@@ -6,154 +6,72 @@
   <title>Japan Admin</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      background: #111;
-      color: #fff;
-      font-family: sans-serif;
-      padding: 20px;
-    }
-    h1 { text-align: center; margin-bottom: 24px; color: #fff; }
-
-    /* Login */
-    #loginBox {
-      max-width: 340px;
-      margin: 80px auto;
-      background: #1a1a1a;
-      padding: 32px;
-      border-radius: 16px;
-      border: 1px solid #333;
-    }
+    body { background: #111; color: #fff; font-family: sans-serif; padding: 20px; }
+    h1 { text-align: center; margin-bottom: 24px; }
+    #loginBox { max-width: 340px; margin: 80px auto; background: #1a1a1a; padding: 32px; border-radius: 16px; border: 1px solid #333; }
     #loginBox h2 { text-align: center; margin-bottom: 20px; }
-
-    /* Main */
     #mainBox { display: none; max-width: 600px; margin: 0 auto; }
-
-    input, select {
-      width: 100%;
-      padding: 12px;
-      background: #1a1a1a;
-      border: 1px solid #333;
-      border-radius: 8px;
-      color: #fff;
-      margin-bottom: 12px;
-      font-size: 14px;
-    }
-    button {
-      width: 100%;
-      padding: 12px;
-      border: none;
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: bold;
-      cursor: pointer;
-      margin-bottom: 8px;
-    }
+    input { width: 100%; padding: 12px; background: #1a1a1a; border: 1px solid #333; border-radius: 8px; color: #fff; margin-bottom: 12px; font-size: 14px; }
+    button { width: 100%; padding: 12px; border: none; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; margin-bottom: 8px; }
     .btn-green  { background: #1db954; color: #fff; }
     .btn-red    { background: #e03131; color: #fff; }
     .btn-yellow { background: #f59f00; color: #000; }
-    .btn-gray   { background: #333;    color: #fff; }
-
-    .card {
-      background: #1a1a1a;
-      border: 1px solid #333;
-      border-radius: 12px;
-      padding: 16px;
-      margin-bottom: 12px;
-    }
+    .btn-gray   { background: #333; color: #fff; }
+    .card { background: #1a1a1a; border: 1px solid #333; border-radius: 12px; padding: 16px; margin-bottom: 12px; }
     .card h3 { margin-bottom: 12px; color: #aaa; font-size: 13px; }
-
-    .key-item {
-      background: #222;
-      border: 1px solid #333;
-      border-radius: 8px;
-      padding: 12px;
-      margin-bottom: 8px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-    .key-info { font-size: 13px; }
+    .key-item { background: #222; border: 1px solid #333; border-radius: 8px; padding: 12px; margin-bottom: 8px; }
+    .key-info { font-size: 13px; margin-bottom: 8px; }
     .key-info span { color: #aaa; }
-    .badge {
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-size: 11px;
-      font-weight: bold;
-    }
+    .badge { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: bold; display: inline-block; margin-bottom: 8px; }
     .badge-active   { background: #1db95422; color: #1db954; border: 1px solid #1db954; }
     .badge-inactive { background: #e0313122; color: #e03131; border: 1px solid #e03131; }
-
-    .key-actions { display: flex; gap: 6px; flex-wrap: wrap; }
-    .key-actions button {
-      width: auto;
-      padding: 6px 12px;
-      font-size: 12px;
-      margin: 0;
-    }
-
-    #msg {
-      text-align: center;
-      padding: 10px;
-      border-radius: 8px;
-      margin-bottom: 12px;
-      display: none;
-    }
+    .key-actions { display: flex; gap: 6px; }
+    .key-actions button { width: auto; padding: 6px 12px; font-size: 12px; margin: 0; }
+    #msg { text-align: center; padding: 10px; border-radius: 8px; margin-bottom: 12px; display: none; }
     .msg-ok  { background: #1db95422; color: #1db954; }
     .msg-err { background: #e0313122; color: #e03131; }
   </style>
 </head>
 <body>
 
-<!-- หน้า Login -->
 <div id="loginBox">
   <h2>🔐 เข้าสู่ระบบแอดมิน</h2>
   <input type="password" id="adminPass" placeholder="รหัสแอดมิน">
   <button class="btn-green" onclick="login()">เข้าสู่ระบบ</button>
-  <p id="loginErr" style="color:#e03131;text-align:center;margin-top:8px;display:none">
-    รหัสไม่ถูกต้อง
-  </p>
+  <p id="loginErr" style="color:#e03131;text-align:center;margin-top:8px;display:none">รหัสไม่ถูกต้อง</p>
 </div>
 
-<!-- หน้าหลัก -->
 <div id="mainBox">
   <h1>🗝️ Japan Key Admin</h1>
-
   <div id="msg"></div>
 
-  <!-- สร้าง Key -->
   <div class="card">
     <h3>➕ สร้าง Key ใหม่</h3>
-    <input type="text"   id="newKey"    placeholder="Key เช่น RUJ-123">
-    <input type="date"   id="newExpiry">
-    <input type="text"   id="newNote"   placeholder="หมายเหตุ เช่น ชื่อผู้ใช้">
+    <input type="text" id="newKey"    placeholder="Key เช่น RUJ-124">
+    <input type="date" id="newExpiry">
+    <input type="text" id="newNote"   placeholder="หมายเหตุ เช่น ชื่อผู้ใช้">
     <button class="btn-green" onclick="createKey()">สร้าง Key</button>
   </div>
 
-  <!-- รายการ Key -->
   <div class="card">
     <h3>📋 รายการ Key ทั้งหมด</h3>
-    <button class="btn-gray" onclick="loadKeys()" style="margin-bottom:12px">
-      🔄 รีเฟรช
-    </button>
+    <button class="btn-gray" onclick="loadKeys()" style="margin-bottom:12px">🔄 รีเฟรช</button>
     <div id="keyList">กำลังโหลด...</div>
   </div>
 </div>
 
 <script>
-  // ══════════════════════════════════════════
-  //  ตั้งค่า — เปลี่ยนตรงนี้
-  // ══════════════════════════════════════════
-  const ADMIN_PASSWORD = "admin888";   // รหัสเข้าหน้าเว็บ
-  const SHEET_URL      = "ใส่ลิงก์ Apps Script ตรงนี้";
+  const ADMIN_PASSWORD = "admin888";
+  const SUPABASE_URL   = "https://ymwlstntuhnmpzmnaioz.supabase.co";
+  const SUPABASE_KEY   = "sb_publishable__6ejNqJVcL0qWsVIdR-3bw_fUNMc3I8";
+  const HEADERS = {
+    "Content-Type":  "application/json",
+    "apikey":        SUPABASE_KEY,
+    "Authorization": "Bearer " + SUPABASE_KEY
+  };
 
-  // ══════════════════════════════════════════
-  //  Login
-  // ══════════════════════════════════════════
   function login() {
-    const pass = document.getElementById("adminPass").value;
-    if (pass === ADMIN_PASSWORD) {
+    if (document.getElementById("adminPass").value === ADMIN_PASSWORD) {
       document.getElementById("loginBox").style.display = "none";
       document.getElementById("mainBox").style.display  = "block";
       loadKeys();
@@ -162,119 +80,86 @@
     }
   }
 
-  document.getElementById("adminPass")
-    .addEventListener("keydown", function(e) {
-      if (e.key === "Enter") login();
-    });
+  document.getElementById("adminPass").addEventListener("keydown", function(e) {
+    if (e.key === "Enter") login();
+  });
 
-  // ══════════════════════════════════════════
-  //  โหลดรายการ Key
-  // ══════════════════════════════════════════
   function loadKeys() {
     document.getElementById("keyList").innerHTML = "กำลังโหลด...";
-    fetch(SHEET_URL + "?action=list")
-      .then(r => r.json())
-      .then(data => {
-        const list = document.getElementById("keyList");
-        if (!data.keys || data.keys.length === 0) {
+    fetch(SUPABASE_URL + "/rest/v1/keys?select=*&order=id.asc", { headers: HEADERS })
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        var list = document.getElementById("keyList");
+        if (!data || data.length === 0) {
           list.innerHTML = "<p style='color:#aaa;text-align:center'>ยังไม่มี Key</p>";
           return;
         }
         list.innerHTML = "";
-        data.keys.forEach(function(k) {
-          const isActive = k.status === "active";
-          list.innerHTML += `
-            <div class="key-item">
-              <div class="key-info">
-                <strong>${k.key}</strong><br>
-                <span>หมดอายุ: ${k.expiry || "-"}</span><br>
-                <span>หมายเหตุ: ${k.note || "-"}</span>
-              </div>
-              <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
-                <span class="badge ${isActive ? "badge-active" : "badge-inactive"}">
-                  ${isActive ? "ใช้งานได้" : "ปิดใช้งาน"}
-                </span>
-                <div class="key-actions">
-                  <button class="${isActive ? "btn-yellow" : "btn-green"}"
-                    onclick="toggleKey('${k.key}','${isActive ? "inactive" : "active"}')">
-                    ${isActive ? "บล็อก" : "ปลดบล็อก"}
-                  </button>
-                  <button class="btn-red" onclick="deleteKey('${k.key}')">ลบ</button>
-                </div>
-              </div>
-            </div>`;
+        data.forEach(function(k) {
+          var isActive = k.status === "active";
+          list.innerHTML += "<div class='key-item'>" +
+            "<div class='key-info'><strong>" + k.key + "</strong><br>" +
+            "<span>หมดอายุ: " + (k.expiry || "-") + "</span><br>" +
+            "<span>หมายเหตุ: " + (k.note || "-") + "</span></div>" +
+            "<span class='badge " + (isActive ? "badge-active" : "badge-inactive") + "'>" +
+            (isActive ? "ใช้งานได้" : "ปิดใช้งาน") + "</span><br>" +
+            "<div class='key-actions'>" +
+            "<button class='" + (isActive ? "btn-yellow" : "btn-green") + "' onclick=\"toggleKey(" + k.id + ",'" + (isActive ? "inactive" : "active") + "')\">" +
+            (isActive ? "บล็อก" : "ปลดบล็อก") + "</button>" +
+            "<button class='btn-red' onclick='deleteKey(" + k.id + ")'>ลบ</button>" +
+            "</div></div>";
         });
       })
-      .catch(function() {
-        showMsg("โหลดไม่ได้ ตรวจสอบ SHEET_URL", false);
-      });
+      .catch(function() { showMsg("โหลดไม่ได้", false); });
   }
 
-  // ══════════════════════════════════════════
-  //  สร้าง Key
-  // ══════════════════════════════════════════
   function createKey() {
-    const key    = document.getElementById("newKey").value.trim();
-    const expiry = document.getElementById("newExpiry").value;
-    const note   = document.getElementById("newNote").value.trim();
+    var key    = document.getElementById("newKey").value.trim();
+    var expiry = document.getElementById("newExpiry").value;
+    var note   = document.getElementById("newNote").value.trim();
     if (!key) { showMsg("กรุณาใส่ Key", false); return; }
-
-    fetch(SHEET_URL + "?action=create&key=" + key
-          + "&expiry=" + expiry + "&note=" + encodeURIComponent(note))
-      .then(r => r.json())
-      .then(function(d) {
-        if (d.success) {
-          showMsg("สร้าง Key สำเร็จ", true);
-          document.getElementById("newKey").value    = "";
-          document.getElementById("newExpiry").value = "";
-          document.getElementById("newNote").value   = "";
-          loadKeys();
-        } else {
-          showMsg(d.reason || "เกิดข้อผิดพลาด", false);
-        }
-      });
+    fetch(SUPABASE_URL + "/rest/v1/keys", {
+      method: "POST",
+      headers: Object.assign({}, HEADERS, { "Prefer": "return=minimal" }),
+      body: JSON.stringify({ key: key, status: "active", expiry: expiry, note: note })
+    }).then(function() {
+      showMsg("สร้าง Key สำเร็จ", true);
+      document.getElementById("newKey").value    = "";
+      document.getElementById("newExpiry").value = "";
+      document.getElementById("newNote").value   = "";
+      loadKeys();
+    });
   }
 
-  // ══════════════════════════════════════════
-  //  บล็อก / ปลดบล็อก
-  // ══════════════════════════════════════════
-  function toggleKey(key, status) {
-    fetch(SHEET_URL + "?action=status&key=" + key + "&status=" + status)
-      .then(r => r.json())
-      .then(function(d) {
-        if (d.success) {
-          showMsg(status === "active" ? "ปลดบล็อกสำเร็จ" : "บล็อกสำเร็จ", true);
-          loadKeys();
-        }
-      });
+  function toggleKey(id, status) {
+    fetch(SUPABASE_URL + "/rest/v1/keys?id=eq." + id, {
+      method: "PATCH",
+      headers: HEADERS,
+      body: JSON.stringify({ status: status })
+    }).then(function() {
+      showMsg(status === "active" ? "ปลดบล็อกสำเร็จ" : "บล็อกสำเร็จ", true);
+      loadKeys();
+    });
   }
 
-  // ══════════════════════════════════════════
-  //  ลบ Key
-  // ══════════════════════════════════════════
-  function deleteKey(key) {
-    if (!confirm("ลบ Key " + key + " ?")) return;
-    fetch(SHEET_URL + "?action=delete&key=" + key)
-      .then(r => r.json())
-      .then(function(d) {
-        if (d.success) {
-          showMsg("ลบสำเร็จ", true);
-          loadKeys();
-        }
-      });
+  function deleteKey(id) {
+    if (!confirm("ลบ Key นี้?")) return;
+    fetch(SUPABASE_URL + "/rest/v1/keys?id=eq." + id, {
+      method: "DELETE",
+      headers: HEADERS
+    }).then(function() {
+      showMsg("ลบสำเร็จ", true);
+      loadKeys();
+    });
   }
 
-  // ══════════════════════════════════════════
-  //  แสดงข้อความ
-  // ══════════════════════════════════════════
   function showMsg(text, ok) {
-    const el = document.getElementById("msg");
-    el.textContent    = text;
-    el.className      = ok ? "msg-ok" : "msg-err";
-    el.style.display  = "block";
+    var el = document.getElementById("msg");
+    el.textContent   = text;
+    el.className     = ok ? "msg-ok" : "msg-err";
+    el.style.display = "block";
     setTimeout(function() { el.style.display = "none"; }, 3000);
   }
 </script>
-
 </body>
-  </html>
+</html>
