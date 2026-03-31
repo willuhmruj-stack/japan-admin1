@@ -3,799 +3,982 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Japan Admin</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<title>BODY METRIC — วิเคราะห์ร่างกายของคุณ</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Noto+Sans+Thai:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg:         #06060a;
-  --surface:    #0d0d12;
-  --surface2:   #111118;
-  --border:     #1a1a28;
-  --border2:    #222235;
-  --accent1:    #7b5fff;
-  --accent2:    #ff5fbb;
-  --accent-mid: #bf5fff;
-  --green:      #22d47a;
-  --red:        #ff4466;
-  --orange:     #ff9933;
-  --text1:      #eeeef4;
-  --text2:      #55556a;
-  --text3:      #2a2a3a;
-}
-* { margin:0; padding:0; box-sizing:border-box; }
-body { background:var(--bg); color:var(--text1); font-family:'Noto Sans Thai',sans-serif; min-height:100vh; overflow-x:hidden; }
-#canvas { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; opacity:0.4; }
+  :root {
+    --bg: #0a0a0f;
+    --surface: #12121a;
+    --card: #1a1a26;
+    --border: #2a2a40;
+    --accent: #7fff6e;
+    --accent2: #ff6e9c;
+    --accent3: #6e9cff;
+    --accent4: #ffd96e;
+    --text: #e8e8f0;
+    --muted: #6666888;
+    --glow: rgba(127,255,110,0.15);
+  }
 
-/* ── NAV ── */
-#nav { display:none; position:fixed; top:0; left:0; right:0; z-index:100; background:rgba(6,6,10,0.92); backdrop-filter:blur(12px); border-bottom:1px solid var(--border); padding:0 20px; height:56px; align-items:center; justify-content:space-between; }
-#nav.show { display:flex; }
-.nav-logo { font-family:'Space Mono',monospace; font-size:13px; background:linear-gradient(90deg,var(--accent1),var(--accent2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; letter-spacing:1px; }
-.nav-tabs { display:flex; gap:4px; }
-.nav-tab { padding:6px 12px; border-radius:8px; font-size:12px; color:var(--text2); cursor:pointer; border:none; background:transparent; font-family:'Noto Sans Thai',sans-serif; transition:all 0.2s; }
-.nav-tab.active { background:var(--surface2); color:var(--text1); border:1px solid var(--border2); }
-.nav-right { display:flex; align-items:center; gap:10px; }
-.nav-date { font-size:11px; color:var(--text3); }
-.btn-logout { padding:6px 12px; background:transparent; border:1px solid var(--border2); border-radius:8px; color:var(--text2); font-size:11px; font-family:'Noto Sans Thai',sans-serif; cursor:pointer; transition:all 0.2s; }
-.btn-logout:hover { border-color:var(--red); color:var(--red); }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
 
-/* ── LOGIN ── */
-#loginBox { position:relative; z-index:10; min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px; }
-.login-card { width:100%; max-width:380px; background:var(--surface); border:1px solid var(--border); border-radius:28px; padding:44px 36px 36px; position:relative; overflow:hidden; }
-.login-card::before { content:''; position:absolute; top:-60px; left:50%; transform:translateX(-50%); width:200px; height:200px; background:radial-gradient(circle,rgba(123,95,255,0.12),transparent 70%); pointer-events:none; }
-.login-icon-wrap { display:flex; justify-content:center; margin-bottom:24px; }
-.login-icon { width:72px; height:72px; background:linear-gradient(135deg,#1a1a2e,#0d0d1a); border:1px solid var(--border2); border-radius:22px; display:flex; align-items:center; justify-content:center; font-size:28px; animation:iconPulse 3s ease-in-out infinite; }
-@keyframes iconPulse { 0%,100%{box-shadow:0 0 20px rgba(123,95,255,0.1)} 50%{box-shadow:0 0 50px rgba(191,95,255,0.25)} }
-.login-title { font-family:'Space Mono',monospace; font-size:17px; font-weight:700; text-align:center; background:linear-gradient(90deg,var(--accent1),var(--accent2)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom:6px; letter-spacing:1px; }
-.login-sub { font-size:11px; color:var(--text3); text-align:center; letter-spacing:0.08em; margin-bottom:32px; }
-.field-label { font-size:10px; font-weight:700; color:var(--text2); letter-spacing:0.14em; margin-bottom:8px; display:flex; align-items:center; gap:8px; }
-.field-label::before { content:''; width:5px; height:5px; border-radius:50%; background:var(--accent-mid); }
-.field-input { width:100%; padding:13px 16px; background:#060609; border:1px solid var(--border2); border-radius:12px; color:var(--text1); font-size:14px; font-family:'Space Mono',monospace; outline:none; transition:border-color 0.25s,box-shadow 0.25s; margin-bottom:16px; }
-.field-input:focus { border-color:var(--accent-mid); box-shadow:0 0 0 3px rgba(191,95,255,0.08); }
-.btn-grad { width:100%; padding:13px; background:linear-gradient(90deg,var(--accent1),var(--accent2)); border:none; border-radius:12px; color:#fff; font-size:14px; font-weight:700; font-family:'Noto Sans Thai',sans-serif; cursor:pointer; transition:opacity 0.2s,transform 0.15s; }
-.btn-grad:hover { opacity:0.88; } .btn-grad:active { transform:scale(0.98); }
-.login-err { text-align:center; margin-top:12px; font-size:12px; color:var(--red); display:none; }
+  body {
+    font-family: 'Noto Sans Thai', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
 
-/* ── PAGES ── */
-.page { display:none; position:relative; z-index:10; max-width:720px; margin:0 auto; padding:72px 20px 60px; }
-.page.active { display:block; }
+  /* Grid background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(127,255,110,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(127,255,110,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
 
-/* ── SECTION ── */
-.section { background:var(--surface); border:1px solid var(--border); border-radius:20px; padding:22px; margin-bottom:14px; }
-.sec-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
-.sec-title { font-size:10px; font-weight:700; color:var(--text2); letter-spacing:0.14em; display:flex; align-items:center; gap:8px; }
-.sec-title::before { content:''; width:5px; height:5px; border-radius:50%; background:var(--accent-mid); }
-.grad-line { height:1px; background:linear-gradient(90deg,transparent,var(--accent-mid),transparent); margin:0 0 16px; opacity:0.25; }
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 20px 80px;
+    position: relative;
+    z-index: 1;
+  }
 
-/* ── STATS ── */
-.stats { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:14px; }
-.stat-card { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:16px; text-align:center; }
-.stat-num { font-family:'Space Mono',monospace; font-size:26px; font-weight:700; margin-bottom:4px; }
-.stat-label { font-size:10px; color:var(--text3); letter-spacing:0.08em; }
+  /* Header */
+  .header {
+    text-align: center;
+    margin-bottom: 50px;
+    animation: fadeDown 0.8s ease;
+  }
 
-/* ── INPUTS ── */
-.sec-input { width:100%; padding:11px 14px; background:#06060a; border:1px solid var(--border2); border-radius:10px; color:var(--text1); font-size:13px; font-family:'Space Mono',monospace; outline:none; transition:border-color 0.2s,box-shadow 0.2s; }
-.sec-input:focus { border-color:var(--accent-mid); box-shadow:0 0 0 3px rgba(191,95,255,0.06); }
-.sec-input::placeholder { color:var(--text3); font-family:'Noto Sans Thai',sans-serif; font-size:12px; }
-.form-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px; }
-.form-grid3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin-bottom:10px; }
+  .header-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    opacity: 0.8;
+  }
 
-/* ── BUTTONS ── */
-.btn-refresh { padding:7px 14px; background:transparent; border:1px solid var(--border2); border-radius:8px; color:var(--text2); font-size:11px; font-family:'Noto Sans Thai',sans-serif; cursor:pointer; transition:all 0.2s; }
-.btn-refresh:hover { border-color:var(--accent-mid); color:var(--accent-mid); }
-.btn-sm { padding:6px 12px; border-radius:7px; font-size:11px; font-family:'Noto Sans Thai',sans-serif; cursor:pointer; transition:all 0.18s; border:1px solid; }
-.btn-block   { background:transparent; border-color:var(--border2); color:var(--text2); }
-.btn-block:hover { border-color:#555; color:var(--text1); }
-.btn-unblock { background:transparent; border-color:rgba(34,212,122,0.3); color:var(--green); }
-.btn-unblock:hover { background:rgba(34,212,122,0.08); }
-.btn-del     { background:transparent; border-color:rgba(255,68,102,0.3); color:var(--red); }
-.btn-del:hover { background:rgba(255,68,102,0.08); }
-.btn-renew   { background:transparent; border-color:rgba(255,153,51,0.3); color:var(--orange); }
-.btn-renew:hover { background:rgba(255,153,51,0.08); }
-.btn-select  { background:transparent; border-color:var(--border2); color:var(--text2); }
-.btn-select.selected { border-color:var(--accent-mid); color:var(--accent-mid); background:rgba(191,95,255,0.08); }
+  .header h1 {
+    font-size: clamp(2.5rem, 8vw, 5rem);
+    font-weight: 900;
+    letter-spacing: -2px;
+    line-height: 1;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent3) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
 
-/* ── KEY ITEM ── */
-.key-item { background:var(--surface2); border:1px solid var(--border); border-radius:14px; padding:14px 16px; margin-bottom:8px; transition:border-color 0.2s,transform 0.15s; }
-.key-item:hover { border-color:var(--border2); transform:translateY(-1px); }
-.key-item.selected { border-color:var(--accent-mid); }
-.key-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
-.key-name { font-family:'Space Mono',monospace; font-size:13px; font-weight:700; color:var(--text1); }
-.badge { padding:3px 10px; border-radius:20px; font-size:10px; font-weight:600; }
-.badge-active   { background:rgba(34,212,122,0.08); color:var(--green); border:1px solid rgba(34,212,122,0.2); }
-.badge-inactive { background:rgba(255,68,102,0.08); color:var(--red); border:1px solid rgba(255,68,102,0.2); }
-.badge-expired  { background:rgba(255,153,51,0.08); color:var(--orange); border:1px solid rgba(255,153,51,0.2); }
-.key-meta { font-size:11px; color:var(--text3); margin-bottom:10px; display:flex; gap:14px; flex-wrap:wrap; }
-.key-actions { display:flex; gap:6px; flex-wrap:wrap; }
+  .header p {
+    margin-top: 14px;
+    color: #888;
+    font-size: 15px;
+    font-weight: 300;
+  }
 
-/* ── SEARCH ── */
-.search-wrap { position:relative; margin-bottom:14px; }
-.search-input { width:100%; padding:10px 14px 10px 36px; background:#06060a; border:1px solid var(--border2); border-radius:10px; color:var(--text1); font-size:13px; font-family:'Noto Sans Thai',sans-serif; outline:none; transition:border-color 0.2s; }
-.search-input:focus { border-color:var(--accent-mid); }
-.search-icon { position:absolute; left:12px; top:50%; transform:translateY(-50%); color:var(--text3); font-size:14px; }
+  /* Form Card */
+  .form-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 40px;
+    margin-bottom: 32px;
+    animation: fadeUp 0.6s ease 0.2s both;
+  }
 
-/* ── BULK ── */
-.bulk-bar { display:none; background:var(--surface2); border:1px solid var(--border2); border-radius:12px; padding:12px 16px; margin-bottom:12px; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; }
-.bulk-bar.show { display:flex; }
-.bulk-info { font-size:12px; color:var(--accent-mid); font-weight:600; }
-.bulk-actions { display:flex; gap:8px; }
+  .form-section-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
 
-/* ── LOG ── */
-.log-item { background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:12px 14px; margin-bottom:6px; display:flex; justify-content:space-between; align-items:center; }
-.log-key { font-family:'Space Mono',monospace; font-size:12px; color:var(--text1); }
-.log-action { font-size:11px; color:var(--accent-mid); font-weight:600; }
-.log-time { font-size:10px; color:var(--text3); }
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 20px;
+    margin-bottom: 20px;
+  }
 
-/* ── ANNOUNCE ── */
-.announce-item { background:var(--surface2); border:1px solid var(--border); border-radius:12px; padding:14px 16px; margin-bottom:8px; }
-.announce-title { font-size:13px; font-weight:700; color:var(--text1); margin-bottom:4px; }
-.announce-msg { font-size:12px; color:var(--text2); margin-bottom:10px; line-height:1.5; }
-.announce-meta { font-size:10px; color:var(--text3); display:flex; justify-content:space-between; align-items:center; }
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
 
-/* ── CHART ── */
-.chart-wrap { height:160px; display:flex; align-items:flex-end; gap:6px; padding:0 4px; }
-.bar-col { flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; }
-.bar { width:100%; border-radius:4px 4px 0 0; background:linear-gradient(180deg,var(--accent1),var(--accent2)); min-height:4px; transition:height 0.6s ease; }
-.bar-label { font-size:9px; color:var(--text3); }
+  .field label {
+    font-size: 12px;
+    font-weight: 500;
+    color: #999;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
 
-/* ── TOAST ── */
-#toast { position:fixed; bottom:28px; left:50%; transform:translateX(-50%) translateY(100px); background:var(--surface2); border:1px solid var(--border2); color:var(--text1); padding:12px 22px; border-radius:12px; font-size:13px; z-index:9999; white-space:nowrap; transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1); }
-#toast.show { transform:translateX(-50%) translateY(0); }
-.empty { text-align:center; padding:40px; color:var(--text3); font-size:13px; }
-::-webkit-scrollbar { width:4px; } ::-webkit-scrollbar-thumb { background:var(--border2); border-radius:4px; }
+  .field-row {
+    display: flex;
+    gap: 8px;
+    align-items: stretch;
+  }
+
+  .field input, .field select {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-family: 'Space Mono', monospace;
+    font-size: 18px;
+    font-weight: 700;
+    padding: 14px 16px;
+    width: 100%;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    -webkit-appearance: none;
+  }
+
+  .field input:focus, .field select:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--glow);
+  }
+
+  .field select option { background: var(--surface); }
+
+  .unit-badge {
+    background: var(--border);
+    border-radius: 8px;
+    padding: 14px 12px;
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    color: #666;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+  }
+
+  /* Gender toggle */
+  .gender-toggle {
+    display: flex;
+    gap: 8px;
+  }
+
+  .gender-btn {
+    flex: 1;
+    padding: 14px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: #666;
+    cursor: pointer;
+    font-family: 'Noto Sans Thai', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s;
+    text-align: center;
+  }
+
+  .gender-btn.active {
+    border-color: var(--accent);
+    background: rgba(127,255,110,0.08);
+    color: var(--accent);
+    box-shadow: 0 0 0 2px var(--glow);
+  }
+
+  /* Calculate Button */
+  .calc-btn {
+    width: 100%;
+    padding: 18px;
+    border-radius: 14px;
+    border: none;
+    background: linear-gradient(135deg, var(--accent), #5de84f);
+    color: #0a0a0f;
+    font-family: 'Noto Sans Thai', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 1px;
+    transition: all 0.2s;
+    margin-top: 8px;
+  }
+
+  .calc-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(127,255,110,0.35);
+  }
+
+  .calc-btn:active { transform: translateY(0); }
+
+  /* Results */
+  .results {
+    display: none;
+    animation: fadeUp 0.5s ease;
+  }
+
+  .results.visible { display: block; }
+
+  /* BMI Hero */
+  .bmi-hero {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 40px;
+    text-align: center;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .bmi-hero::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: radial-gradient(circle, var(--result-color, rgba(127,255,110,0.15)) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .bmi-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: #666;
+    margin-bottom: 8px;
+  }
+
+  .bmi-number {
+    font-family: 'Space Mono', monospace;
+    font-size: clamp(4rem, 15vw, 8rem);
+    font-weight: 700;
+    line-height: 1;
+    color: var(--accent);
+    transition: color 0.3s;
+  }
+
+  .bmi-category {
+    font-size: 22px;
+    font-weight: 700;
+    margin-top: 8px;
+    color: var(--accent);
+    transition: color 0.3s;
+  }
+
+  /* BMI Scale Bar */
+  .bmi-scale {
+    margin-top: 28px;
+    position: relative;
+  }
+
+  .scale-bar {
+    height: 8px;
+    border-radius: 4px;
+    background: linear-gradient(to right,
+      #6e9cff 0%, #6e9cff 14%,
+      #7fff6e 14%, #7fff6e 42%,
+      #ffd96e 42%, #ffd96e 60%,
+      #ff9a6e 60%, #ff9a6e 75%,
+      #ff6e6e 75%, #ff6e6e 100%
+    );
+    position: relative;
+  }
+
+  .scale-marker {
+    position: absolute;
+    top: -4px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: white;
+    border: 3px solid var(--bg);
+    box-shadow: 0 0 0 2px white;
+    transform: translateX(-50%);
+    transition: left 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .scale-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    color: #555;
+    letter-spacing: 0.5px;
+  }
+
+  /* Metrics Grid */
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+  .metric-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .metric-card:hover {
+    border-color: #3a3a55;
+    transform: translateY(-2px);
+  }
+
+  .metric-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px;
+    height: 100%;
+    background: var(--card-accent, var(--accent));
+    border-radius: 3px 0 0 3px;
+  }
+
+  .metric-icon {
+    font-size: 24px;
+    margin-bottom: 12px;
+  }
+
+  .metric-name {
+    font-size: 11px;
+    font-weight: 500;
+    color: #666;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .metric-value {
+    font-family: 'Space Mono', monospace;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .metric-unit {
+    font-size: 12px;
+    color: #555;
+    font-family: 'Space Mono', monospace;
+  }
+
+  .metric-sub {
+    font-size: 11px;
+    color: #777;
+    margin-top: 8px;
+    line-height: 1.5;
+  }
+
+  /* Ideal Weight Section */
+  .ideal-section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 32px;
+    margin-bottom: 20px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .section-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent3);
+  }
+
+  .weight-range {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .weight-range-item {
+    flex: 1;
+    text-align: center;
+    padding: 20px;
+    background: var(--surface);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+  }
+
+  .weight-range-label {
+    font-size: 11px;
+    color: #666;
+    margin-bottom: 6px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .weight-range-value {
+    font-family: 'Space Mono', monospace;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--accent3);
+  }
+
+  .weight-range-sep {
+    font-family: 'Space Mono', monospace;
+    color: #444;
+    font-size: 20px;
+  }
+
+  /* How to fix section */
+  .advice-section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 32px;
+    margin-bottom: 20px;
+  }
+
+  .advice-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+  }
+
+  .advice-item {
+    padding: 20px;
+    background: var(--surface);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+  }
+
+  .advice-emoji {
+    font-size: 28px;
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .advice-title {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: var(--text);
+  }
+
+  .advice-text {
+    font-size: 13px;
+    color: #888;
+    line-height: 1.6;
+  }
+
+  /* Risk meter */
+  .health-risk {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 32px;
+    margin-bottom: 20px;
+  }
+
+  .risk-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .risk-item:last-child { border-bottom: none; }
+
+  .risk-name {
+    flex: 1;
+    font-size: 14px;
+    color: #ccc;
+  }
+
+  .risk-bar-wrap {
+    width: 140px;
+    height: 6px;
+    background: var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .risk-bar {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 1s ease;
+  }
+
+  .risk-level {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1px;
+    width: 60px;
+    text-align: right;
+    color: #999;
+  }
+
+  /* Animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes countUp {
+    from { opacity: 0; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  .animate-in {
+    animation: fadeUp 0.5s ease both;
+  }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    .form-card { padding: 24px; }
+    .form-grid { grid-template-columns: 1fr 1fr; }
+    .bmi-hero { padding: 30px 24px; }
+    .weight-range { flex-direction: column; }
+    .weight-range-sep { display: none; }
+  }
+
+  .disclaimer {
+    text-align: center;
+    font-size: 11px;
+    color: #444;
+    margin-top: 40px;
+    line-height: 1.7;
+  }
 </style>
 </head>
 <body>
 
-<canvas id="canvas"></canvas>
+<div class="container">
 
-<!-- NAV -->
-<nav id="nav">
-  <div class="nav-logo">✦ JAPAN ADMIN</div>
-  <div class="nav-tabs">
-    <button class="nav-tab active" onclick="showPage('keys')">🗝 Key</button>
-    <button class="nav-tab" onclick="showPage('announce')">📢 ประกาศ</button>
-    <button class="nav-tab" onclick="showPage('logs')">📋 Log</button>
-    <button class="nav-tab" onclick="showPage('stats')">📊 สถิติ</button>
-  </div>
-  <div class="nav-right">
-    <span class="nav-date" id="dateLabel"></span>
-    <button class="btn-logout" onclick="logout()">ออก</button>
-  </div>
-</nav>
-
-<!-- LOGIN -->
-<div id="loginBox">
-  <div class="login-card">
-    <div class="login-icon-wrap"><div class="login-icon">✦</div></div>
-    <div class="login-title">JAPAN ADMIN</div>
-    <div class="login-sub">SECURE ACCESS SYSTEM</div>
-    <div class="field-label">รหัสผ่าน</div>
-    <input type="password" id="adminPass" class="field-input" placeholder="กรอกรหัสผ่านแอดมิน">
-    <button class="btn-grad" onclick="login()">เข้าสู่ระบบ</button>
-    <p class="login-err" id="loginErr">✕  รหัสผ่านไม่ถูกต้อง</p>
-  </div>
-</div>
-
-<!-- PAGE: KEYS -->
-<div class="page active" id="page-keys">
-
-  <div class="stats">
-    <div class="stat-card">
-      <div class="stat-num" id="statTotal" style="color:var(--text1)">—</div>
-      <div class="stat-label">KEY ทั้งหมด</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-num" id="statActive" style="color:var(--green)">—</div>
-      <div class="stat-label">ใช้งานได้</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-num" id="statInactive" style="color:var(--red)">—</div>
-      <div class="stat-label">ปิดใช้งาน</div>
-    </div>
+  <!-- Header -->
+  <div class="header">
+    <p class="header-tag">▸ Health Analytics Tool</p>
+    <h1>BODY METRIC</h1>
+    <p>วิเคราะห์ดัชนีมวลกายและสุขภาพร่างกายอย่างละเอียด</p>
   </div>
 
-  <!-- สร้าง Key -->
-  <div class="section">
-    <div class="sec-header"><div class="sec-title">สร้าง Key ใหม่</div></div>
-    <div class="grad-line"></div>
+  <!-- Input Form -->
+  <div class="form-card">
+    <p class="form-section-title">▸ 01 / ข้อมูลส่วนตัว</p>
+
     <div class="form-grid">
-      <input type="text" id="newKey" class="sec-input" placeholder="KEY เช่น RUJ-124">
-      <input type="datetime-local" id="newExpiry" class="sec-input">
-    </div>
-    <input type="text" id="newNote" class="sec-input" placeholder="หมายเหตุ เช่น ชื่อผู้ใช้" style="width:100%;margin-bottom:10px">
-    <button class="btn-grad" onclick="createKey()" style="width:100%">+ สร้าง Key</button>
-  </div>
-
-  <!-- รายการ Key -->
-  <div class="section">
-    <div class="sec-header">
-      <div class="sec-title">รายการ Key</div>
-      <div style="display:flex;gap:8px">
-        <button class="btn-refresh" onclick="exportCSV()">↓ CSV</button>
-        <button class="btn-refresh" onclick="loadKeys()">↻ รีเฟรช</button>
+      <!-- Name -->
+      <div class="field" style="grid-column: span 2;">
+        <label>ชื่อ (ไม่บังคับ)</label>
+        <input type="text" id="name" placeholder="ชื่อของคุณ" style="font-family:'Noto Sans Thai',sans-serif; font-size:16px; font-weight:500;">
       </div>
-    </div>
-    <div class="grad-line"></div>
 
-    <!-- Search -->
-    <div class="search-wrap">
-      <span class="search-icon">🔍</span>
-      <input type="text" id="searchInput" class="search-input"
-             placeholder="ค้นหา Key หรือหมายเหตุ..."
-             oninput="filterKeys()">
-    </div>
+      <!-- Age -->
+      <div class="field">
+        <label>อายุ</label>
+        <div class="field-row">
+          <input type="number" id="age" placeholder="25" min="1" max="120">
+          <div class="unit-badge">ปี</div>
+        </div>
+      </div>
 
-    <!-- Bulk bar -->
-    <div class="bulk-bar" id="bulkBar">
-      <span class="bulk-info" id="bulkInfo">เลือก 0 รายการ</span>
-      <div class="bulk-actions">
-        <button class="btn-sm btn-unblock" onclick="bulkAction('active')">ปลดบล็อกทั้งหมด</button>
-        <button class="btn-sm btn-block" onclick="bulkAction('inactive')">บล็อกทั้งหมด</button>
-        <button class="btn-sm btn-renew" onclick="bulkRenew()">ต่ออายุทั้งหมด</button>
-        <button class="btn-sm btn-del" onclick="bulkDelete()">ลบทั้งหมด</button>
+      <!-- Gender -->
+      <div class="field">
+        <label>เพศ</label>
+        <div class="gender-toggle">
+          <button class="gender-btn active" onclick="selectGender('male', this)">♂ ชาย</button>
+          <button class="gender-btn" onclick="selectGender('female', this)">♀ หญิง</button>
+        </div>
       </div>
     </div>
 
-    <div id="keyList"><div class="empty">กำลังโหลด...</div></div>
-  </div>
-</div>
+    <p class="form-section-title" style="margin-top:28px;">▸ 02 / ร่างกาย</p>
 
-<!-- PAGE: ANNOUNCE -->
-<div class="page" id="page-announce">
-  <div class="section">
-    <div class="sec-header"><div class="sec-title">สร้างประกาศใหม่</div></div>
-    <div class="grad-line"></div>
-    <input type="text" id="annTitle" class="sec-input" placeholder="หัวข้อประกาศ" style="margin-bottom:10px">
-    <textarea id="annMsg" class="sec-input" rows="4"
-              placeholder="ข้อความประกาศ..."
-              style="resize:vertical;line-height:1.5;margin-bottom:10px"></textarea>
-    <button class="btn-grad" onclick="createAnnouncement()" style="width:100%">📢 ส่งประกาศ</button>
-  </div>
-  <div class="section">
-    <div class="sec-header">
-      <div class="sec-title">ประกาศทั้งหมด</div>
-      <button class="btn-refresh" onclick="loadAnnouncements()">↻ รีเฟรช</button>
-    </div>
-    <div class="grad-line"></div>
-    <div id="announceList"><div class="empty">กำลังโหลด...</div></div>
-  </div>
-</div>
+    <div class="form-grid">
+      <!-- Height -->
+      <div class="field">
+        <label>ส่วนสูง</label>
+        <div class="field-row">
+          <input type="number" id="height" placeholder="170" min="50" max="250">
+          <div class="unit-badge">ซม.</div>
+        </div>
+      </div>
 
-<!-- PAGE: LOGS -->
-<div class="page" id="page-logs">
-  <div class="section">
-    <div class="sec-header">
-      <div class="sec-title">ประวัติการใช้งาน</div>
-      <button class="btn-refresh" onclick="loadLogs()">↻ รีเฟรช</button>
-    </div>
-    <div class="grad-line"></div>
-    <div id="logList"><div class="empty">กำลังโหลด...</div></div>
-  </div>
-</div>
+      <!-- Weight -->
+      <div class="field">
+        <label>น้ำหนัก</label>
+        <div class="field-row">
+          <input type="number" id="weight" placeholder="65" min="1" max="500">
+          <div class="unit-badge">กก.</div>
+        </div>
+      </div>
 
-<!-- PAGE: STATS -->
-<div class="page" id="page-stats">
-  <div class="section">
-    <div class="sec-header"><div class="sec-title">สถิติการใช้งาน 7 วันล่าสุด</div></div>
-    <div class="grad-line"></div>
-    <div class="chart-wrap" id="chart"></div>
-  </div>
-  <div class="stats" style="margin-top:14px">
-    <div class="stat-card">
-      <div class="stat-num" id="statLogin" style="color:var(--accent-mid)">—</div>
-      <div class="stat-label">ครั้งที่ Login</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-num" id="statExpired" style="color:var(--orange)">—</div>
-      <div class="stat-label">Key หมดอายุ</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-num" id="statVersion" style="color:var(--green)">—</div>
-      <div class="stat-label">เวอร์ชัน</div>
-    </div>
-  </div>
-  <div class="section">
-    <div class="sec-header"><div class="sec-title">ตั้งค่า App Version</div></div>
-    <div class="grad-line"></div>
-    <div class="form-grid" style="margin-bottom:10px">
-      <input type="text" id="cfgVersion" class="sec-input" placeholder="เวอร์ชัน เช่น 1.1">
-      <input type="text" id="cfgDownload" class="sec-input" placeholder="URL ดาวน์โหลด">
-    </div>
-    <label style="display:flex;align-items:center;gap:8px;margin-bottom:12px;font-size:12px;color:var(--text2)">
-      <input type="checkbox" id="cfgForce"> บังคับอัปเดต (force update)
-    </label>
-    <button class="btn-grad" onclick="saveConfig()" style="width:100%">บันทึกการตั้งค่า</button>
-  </div>
-</div>
+      <!-- Waist -->
+      <div class="field">
+        <label>รอบเอว (ถ้ามี)</label>
+        <div class="field-row">
+          <input type="number" id="waist" placeholder="80" min="30" max="200">
+          <div class="unit-badge">ซม.</div>
+        </div>
+      </div>
 
-<div id="toast"></div>
+      <!-- Activity -->
+      <div class="field">
+        <label>ระดับกิจกรรม</label>
+        <select id="activity">
+          <option value="1.2">🪑 นั่งทำงานเป็นหลัก</option>
+          <option value="1.375">🚶 เดิน/ออกกำลังเบา</option>
+          <option value="1.55" selected>🏃 ออกกำลัง 3-5 วัน/สัปดาห์</option>
+          <option value="1.725">💪 ออกกำลังหนัก 6-7 วัน</option>
+          <option value="1.9">🏋️ นักกีฬา/ออกกำลังหนักมาก</option>
+        </select>
+      </div>
+    </div>
+
+    <button class="calc-btn" onclick="calculate()">
+      ⚡ วิเคราะห์ร่างกายของฉัน
+    </button>
+  </div>
+
+  <!-- Results -->
+  <div class="results" id="results">
+
+    <!-- BMI Hero -->
+    <div class="bmi-hero animate-in" id="bmiHero">
+      <p class="bmi-label">ดัชนีมวลกาย (BMI)</p>
+      <div class="bmi-number" id="bmiNumber">—</div>
+      <div class="bmi-category" id="bmiCategory">—</div>
+
+      <div class="bmi-scale" style="margin-top: 28px;">
+        <div class="scale-bar">
+          <div class="scale-marker" id="scaleMarker" style="left:0%"></div>
+        </div>
+        <div class="scale-labels">
+          <span>ผอมมาก<br>≤16</span>
+          <span>ผอม<br>16-18.5</span>
+          <span>ปกติ<br>18.5-25</span>
+          <span>เกิน<br>25-30</span>
+          <span>อ้วน<br>≥30</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Key Metrics -->
+    <div class="metrics-grid" id="metricsGrid">
+      <!-- filled by JS -->
+    </div>
+
+    <!-- Ideal Weight -->
+    <div class="ideal-section animate-in" id="idealSection">
+      <div class="section-header">
+        <span>🎯</span>
+        <p class="section-title">น้ำหนักในช่วงที่เหมาะสม</p>
+      </div>
+      <div class="weight-range" id="weightRange">
+        <!-- filled by JS -->
+      </div>
+    </div>
+
+    <!-- Health Risk -->
+    <div class="health-risk animate-in" id="healthRisk">
+      <div class="section-header">
+        <span>🩺</span>
+        <p class="section-title" style="color:var(--accent2);">ความเสี่ยงสุขภาพ</p>
+      </div>
+      <div id="riskItems">
+        <!-- filled by JS -->
+      </div>
+    </div>
+
+    <!-- Advice -->
+    <div class="advice-section animate-in" id="adviceSection">
+      <div class="section-header">
+        <span>💡</span>
+        <p class="section-title" style="color:var(--accent4);">คำแนะนำสำหรับคุณ</p>
+      </div>
+      <div class="advice-grid" id="adviceGrid">
+        <!-- filled by JS -->
+      </div>
+    </div>
+
+  </div>
+
+  <p class="disclaimer">
+    ข้อมูลนี้ใช้เพื่อการประเมินเบื้องต้นเท่านั้น ไม่ใช่คำวินิจฉัยทางการแพทย์<br>
+    ควรปรึกษาแพทย์หรือนักโภชนาการสำหรับคำแนะนำเฉพาะบุคคล
+  </p>
+
+</div>
 
 <script>
-// ── Config ──
-var ADMIN_PASSWORD = "admin888";
-var SUPABASE_URL   = "https://ymwlstntuhnmpzmnaioz.supabase.co";
-var SUPABASE_KEY   = "sb_publishable__6ejNqJVcL0qWsVIdR-3bw_fUNMc3I8";
-var HEADERS = {
-  "Content-Type":  "application/json",
-  "apikey":        SUPABASE_KEY,
-  "Authorization": "Bearer " + SUPABASE_KEY
-};
+  let gender = 'male';
 
-var allKeys     = [];
-var selectedIds = [];
-
-// ── Particles ──
-(function() {
-  var c = document.getElementById("canvas");
-  var ctx = c.getContext("2d");
-  var W, H, pts = [];
-  var colors = ["#7b5fff","#bf5fff","#ff5fbb","#5fffff","#ffaa55"];
-  function resize() { W = c.width = innerWidth; H = c.height = innerHeight; }
-  function init() {
-    pts = [];
-    for (var i = 0; i < 20; i++) pts.push({
-      x: Math.random()*W, y: Math.random()*H,
-      vx:(Math.random()-0.5)*0.35, vy:-(Math.random()*0.35+0.1),
-      r: Math.random()*2.5+0.5, a: Math.random(),
-      c: colors[Math.floor(Math.random()*colors.length)]
-    });
+  function selectGender(g, btn) {
+    gender = g;
+    document.querySelectorAll('.gender-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
   }
-  function loop() {
-    ctx.clearRect(0,0,W,H);
-    pts.forEach(function(p) {
-      p.x+=p.vx; p.y+=p.vy; p.a-=0.0025;
-      if (p.a<=0||p.y<0) { p.x=Math.random()*W; p.y=H; p.a=Math.random()*0.5+0.2; p.vy=-(Math.random()*0.35+0.1); p.vx=(Math.random()-0.5)*0.35; }
-      ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-      ctx.fillStyle = p.c + Math.round(p.a*99).toString(16).padStart(2,"0");
-      ctx.fill();
-    });
-    requestAnimationFrame(loop);
-  }
-  window.addEventListener("resize", function(){ resize(); init(); });
-  resize(); init(); loop();
-})();
 
-// ── Date ──
-document.getElementById("dateLabel").textContent =
-  new Date().toLocaleDateString("th-TH", { dateStyle:"medium" });
+  function calculate() {
+    const age = parseFloat(document.getElementById('age').value);
+    const height = parseFloat(document.getElementById('height').value);
+    const weight = parseFloat(document.getElementById('weight').value);
+    const waist = parseFloat(document.getElementById('waist').value) || null;
+    const activity = parseFloat(document.getElementById('activity').value);
+    const name = document.getElementById('name').value.trim();
 
-// ── Auth ──
-function login() {
-  if (document.getElementById("adminPass").value === ADMIN_PASSWORD) {
-    document.getElementById("loginBox").style.display = "none";
-    document.getElementById("nav").classList.add("show");
-    showPage("keys");
-    loadKeys();
-  } else {
-    document.getElementById("loginErr").style.display = "block";
-    document.getElementById("adminPass").style.borderColor = "var(--red)";
-    setTimeout(function(){ document.getElementById("adminPass").style.borderColor = ""; }, 1500);
-  }
-}
-function logout() {
-  document.getElementById("loginBox").style.display = "flex";
-  document.getElementById("nav").classList.remove("show");
-  document.querySelectorAll(".page").forEach(function(p){ p.classList.remove("active"); });
-  document.getElementById("adminPass").value = "";
-  document.getElementById("loginErr").style.display = "none";
-}
-document.getElementById("adminPass").addEventListener("keydown", function(e){ if(e.key==="Enter") login(); });
+    if (!height || !weight || !age) {
+      alert('กรุณากรอก อายุ ส่วนสูง และน้ำหนัก ให้ครบ');
+      return;
+    }
 
-// ── Pages ──
-function showPage(name) {
-  document.querySelectorAll(".page").forEach(function(p){ p.classList.remove("active"); });
-  document.querySelectorAll(".nav-tab").forEach(function(t){ t.classList.remove("active"); });
-  document.getElementById("page-"+name).classList.add("active");
-  event.target.classList.add("active");
-  if (name==="logs")    loadLogs();
-  if (name==="stats")   loadStats();
-  if (name==="announce") loadAnnouncements();
-}
+    // ── Calculations ──
+    const heightM = height / 100;
+    const bmi = weight / (heightM * heightM);
 
-// ── Load Keys ──
-function loadKeys() {
-  document.getElementById("keyList").innerHTML = "<div class='empty'>กำลังโหลด...</div>";
-  selectedIds = [];
-  document.getElementById("bulkBar").classList.remove("show");
+    // BMR (Mifflin-St Jeor)
+    let bmr;
+    if (gender === 'male') {
+      bmr = 10 * weight + 6.25 * height - 5 * age + 5;
+    } else {
+      bmr = 10 * weight + 6.25 * height - 5 * age - 161;
+    }
+    const tdee = bmr * activity;
 
-  fetch(SUPABASE_URL + "/rest/v1/keys?select=*&order=id.asc", { headers: HEADERS })
-    .then(function(r){ return r.json(); })
-    .then(function(data) {
-      allKeys = data;
-      renderKeys(data);
-    })
-    .catch(function(){ showToast("โหลดไม่ได้"); });
-}
+    // Ideal weight (Hamwi formula)
+    const idealLow = 18.5 * heightM * heightM;
+    const idealHigh = 24.9 * heightM * heightM;
 
-function renderKeys(data) {
-  var today  = new Date().toISOString().slice(0,16);
-  var active = 0, inactive = 0;
-  var html   = "";
+    // Body fat % estimate (US Navy / BMI method)
+    let fatPercent;
+    if (gender === 'male') {
+      fatPercent = (1.20 * bmi) + (0.23 * age) - 16.2;
+    } else {
+      fatPercent = (1.20 * bmi) + (0.23 * age) - 5.4;
+    }
+    fatPercent = Math.max(3, Math.min(60, fatPercent));
 
-  data.forEach(function(k) {
-    var isActive  = k.status === "active";
-    var expDt     = k.expiry_datetime || k.expiry || "";
-    var isExpired = expDt && expDt < today && isActive;
-    if (isActive && !isExpired) active++;
-    else inactive++;
+    // Lean mass
+    const fatKg = weight * fatPercent / 100;
+    const leanKg = weight - fatKg;
 
-    var badgeClass = isExpired ? "badge-expired" : isActive ? "badge-active" : "badge-inactive";
-    var badgeText  = isExpired ? "หมดอายุ" : isActive ? "ใช้งานได้" : "ปิดใช้งาน";
-    var isSel      = selectedIds.indexOf(k.id) >= 0;
+    // BMI category
+    let category, color, emoji;
+    if (bmi < 16) { category = 'ผอมเกินไปมาก'; color = '#6e9cff'; emoji = '⚠️'; }
+    else if (bmi < 18.5) { category = 'น้ำหนักต่ำกว่าเกณฑ์'; color = '#9ab8ff'; emoji = '📉'; }
+    else if (bmi < 25) { category = 'น้ำหนักปกติ ✓'; color = '#7fff6e'; emoji = '✅'; }
+    else if (bmi < 27.5) { category = 'น้ำหนักเกินเล็กน้อย'; color = '#ffd96e'; emoji = '📊'; }
+    else if (bmi < 30) { category = 'น้ำหนักเกิน'; color = '#ffb96e'; emoji = '⚡'; }
+    else if (bmi < 35) { category = 'อ้วนระดับที่ 1'; color = '#ff8a6e'; emoji = '🔴'; }
+    else { category = 'อ้วนระดับที่ 2+'; color = '#ff6e6e'; emoji = '🚨'; }
 
-    html +=
-      "<div class='key-item" + (isSel?" selected":"") + "' id='ki-"+k.id+"'>" +
-        "<div class='key-top'>" +
-          "<div style='display:flex;align-items:center;gap:10px'>" +
-            "<input type='checkbox' " + (isSel?"checked":"") +
-              " onchange='toggleSelect("+k.id+",this.checked)' style='accent-color:var(--accent-mid)'>" +
-            "<span class='key-name'>" + esc(k.key) + "</span>" +
-          "</div>" +
-          "<span class='badge "+badgeClass+"'>" + badgeText + "</span>" +
-        "</div>" +
-        "<div class='key-meta'>" +
-          "<span>📅 " + (expDt || "ไม่มีกำหนด") + "</span>" +
-          "<span>📝 " + esc(k.note||"—") + "</span>" +
-        "</div>" +
-        "<div class='key-actions'>" +
-          (isActive
-            ? "<button class='btn-sm btn-block' onclick='toggleKey("+k.id+",\"inactive\")'>บล็อก</button>"
-            : "<button class='btn-sm btn-unblock' onclick='toggleKey("+k.id+",\"active\")'>ปลดบล็อก</button>") +
-          "<button class='btn-sm btn-renew' onclick='renewKey("+k.id+")'>ต่ออายุ</button>" +
-          "<button class='btn-sm btn-del' onclick='deleteKey("+k.id+")'>ลบ</button>" +
-        "</div>" +
-      "</div>";
-  });
+    // ── Update BMI Hero ──
+    document.getElementById('bmiNumber').textContent = bmi.toFixed(1);
+    document.getElementById('bmiNumber').style.color = color;
+    document.getElementById('bmiCategory').textContent = `${emoji} ${category}`;
+    document.getElementById('bmiCategory').style.color = color;
+    document.getElementById('bmiHero').style.setProperty('--result-color', color + '25');
 
-  document.getElementById("statTotal").textContent   = allKeys.length;
-  document.getElementById("statActive").textContent  = active;
-  document.getElementById("statInactive").textContent = inactive;
-  document.getElementById("keyList").innerHTML =
-    data.length ? html : "<div class='empty'>ยังไม่มี Key</div>";
-}
+    // Scale marker position (BMI 10–40 range mapped 0–100%)
+    const markerPct = Math.min(Math.max(((bmi - 10) / 30) * 100, 2), 98);
+    setTimeout(() => {
+      document.getElementById('scaleMarker').style.left = markerPct + '%';
+    }, 100);
 
-// ── Search ──
-function filterKeys() {
-  var q = document.getElementById("searchInput").value.toLowerCase();
-  if (!q) { renderKeys(allKeys); return; }
-  var filtered = allKeys.filter(function(k){
-    return (k.key||"").toLowerCase().includes(q)
-        || (k.note||"").toLowerCase().includes(q);
-  });
-  renderKeys(filtered);
-}
+    // ── Metrics ──
+    const metrics = [
+      {
+        icon: '⚖️', name: 'BMR (พลังงานพื้นฐาน)',
+        value: Math.round(bmr).toLocaleString(), unit: 'kcal/วัน',
+        sub: 'พลังงานที่ร่างกายต้องการแม้ไม่ขยับเลย',
+        accent: '#7fff6e'
+      },
+      {
+        icon: '🔥', name: 'TDEE (พลังงานรวม)',
+        value: Math.round(tdee).toLocaleString(), unit: 'kcal/วัน',
+        sub: 'แคลอรีที่คุณเผาผลาญจริงต่อวัน',
+        accent: '#ff9a6e'
+      },
+      {
+        icon: '🫀', name: 'ไขมันในร่างกาย (ประมาณ)',
+        value: fatPercent.toFixed(1), unit: '%',
+        sub: `ประมาณ ${fatKg.toFixed(1)} กก. จากน้ำหนักรวม`,
+        accent: '#ff6e9c'
+      },
+      {
+        icon: '💪', name: 'มวลกล้ามเนื้อ/กระดูก (ประมาณ)',
+        value: leanKg.toFixed(1), unit: 'กก.',
+        sub: 'Lean Body Mass (ไม่รวมไขมัน)',
+        accent: '#6e9cff'
+      },
+      {
+        icon: '🍽️', name: 'แคลอรีลดน้ำหนัก',
+        value: Math.round(tdee - 500).toLocaleString(), unit: 'kcal/วัน',
+        sub: 'ลดประมาณ 0.5 กก./สัปดาห์ (Deficit 500)',
+        accent: '#ffd96e'
+      },
+      {
+        icon: '📈', name: 'แคลอรีเพิ่มน้ำหนัก',
+        value: Math.round(tdee + 400).toLocaleString(), unit: 'kcal/วัน',
+        sub: 'เพิ่มมวลกล้ามเนื้อ (Surplus 400)',
+        accent: '#a8ff9e'
+      },
+    ];
 
-// ── Select ──
-function toggleSelect(id, checked) {
-  if (checked) {
-    if (selectedIds.indexOf(id) < 0) selectedIds.push(id);
-  } else {
-    selectedIds = selectedIds.filter(function(x){ return x !== id; });
-  }
-  var el = document.getElementById("ki-"+id);
-  if (el) el.classList.toggle("selected", checked);
-  document.getElementById("bulkInfo").textContent = "เลือก " + selectedIds.length + " รายการ";
-  document.getElementById("bulkBar").classList.toggle("show", selectedIds.length > 0);
-}
+    const grid = document.getElementById('metricsGrid');
+    grid.innerHTML = metrics.map((m, i) => `
+      <div class="metric-card animate-in" style="--card-accent:${m.accent}; animation-delay:${i*0.07}s">
+        <div class="metric-icon">${m.icon}</div>
+        <div class="metric-name">${m.name}</div>
+        <div class="metric-value">${m.value} <span class="metric-unit">${m.unit}</span></div>
+        <div class="metric-sub">${m.sub}</div>
+      </div>
+    `).join('');
 
-// ── Bulk ──
-function bulkAction(status) {
-  if (!selectedIds.length) return;
-  if (!confirm((status==="active"?"ปลดบล็อก":"บล็อก") + " " + selectedIds.length + " Key?")) return;
-  var p = selectedIds.map(function(id){
-    return fetch(SUPABASE_URL + "/rest/v1/keys?id=eq." + id, {
-      method:"PATCH", headers:HEADERS,
-      body:JSON.stringify({ status: status })
-    });
-  });
-  Promise.all(p).then(function(){
-    showToast("✓ ดำเนินการสำเร็จ " + selectedIds.length + " รายการ");
-    selectedIds = [];
-    loadKeys();
-  });
-}
+    // ── Ideal Weight ──
+    document.getElementById('weightRange').innerHTML = `
+      <div class="weight-range-item">
+        <div class="weight-range-label">น้ำหนักต่ำสุด (BMI 18.5)</div>
+        <div class="weight-range-value">${idealLow.toFixed(1)} <small style="font-size:13px;color:#666">กก.</small></div>
+      </div>
+      <div class="weight-range-sep">—</div>
+      <div class="weight-range-item">
+        <div class="weight-range-label">น้ำหนักสูงสุด (BMI 24.9)</div>
+        <div class="weight-range-value">${idealHigh.toFixed(1)} <small style="font-size:13px;color:#666">กก.</small></div>
+      </div>
+      <div class="weight-range-item" style="--card-accent:var(--accent4)">
+        <div class="weight-range-label">ต้องลด/เพิ่มอีก</div>
+        <div class="weight-range-value" style="color:${color}">
+          ${weight < idealLow ? `+${(idealLow - weight).toFixed(1)}` :
+            weight > idealHigh ? `-${(weight - idealHigh).toFixed(1)}` : '✓ อยู่ในเกณฑ์'}
+          ${(weight < idealLow || weight > idealHigh) ? '<small style="font-size:13px;color:#666"> กก.</small>' : ''}
+        </div>
+      </div>
+    `;
 
-function bulkRenew() {
-  if (!selectedIds.length) return;
-  var days = prompt("ต่ออายุกี่วัน?", "30");
-  if (!days) return;
-  var d = parseInt(days);
-  if (isNaN(d) || d <= 0) { showToast("⚠ กรอกจำนวนวันให้ถูกต้อง"); return; }
-  var newExp = new Date(Date.now() + d*86400000);
-  var expStr = newExp.toISOString().slice(0,16);
-  var p = selectedIds.map(function(id){
-    return fetch(SUPABASE_URL + "/rest/v1/keys?id=eq." + id, {
-      method:"PATCH", headers:HEADERS,
-      body:JSON.stringify({ expiry_datetime: expStr })
-    });
-  });
-  Promise.all(p).then(function(){
-    showToast("✓ ต่ออายุ " + selectedIds.length + " Key เป็น " + d + " วัน");
-    selectedIds = [];
-    loadKeys();
-  });
-}
+    // ── Risk Assessment ──
+    function getRisk(bmi, condition) {
+      const risks = {
+        diabetes: bmi < 18.5 ? 15 : bmi < 25 ? 10 : bmi < 30 ? 40 : bmi < 35 ? 65 : 80,
+        heart: bmi < 18.5 ? 20 : bmi < 25 ? 10 : bmi < 30 ? 35 : bmi < 35 ? 60 : 80,
+        hypertension: bmi < 18.5 ? 10 : bmi < 25 ? 12 : bmi < 30 ? 45 : bmi < 35 ? 68 : 85,
+        joints: bmi < 18.5 ? 15 : bmi < 25 ? 10 : bmi < 30 ? 30 : bmi < 35 ? 60 : 82,
+        sleep: bmi < 18.5 ? 8 : bmi < 25 ? 10 : bmi < 30 ? 30 : bmi < 35 ? 55 : 75,
+      };
+      return risks[condition];
+    }
 
-function bulkDelete() {
-  if (!selectedIds.length) return;
-  if (!confirm("ลบ " + selectedIds.length + " Key?")) return;
-  var p = selectedIds.map(function(id){
-    return fetch(SUPABASE_URL + "/rest/v1/keys?id=eq." + id, {
-      method:"DELETE", headers:HEADERS
-    });
-  });
-  Promise.all(p).then(function(){
-    showToast("✓ ลบ " + selectedIds.length + " Key สำเร็จ");
-    selectedIds = [];
-    loadKeys();
-  });
-}
+    function riskColor(pct) {
+      if (pct < 20) return '#7fff6e';
+      if (pct < 40) return '#ffd96e';
+      if (pct < 60) return '#ff9a6e';
+      return '#ff6e6e';
+    }
 
-// ── Create Key ──
-function createKey() {
-  var key    = document.getElementById("newKey").value.trim();
-  var expiry = document.getElementById("newExpiry").value;
-  var note   = document.getElementById("newNote").value.trim();
-  if (!key) { showToast("⚠ กรุณาใส่ Key"); return; }
-  fetch(SUPABASE_URL + "/rest/v1/keys", {
-    method:"POST",
-    headers: Object.assign({}, HEADERS, { "Prefer":"return=minimal" }),
-    body: JSON.stringify({ key:key, status:"active", expiry_datetime:expiry, note:note })
-  }).then(function(r){
-    if (r.ok||r.status===201) {
-      showToast("✓ สร้าง Key สำเร็จ");
-      document.getElementById("newKey").value    = "";
-      document.getElementById("newExpiry").value = "";
-      document.getElementById("newNote").value   = "";
-      loadKeys();
-    } else { showToast("✕ เกิดข้อผิดพลาด"); }
-  }).catch(function(){ showToast("✕ เชื่อมต่อไม่ได้"); });
-}
+    function riskLabel(pct) {
+      if (pct < 20) return 'ต่ำ';
+      if (pct < 40) return 'ปานกลาง';
+      if (pct < 60) return 'สูง';
+      return 'สูงมาก';
+    }
 
-// ── Toggle Key ──
-function toggleKey(id, status) {
-  fetch(SUPABASE_URL + "/rest/v1/keys?id=eq." + id, {
-    method:"PATCH", headers:HEADERS,
-    body: JSON.stringify({ status:status })
-  }).then(function(){
-    showToast(status==="active" ? "✓ ปลดบล็อกสำเร็จ" : "✓ บล็อกสำเร็จ");
-    loadKeys();
-  });
-}
+    const risks = [
+      { name: 'เบาหวานชนิดที่ 2', pct: getRisk(bmi, 'diabetes') },
+      { name: 'โรคหัวใจและหลอดเลือด', pct: getRisk(bmi, 'heart') },
+      { name: 'ความดันโลหิตสูง', pct: getRisk(bmi, 'hypertension') },
+      { name: 'โรคข้อและกระดูก', pct: getRisk(bmi, 'joints') },
+      { name: 'Sleep Apnea / นอนกรน', pct: getRisk(bmi, 'sleep') },
+    ];
 
-// ── Renew Key ──
-function renewKey(id) {
-  var days = prompt("ต่ออายุกี่วัน?", "30");
-  if (!days) return;
-  var d = parseInt(days);
-  if (isNaN(d)||d<=0) { showToast("⚠ กรอกจำนวนวัน"); return; }
-  var expStr = new Date(Date.now()+d*86400000).toISOString().slice(0,16);
-  fetch(SUPABASE_URL + "/rest/v1/keys?id=eq." + id, {
-    method:"PATCH", headers:HEADERS,
-    body: JSON.stringify({ expiry_datetime:expStr, status:"active" })
-  }).then(function(){
-    showToast("✓ ต่ออายุ " + d + " วันสำเร็จ");
-    loadKeys();
-  });
-}
+    document.getElementById('riskItems').innerHTML = risks.map((r, i) => `
+      <div class="risk-item" style="animation: fadeUp 0.4s ease ${i*0.08}s both">
+        <div class="risk-name">${r.name}</div>
+        <div class="risk-bar-wrap">
+          <div class="risk-bar" id="rbar${i}" style="width:0%; background:${riskColor(r.pct)}"></div>
+        </div>
+        <div class="risk-level" style="color:${riskColor(r.pct)}">${riskLabel(r.pct)}</div>
+      </div>
+    `).join('');
 
-// ── Delete Key ──
-function deleteKey(id) {
-  if (!confirm("ลบ Key นี้?")) return;
-  fetch(SUPABASE_URL + "/rest/v1/keys?id=eq." + id, {
-    method:"DELETE", headers:HEADERS
-  }).then(function(){
-    showToast("✓ ลบสำเร็จ");
-    loadKeys();
-  });
-}
-
-// ── Export CSV ──
-function exportCSV() {
-  if (!allKeys.length) { showToast("⚠ ยังไม่มีข้อมูล"); return; }
-  var rows = ["id,key,status,expiry_datetime,note"];
-  allKeys.forEach(function(k){
-    rows.push([k.id, k.key, k.status, k.expiry_datetime||k.expiry||"", k.note||""].join(","));
-  });
-  var blob = new Blob([rows.join("\n")], { type:"text/csv;charset=utf-8;" });
-  var a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = "japan_keys_" + new Date().toISOString().slice(0,10) + ".csv";
-  a.click();
-  showToast("✓ Export CSV สำเร็จ");
-}
-
-// ── Announcements ──
-function loadAnnouncements() {
-  document.getElementById("announceList").innerHTML = "<div class='empty'>กำลังโหลด...</div>";
-  fetch(SUPABASE_URL + "/rest/v1/announcements?select=*&order=created_at.desc", { headers:HEADERS })
-    .then(function(r){ return r.json(); })
-    .then(function(data){
-      if (!data.length) {
-        document.getElementById("announceList").innerHTML = "<div class='empty'>ยังไม่มีประกาศ</div>";
-        return;
-      }
-      var html = "";
-      data.forEach(function(a){
-        var dt = a.created_at ? new Date(a.created_at).toLocaleString("th-TH") : "-";
-        html += "<div class='announce-item'>" +
-          "<div class='announce-title'>" + esc(a.title||"") + "</div>" +
-          "<div class='announce-msg'>" + esc(a.message||"") + "</div>" +
-          "<div class='announce-meta'>" +
-            "<span>" + dt + "</span>" +
-            "<div style='display:flex;gap:6px'>" +
-              "<button class='btn-sm " + (a.active?"btn-block":"btn-unblock") + "' " +
-                "onclick='toggleAnnounce(" + a.id + "," + !a.active + ")'>" +
-                (a.active?"ซ่อน":"แสดง") + "</button>" +
-              "<button class='btn-sm btn-del' onclick='deleteAnnounce("+a.id+")'>ลบ</button>" +
-            "</div>" +
-          "</div>" +
-        "</div>";
+    setTimeout(() => {
+      risks.forEach((r, i) => {
+        const el = document.getElementById('rbar' + i);
+        if (el) el.style.width = r.pct + '%';
       });
-      document.getElementById("announceList").innerHTML = html;
-    });
-}
+    }, 200);
 
-function createAnnouncement() {
-  var title = document.getElementById("annTitle").value.trim();
-  var msg   = document.getElementById("annMsg").value.trim();
-  if (!title||!msg) { showToast("⚠ กรอกหัวข้อและข้อความ"); return; }
-  fetch(SUPABASE_URL + "/rest/v1/announcements", {
-    method:"POST",
-    headers: Object.assign({}, HEADERS, { "Prefer":"return=minimal" }),
-    body: JSON.stringify({ title:title, message:msg, active:true })
-  }).then(function(){
-    showToast("✓ ส่งประกาศสำเร็จ");
-    document.getElementById("annTitle").value = "";
-    document.getElementById("annMsg").value   = "";
-    loadAnnouncements();
-  });
-}
+    // ── Advice ──
+    let advice = [];
 
-function toggleAnnounce(id, active) {
-  fetch(SUPABASE_URL + "/rest/v1/announcements?id=eq." + id, {
-    method:"PATCH", headers:HEADERS,
-    body: JSON.stringify({ active:active })
-  }).then(function(){
-    showToast(active ? "✓ แสดงประกาศแล้ว" : "✓ ซ่อนประกาศแล้ว");
-    loadAnnouncements();
-  });
-}
+    if (bmi < 18.5) {
+      advice = [
+        { emoji: '🍳', title: 'เพิ่มแคลอรี่อย่างมีคุณภาพ', text: 'รับประทานโปรตีนและคาร์โบไฮเดรตเชิงซ้อนเพิ่มขึ้น เน้นอาหารมีคุณค่า เช่น ไข่ เนื้อสัตว์ ถั่ว' },
+        { emoji: '🏋️', title: 'ออกกำลังสร้างกล้ามเนื้อ', text: 'เน้น Weight Training เพื่อเพิ่มมวลกล้ามเนื้อ ไม่ใช่แค่น้ำหนักตัว' },
+        { emoji: '🩺', title: 'ตรวจสุขภาพ', text: 'น้ำหนักน้อยเกินไปอาจมีสาเหตุจากโรคหรือภาวะขาดสารอาหาร ควรพบแพทย์' },
+        { emoji: '😴', title: 'นอนหลับพักผ่อนให้เพียงพอ', text: 'ร่างกายสร้างกล้ามเนื้อและฟื้นฟูตัวเองระหว่างการนอนหลับ ควรนอน 7-9 ชั่วโมง' },
+      ];
+    } else if (bmi < 25) {
+      advice = [
+        { emoji: '🎉', title: 'คุณอยู่ในเกณฑ์ดี!', text: `น้ำหนักของ${name || 'คุณ'}อยู่ในช่วงปกติที่ดีต่อสุขภาพ รักษาพฤติกรรมนี้ไว้` },
+        { emoji: '🥗', title: 'รับประทานอาหารหลากหลาย', text: 'เน้นผัก ผลไม้ ธัญพืชไม่ขัดสี โปรตีนไขมันต่ำ และลดน้ำตาลแปรรูป' },
+        { emoji: '🏃', title: 'ออกกำลังกายสม่ำเสมอ', text: 'ออกกำลังกายอย่างน้อย 150 นาที/สัปดาห์ ผสม Cardio และ Weight Training' },
+        { emoji: '💧', title: 'ดื่มน้ำให้เพียงพอ', text: `ควรดื่มน้ำอย่างน้อย ${(weight * 0.033).toFixed(1)} ลิตร/วัน` },
+      ];
+    } else if (bmi < 30) {
+      advice = [
+        { emoji: '🎯', title: `เป้าหมาย: ลด ${(weight - idealHigh).toFixed(1)} กก.`, text: 'ลดแคลอรี่ลง 300-500 kcal/วัน เพื่อลดน้ำหนักอย่างปลอดภัย 0.3-0.5 กก./สัปดาห์' },
+        { emoji: '🚶', title: 'เดิน 10,000 ก้าวต่อวัน', text: 'การเดินเป็นวิธีลดน้ำหนักที่ง่ายที่สุด เผาผลาญ 300-400 kcal ต่อชั่วโมง' },
+        { emoji: '🍽️', title: 'ควบคุมปริมาณอาหาร', text: 'ลดน้ำตาล ของทอด และแป้งขัดขาว เพิ่มผักและโปรตีนในทุกมื้อ' },
+        { emoji: '📏', title: 'ติดตามรอบเอว', text: 'รอบเอวควรน้อยกว่า ' + (gender === 'male' ? '90 ซม. (ชาย)' : '80 ซม. (หญิง)') },
+      ];
+    } else {
+      advice = [
+        { emoji: '🏥', title: 'ปรึกษาแพทย์', text: 'BMI ระดับนี้เพิ่มความเสี่ยงโรคเรื้อรัง ควรพบแพทย์เพื่อวางแผนลดน้ำหนักอย่างปลอดภัย' },
+        { emoji: '🎯', title: 'ตั้งเป้าหมายระยะสั้น', text: 'เริ่มต้นด้วยการลด 5-10% ของน้ำหนักตัว ซึ่งช่วยลดความเสี่ยงโรคได้มาก' },
+        { emoji: '🥦', title: 'ปรับอาหารก่อนเลย', text: 'ลดน้ำตาลและของทอด เพิ่มผักและโปรตีน อาหารมีผลต่อน้ำหนักมากกว่าการออกกำลังกาย' },
+        { emoji: '🌊', title: 'ออกกำลังกายในน้ำ', text: 'ว่ายน้ำหรือออกกำลังกายในน้ำลดแรงกดต่อข้อ เหมาะสำหรับผู้มีน้ำหนักมาก' },
+      ];
+    }
 
-function deleteAnnounce(id) {
-  if (!confirm("ลบประกาศนี้?")) return;
-  fetch(SUPABASE_URL + "/rest/v1/announcements?id=eq." + id, {
-    method:"DELETE", headers:HEADERS
-  }).then(function(){
-    showToast("✓ ลบสำเร็จ");
-    loadAnnouncements();
-  });
-}
+    document.getElementById('adviceGrid').innerHTML = advice.map((a, i) => `
+      <div class="advice-item" style="animation: fadeUp 0.4s ease ${i*0.08}s both">
+        <span class="advice-emoji">${a.emoji}</span>
+        <div class="advice-title">${a.title}</div>
+        <div class="advice-text">${a.text}</div>
+      </div>
+    `).join('');
 
-// ── Logs ──
-function loadLogs() {
-  document.getElementById("logList").innerHTML = "<div class='empty'>กำลังโหลด...</div>";
-  fetch(SUPABASE_URL + "/rest/v1/usage_logs?select=*&order=created_at.desc&limit=100", { headers:HEADERS })
-    .then(function(r){ return r.json(); })
-    .then(function(data){
-      if (!data.length) {
-        document.getElementById("logList").innerHTML = "<div class='empty'>ยังไม่มี Log</div>";
-        return;
-      }
-      var html = "";
-      data.forEach(function(l){
-        var dt = l.created_at ? new Date(l.created_at).toLocaleString("th-TH") : "-";
-        html += "<div class='log-item'>" +
-          "<div>" +
-            "<div class='log-key'>" + esc(l.key_name||"—") + "</div>" +
-            "<div class='log-time'>" + dt + "</div>" +
-          "</div>" +
-          "<span class='log-action'>" + esc(l.action||"") + "</span>" +
-        "</div>";
-      });
-      document.getElementById("logList").innerHTML = html;
-    });
-}
-
-// ── Stats ──
-function loadStats() {
-  fetch(SUPABASE_URL + "/rest/v1/usage_logs?select=*&order=created_at.desc&limit=500", { headers:HEADERS })
-    .then(function(r){ return r.json(); })
-    .then(function(data){
-      var loginCount   = data.filter(function(l){ return l.action==="LOGIN"||l.action==="AUTO_LOGIN"; }).length;
-      document.getElementById("statLogin").textContent = loginCount;
-
-      var today = new Date().toISOString().slice(0,10);
-      var expiredCount = allKeys.filter(function(k){
-        var exp = k.expiry_datetime||k.expiry||"";
-        return exp && exp.slice(0,10) < today;
-      }).length;
-      document.getElementById("statExpired").textContent = expiredCount;
-
-      renderChart(data);
-    });
-
-  fetch(SUPABASE_URL + "/rest/v1/app_config?select=*&limit=1", { headers:HEADERS })
-    .then(function(r){ return r.json(); })
-    .then(function(data){
-      if (!data.length) return;
-      var cfg = data[0];
-      document.getElementById("statVersion").textContent   = cfg.latest_version || "—";
-      document.getElementById("cfgVersion").value          = cfg.latest_version || "";
-      document.getElementById("cfgDownload").value         = cfg.download_url || "";
-      document.getElementById("cfgForce").checked          = cfg.force_update || false;
-    });
-}
-
-function renderChart(logs) {
-  var days = [];
-  for (var i = 6; i >= 0; i--) {
-    var d = new Date(Date.now() - i*86400000);
-    days.push(d.toISOString().slice(0,10));
+    // Show results
+    const resultsEl = document.getElementById('results');
+    resultsEl.classList.add('visible');
+    setTimeout(() => {
+      resultsEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
   }
-  var counts = {};
-  days.forEach(function(d){ counts[d] = 0; });
-  logs.forEach(function(l){
-    if (!l.created_at) return;
-    var day = l.created_at.slice(0,10);
-    if (counts[day] !== undefined) counts[day]++;
-  });
-  var max = Math.max.apply(null, days.map(function(d){ return counts[d]; })) || 1;
-  var html = "";
-  days.forEach(function(d){
-    var pct = Math.max(4, Math.round((counts[d]/max)*140));
-    var label = d.slice(5);
-    html += "<div class='bar-col'>" +
-      "<div style='font-size:10px;color:var(--text3);margin-bottom:4px'>" + counts[d] + "</div>" +
-      "<div class='bar' style='height:" + pct + "px'></div>" +
-      "<div class='bar-label'>" + label + "</div>" +
-    "</div>";
-  });
-  document.getElementById("chart").innerHTML = html;
-}
-
-// ── Save Config ──
-function saveConfig() {
-  var ver      = document.getElementById("cfgVersion").value.trim();
-  var download = document.getElementById("cfgDownload").value.trim();
-  var force    = document.getElementById("cfgForce").checked;
-  if (!ver) { showToast("⚠ กรอกเวอร์ชัน"); return; }
-
-  fetch(SUPABASE_URL + "/rest/v1/app_config?select=id&limit=1", { headers:HEADERS })
-    .then(function(r){ return r.json(); })
-    .then(function(data){
-      var body = JSON.stringify({ latest_version:ver, download_url:download, force_update:force });
-      var req;
-      if (data.length) {
-        req = fetch(SUPABASE_URL + "/rest/v1/app_config?id=eq." + data[0].id, {
-          method:"PATCH", headers:HEADERS, body:body
-        });
-      } else {
-        req = fetch(SUPABASE_URL + "/rest/v1/app_config", {
-          method:"POST", headers:Object.assign({},HEADERS,{"Prefer":"return=minimal"}), body:body
-        });
-      }
-      return req;
-    })
-    .then(function(){
-      showToast("✓ บันทึกการตั้งค่าสำเร็จ");
-    });
-}
-
-// ── Toast ──
-function showToast(msg) {
-  var el = document.getElementById("toast");
-  el.textContent = msg;
-  el.classList.add("show");
-  setTimeout(function(){ el.classList.remove("show"); }, 2800);
-}
-
-// ── Escape HTML ──
-function esc(s) {
-  return String(s)
-    .replace(/&/g,"&amp;").replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;").replace(/"/g,"&quot;");
-}
 </script>
+
 </body>
-                                                                 </html>
+</html>
+
