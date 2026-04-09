@@ -2,9 +2,8 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>เป็นแฟนเค้าหน่อยน้าาา 💖</title>
-  <!-- ฟอนต์น่ารัก -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>💘 รับรักเค้าหน่อยมั้ย 💘</title>
   <link href="https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
     * {
@@ -16,236 +15,231 @@
 
     body {
       min-height: 100vh;
-      background: linear-gradient(145deg, #ffe6f0 0%, #ffd9e8 100%);
+      background: #ffecf0;
+      background-image: radial-gradient(circle at 20% 30%, #ffe5f1 0%, #ffd9e4 100%);
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 20px;
+      padding: 16px;
       position: relative;
       overflow-x: hidden;
     }
 
-    /* กล่องหลัก */
-    .container {
-      background: rgba(255, 255, 255, 0.75);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-radius: 50px;
-      padding: 40px 30px;
-      max-width: 600px;
+    /* กล่องเนื้อหา */
+    .love-box {
+      background: rgba(255, 250, 245, 0.8);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: 70px;
+      padding: 40px 24px;
+      max-width: 650px;
       width: 100%;
-      box-shadow: 0 25px 40px rgba(244, 143, 177, 0.2),
-                  0 0 0 2px #fff9fb inset;
+      box-shadow: 0 30px 40px rgba(210, 80, 120, 0.2),
+                  0 0 0 3px #fff0f5 inset,
+                  0 0 0 6px #ffc1d4 inset;
       text-align: center;
-      border: 1px solid rgba(255, 220, 240, 0.8);
-      transition: all 0.3s ease;
-    }
-
-    /* ส่วนคำถาม (แสดงตอนเริ่ม) */
-    .question-section {
-      display: block;
+      transition: box-shadow 0.3s;
+      border: 2px solid #ffb6c1;
+      position: relative;
+      z-index: 10;
     }
 
     h1 {
-      color: #b3406c;
-      font-size: 2.8rem;
-      font-weight: 600;
-      text-shadow: 4px 4px 0 #ffbfd5;
-      letter-spacing: 1px;
-      margin-bottom: 15px;
-      word-break: break-word;
+      font-size: 2.7rem;
+      color: #a63462;
+      text-shadow: 3px 3px 0 #ffb7c5;
+      margin-bottom: 8px;
+      letter-spacing: 2px;
     }
 
-    .cute-emoji {
-      font-size: 3.5rem;
-      line-height: 1.2;
-      filter: drop-shadow(0 6px 6px rgba(0,0,0,0.05));
+    .cute-emoji-big {
+      font-size: 3.8rem;
+      line-height: 1.3;
+      filter: drop-shadow(0 6px 8px rgba(230, 100, 130, 0.2));
     }
 
-    .button-group {
+    .button-area {
       position: relative;
+      min-height: 240px;
+      margin: 25px 0 15px;
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 30px;
-      margin: 30px 0 20px;
       flex-wrap: wrap;
-      min-height: 180px;
+      gap: 20px;
     }
 
     /* ปุ่มพื้นฐาน */
-    .btn {
+    .love-btn {
       border: none;
-      border-radius: 999px;
-      padding: 18px 35px;
-      font-size: 2rem;
+      border-radius: 200px;
+      padding: 22px 40px;
+      font-size: 2.2rem;
       font-weight: 600;
       cursor: pointer;
-      box-shadow: 0 12px 0 #b34e7a, 0 8px 20px rgba(180, 60, 100, 0.25);
-      transition: all 0.15s cubic-bezier(0.18, 0.89, 0.32, 1.28);
-      border: 3px solid #fff5fb;
-      letter-spacing: 2px;
+      box-shadow: 0 12px 0 #ac3a64, 0 10px 20px rgba(170, 50, 90, 0.25);
+      transition: all 0.2s cubic-bezier(0.25, 0.1, 0.15, 1.3);
+      border: 4px solid #ffeef4;
       color: white;
-      text-shadow: 2px 2px 0 rgba(0,0,0,0.1);
+      text-shadow: 2px 2px 0 #b34e7a;
+      letter-spacing: 2px;
       transform: scale(1);
-      line-height: 1.2;
+      background: #ff8dae;
+      background: linear-gradient(145deg, #ffa7c2, #ff709b);
+      min-width: 180px;
       user-select: none;
       touch-action: manipulation;
-    }
-
-    .btn-yes {
-      background: #ff85a8;
-      background: linear-gradient(145deg, #ff98b9, #ff6f9b);
-      box-shadow: 0 12px 0 #a13e63, 0 8px 20px rgba(200, 60, 100, 0.3);
-    }
-
-    .btn-no {
-      background: #b0b0c0;
-      background: linear-gradient(145deg, #c2c2d6, #a5a5bb);
-      box-shadow: 0 12px 0 #6e6e88, 0 8px 20px rgba(100, 100, 130, 0.25);
       position: relative;
-      /* จะขยับได้ด้วย transform */
     }
 
-    .btn:active {
-      transform: translateY(5px);
-      box-shadow: 0 7px 0 #a13e63, 0 8px 20px rgba(180,60,100,0.25);
+    .yes-btn {
+      background: #ff8dae;
+      background: linear-gradient(145deg, #ffb0c8, #ff7da3);
+      box-shadow: 0 12px 0 #9e3c62, 0 10px 25px #e07a9e;
+      z-index: 20;
     }
 
-    /* ปุ่มไม่เป็น — เพิ่ม transition ให้ smooth */
-    .btn-no {
-      transition: transform 0.25s ease, box-shadow 0.2s, top 0.2s, left 0.2s, width 0.2s, height 0.2s, font-size 0.2s;
+    .no-btn {
+      background: #c0b7c9;
+      background: linear-gradient(145deg, #d4c9db, #b8aac0);
+      box-shadow: 0 12px 0 #7a637f, 0 10px 20px rgba(100, 70, 100, 0.3);
+      color: #fcf4f9;
+      text-shadow: 2px 2px 0 #6e5474;
+      z-index: 15;
+      transition: transform 0.25s, opacity 0.3s, box-shadow 0.2s, left 0.2s, top 0.2s, font-size 0.2s, padding 0.2s;
     }
 
-    /* ส่วนแสดงผลหลังจากกด "เป็นแฟน" */
-    .success-section {
+    /* เอฟเฟกต์กดปุ่ม */
+    .love-btn:active {
+      transform: translateY(6px) scale(0.98);
+      box-shadow: 0 6px 0 #9e3c62, 0 8px 15px rgba(0,0,0,0.1);
+    }
+
+    /* ข้อความเตือนเล็ก ๆ */
+    .hint-message {
+      margin-top: 8px;
+      font-size: 1.3rem;
+      color: #bc6c8a;
+      min-height: 40px;
+      font-weight: 400;
+      transition: 0.2s;
+    }
+
+    /* หน้าสำเร็จ */
+    .success-panel {
       display: none;
-      animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      animation: popHeart 0.6s;
     }
 
-    @keyframes popIn {
-      0% { opacity: 0; transform: scale(0.7); }
-      100% { opacity: 1; transform: scale(1); }
+    @keyframes popHeart {
+      0% { opacity: 0; transform: scale(0.2) rotate(-5deg); }
+      80% { transform: scale(1.05); }
+      100% { opacity: 1; transform: scale(1) rotate(0); }
     }
 
     .success-card {
-      background: #fff0f5;
-      border-radius: 40px;
-      padding: 30px 20px;
-      border: 4px dashed #ff98b9;
+      background: #fff3f8;
+      border-radius: 50px;
+      padding: 35px 20px;
+      border: 5px dashed #ff8aac;
+      box-shadow: 0 15px 0 #b35f7c, inset 0 0 20px #ffe0ec;
     }
 
     .success-card h2 {
-      color: #c44a7a;
       font-size: 2.5rem;
-      margin-bottom: 25px;
+      color: #a03a60;
+      margin: 15px 0;
     }
 
-    .input-group {
-      margin: 20px 0;
-    }
-
-    .cute-input {
+    .love-input {
       width: 90%;
-      padding: 18px 22px;
-      font-size: 1.4rem;
-      border: 3px solid #ffb0c8;
+      padding: 18px 20px;
+      font-size: 1.5rem;
+      border: 4px solid #ffb0ca;
       border-radius: 60px;
       background: white;
       outline: none;
-      color: #5e3a4a;
+      color: #632c44;
       text-align: center;
-      transition: all 0.2s;
-      font-weight: 400;
+      margin: 15px 0;
     }
 
-    .cute-input:focus {
-      border-color: #ff6f9b;
-      box-shadow: 0 0 0 6px rgba(255, 111, 155, 0.2);
-    }
-
-    .submit-message-btn {
-      background: #ff85a8;
+    .send-love {
+      background: #ff8aae;
       border: none;
       color: white;
-      font-size: 1.8rem;
-      padding: 16px 30px;
-      border-radius: 999px;
-      font-weight: 600;
-      margin-top: 15px;
-      box-shadow: 0 8px 0 #a13e63;
+      font-size: 2rem;
+      padding: 18px 30px;
+      border-radius: 60px;
+      font-weight: bold;
+      box-shadow: 0 9px 0 #ac3e65;
       cursor: pointer;
-      border: 3px solid #fff5fb;
+      border: 3px solid #fff1f7;
+      width: 85%;
       transition: 0.1s;
-      width: 80%;
     }
 
-    .submit-message-btn:active {
-      transform: translateY(4px);
-      box-shadow: 0 4px 0 #a13e63;
+    .send-love:active {
+      transform: translateY(5px);
+      box-shadow: 0 4px 0 #ac3e65;
     }
 
-    .small-note {
-      margin-top: 25px;
-      color: #b36b89;
-      font-size: 1.2rem;
+    #displayMessage {
+      margin-top: 20px;
+      font-size: 2rem;
+      color: #b13f66;
+      min-height: 70px;
     }
 
-    /* รูปหัวใจตกแต่ง */
-    .floating-heart {
+    /* หัวใจลอย (ตกแต่ง) */
+    .floaty {
       position: absolute;
-      color: #ffb7c5;
       font-size: 24px;
-      user-select: none;
       pointer-events: none;
-      z-index: 0;
+      z-index: 1;
     }
 
     /* responsive */
     @media (max-width: 480px) {
-      .container { padding: 25px 18px; }
+      .love-box { padding: 30px 16px; border-radius: 45px; }
       h1 { font-size: 2.2rem; }
-      .btn { font-size: 1.6rem; padding: 15px 25px; }
+      .love-btn { font-size: 1.8rem; padding: 18px 25px; min-width: 140px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- หัวใจลอยๆ ตกแต่ง -->
-  <div class="floating-heart" style="top: 10%; left: 5%;">🌸</div>
-  <div class="floating-heart" style="bottom: 15%; right: 8%;">🫧</div>
-  <div class="floating-heart" style="top: 20%; right: 12%;">🎀</div>
-  <div class="floating-heart" style="bottom: 25%; left: 10%;">🐻‍❄️</div>
+  <!-- หัวใจ/อิโมจิตกแต่ง -->
+  <div class="floaty" style="top: 8%; left: 5%;">🐣</div>
+  <div class="floaty" style="bottom: 12%; right: 8%;">🌸</div>
+  <div class="floaty" style="top: 25%; right: 6%;">🫧</div>
+  <div class="floaty" style="bottom: 25%; left: 7%;">🧸</div>
 
-  <div class="container">
-    <!-- ===== หน้าแรก : คำถาม + ปุ่ม ===== -->
-    <div id="questionSection" class="question-section">
-      <div class="cute-emoji">🥺💗</div>
-      <h1>เป็นแฟนเค้าหน่อยนะะ</h1>
-      <div class="cute-emoji" style="font-size: 2.5rem;">👇👇</div>
+  <div class="love-box">
+    <!-- ********** ส่วนถามคำถาม ********** -->
+    <div id="questionPart">
+      <div class="cute-emoji-big">🥺💭💗</div>
+      <h1>เป็นแฟนเค้ามั้ยอ่าา</h1>
+      <div class="cute-emoji-big" style="font-size: 2.5rem;">👇 กดเลย 👇</div>
 
-      <div class="button-group">
-        <!-- ปุ่ม "เป็นแฟน" -->
-        <button id="yesBtn" class="btn btn-yes">✅ เป็นแฟน</button>
-        <!-- ปุ่ม "ไม่เป็น" -->
-        <button id="noBtn" class="btn btn-no">❌ ไม่เป็น</button>
+      <div class="button-area">
+        <button id="yesButton" class="love-btn yes-btn">💖 เป็นแฟน 💖</button>
+        <button id="noButton" class="love-btn no-btn">😢 ไม่เป็น 😢</button>
       </div>
-      <p style="color:#b36280; margin-top: 10px; opacity:0.9;">(กด "ไม่เป็น" แล้วมันจะหนี ฮี่ๆ)</p>
+
+      <div id="hintBox" class="hint-message">🐰 กดสิ กดสิ ~</div>
     </div>
 
-    <!-- ===== หน้าสำเร็จ : แสดงหลังจากกดเป็นแฟน ===== -->
-    <div id="successSection" class="success-section">
+    <!-- ********** ส่วนสำเร็จ ********** -->
+    <div id="successPart" class="success-panel">
       <div class="success-card">
-        <div class="cute-emoji">💖🎉💖</div>
-        <h2>เย้! ตกลงเป็นแฟนแล้วน้าา</h2>
-        <div class="cute-emoji" style="font-size: 3rem;">😽💌</div>
-        
-        <div class="input-group">
-          <input type="text" id="messageInput" class="cute-input" placeholder="บอกรักเค้าหน่อย...">
-        </div>
-        <button id="sendLoveBtn" class="submit-message-btn">ส่งข้อความหวานๆ 💬</button>
-        <div class="small-note">👇 กดแล้วข้อความจะโผล่มาให้เธออ่านน้า</div>
-        <div id="loveMessageDisplay" style="margin-top: 20px; font-size: 1.6rem; color:#a13e63; min-height: 50px;"></div>
+        <div class="cute-emoji-big">💘✨💘</div>
+        <h2>เย้! เป็นแฟนกันแล้วนะะ</h2>
+        <div class="cute-emoji-big">🐻‍❄️💕🐣</div>
+        <input type="text" id="loveMessageInput" class="love-input" placeholder="พิมพ์ข้อความหวาน ๆ ตรงนี้...">
+        <button id="submitLoveBtn" class="send-love">ส่งรักให้เค้าหน่อย 💌</button>
+        <div id="displayMessage"></div>
+        <p style="margin-top: 15px; color:#c06a8a;">⬆️ ข้อความจะขึ้นตรงนี้เลยน้าา</p>
       </div>
     </div>
   </div>
@@ -254,152 +248,226 @@
     (function(){
       "use strict";
 
-      // ----- ดึง element หลัก -----
-      const questionSection = document.getElementById('questionSection');
-      const successSection = document.getElementById('successSection');
-      const yesBtn = document.getElementById('yesBtn');
-      const noBtn = document.getElementById('noBtn');
-      const messageInput = document.getElementById('messageInput');
-      const sendLoveBtn = document.getElementById('sendLoveBtn');
-      const loveMessageDisplay = document.getElementById('loveMessageDisplay');
+      // --- Elements ---
+      const questionPart = document.getElementById('questionPart');
+      const successPart = document.getElementById('successPart');
+      const yesBtn = document.getElementById('yesButton');
+      const noBtn = document.getElementById('noButton');
+      const hintBox = document.getElementById('hintBox');
+      const loveInput = document.getElementById('loveMessageInput');
+      const submitLove = document.getElementById('submitLoveBtn');
+      const displayMsg = document.getElementById('displayMessage');
 
-      // ----- ตัวแปรควบคุมขนาด / ตำแหน่ง -----
-      let yesScale = 1.0;
-      let noScale = 1.0;
-      // ตำแหน่งของปุ่ม "ไม่เป็น" (เราใช้ transform translate ในการขยับ)
-      let noTranslateX = 0;
-      let noTranslateY = 0;
+      // --- State variables ---
+      let noClickCount = 0;           // จำนวนครั้งที่กด "ไม่เป็น"
+      const MAX_NO_CLICKS = 5;        // กดครบ 5 ครั้ง ปุ่มไม่เป็นจะหายไป
+      let yesScale = 1.0;             // ขนาดปุ่มเป็นแฟน
+      let noBtnOpacity = 1.0;
+      let noBtnPosition = { x: 0, y: 0 }; // ใช้ transform translate
+      
+      // ข้อความเปลี่ยนตามจำนวนครั้งที่กดไม่เป็น
+      const hintMessages = [
+        "😳 เอ้า… กดไม่เป็นหรอ?",
+        "🐣 ยังไงแน่ะ ลองอีกทีสิ",
+        "💧 ใจร้ายจัง… แต่เค้าไม่ยอมแพ้หรอก",
+        "🥺 งื้อ… กดไม่เป็นอีกแล้ว",
+        "😈 ครั้งสุดท้ายแล้วนะ! ปุ่มไม่เป็นจะหายไปแล้วน้า~"
+      ];
 
-      // ขอบเขตการขยับ (เพื่อไม่ให้หลุดจอเกินไป) — จะอัปเดตตามขนาดหน้าจอ
-      let maxMoveX = 120;
-      let maxMoveY = 60;
+      // ข้อความบนปุ่ม "ไม่เป็น" เปลี่ยนด้วย
+      const noBtnTexts = [
+        "😢 ไม่เป็น",
+        "😭 ไม่เอาน่า",
+        "🥺 แน่ใจหรอ",
+        "💔 ใจร้าย",
+        "🙏 ลองเป็นมั้ย"
+      ];
 
-      function updateMoveBoundary() {
-        // ปรับตามความกว้างหน้าจอเล็กน้อย
-        if (window.innerWidth < 500) {
-          maxMoveX = 80;
-          maxMoveY = 50;
+      // เริ่มต้น
+      updateYesSize();
+
+      // ----- ฟังก์ชันอัปเดตปุ่ม "เป็นแฟน" ตาม scale -----
+      function updateYesSize() {
+        yesBtn.style.transform = `scale(${yesScale})`;
+        // ปรับขนาดตัวอักษรและ padding เล็กน้อยตาม scale
+        const baseFont = 2.2; // rem
+        yesBtn.style.fontSize = (baseFont * yesScale) + 'rem';
+        // padding ด้วย
+      }
+
+      // ----- ฟังก์ชันอัปเดตปุ่มไม่เป็น (ตำแหน่ง + opacity + ข้อความ)-----
+      function updateNoButton() {
+        // เปลี่ยนข้อความปุ่มตามจำนวนคลิก
+        if (noClickCount < noBtnTexts.length) {
+          noBtn.textContent = noBtnTexts[noClickCount];
         } else {
-          maxMoveX = 140;
-          maxMoveY = 70;
+          noBtn.textContent = "😶‍🌫️ หายไปละ...";
+        }
+
+        // ปรับตำแหน่ง (ขยับหนีแบบสุ่ม)
+        noBtn.style.transform = `translate(${noBtnPosition.x}px, ${noBtnPosition.y}px)`;
+        
+        // เมื่อถึงจำนวนที่กำหนดให้ปุ่มค่อยๆหาย
+        if (noClickCount >= MAX_NO_CLICKS) {
+          noBtn.style.opacity = '0';
+          noBtn.style.pointerEvents = 'none';  // กดไม่ได้แล้ว
+          noBtn.style.transition = 'opacity 0.5s, transform 0.3s';
+          hintBox.textContent = "💕 เหลือแต่ปุ่ม 'เป็นแฟน' แล้วน้าา กดเลยย~ 💕";
+        } else {
+          noBtn.style.opacity = noBtnOpacity;
+          noBtn.style.pointerEvents = 'auto';
+        }
+
+        // เปลี่ยน hint message
+        if (noClickCount < hintMessages.length) {
+          hintBox.textContent = hintMessages[noClickCount];
+        } else if (noClickCount >= MAX_NO_CLICKS) {
+          hintBox.textContent = "💖 ไม่มีทางเลือกอื่นแล้ว besides love 💖";
+        } else {
+          hintBox.textContent = "😢 อย่ากดไม่เป็นอีกเลยน้าา...";
         }
       }
-      updateMoveBoundary();
-      window.addEventListener('resize', updateMoveBoundary);
 
-      // ----- ฟังก์ชันอัปเดตสไตล์ปุ่มตามค่าปัจจุบัน -----
-      function updateNoButtonStyle() {
-        // รวม scale + translate
-        noBtn.style.transform = `translate(${noTranslateX}px, ${noTranslateY}px) scale(${noScale})`;
-        // ทำให้ขนาดตัวอักษรเล็กลงตาม scale (เพิ่มความน่ารัก)
-        const baseFontSize = 2.0; // rem
-        noBtn.style.fontSize = (baseFontSize * noScale) + 'rem';
-        noBtn.style.padding = `${16 * noScale}px ${30 * noScale}px`;
-      }
-
-      function updateYesButtonStyle() {
-        yesBtn.style.transform = `scale(${yesScale})`;
-        const baseFontSize = 2.0;
-        yesBtn.style.fontSize = (baseFontSize * yesScale) + 'rem';
-        yesBtn.style.padding = `${16 * yesScale}px ${30 * yesScale}px`;
-      }
-
-      // เริ่มต้นเซ็ตค่า
-      updateNoButtonStyle();
-      updateYesButtonStyle();
-
-      // ----- การกระทำเมื่อกดปุ่ม "ไม่เป็น" -----
-      function handleNoClick(e) {
+      // ----- เมื่อกดปุ่ม "ไม่เป็น" -----
+      function onNoClick(e) {
         e.preventDefault();
         
-        // 1. ลดขนาดปุ่มไม่เป็น (แต่ไม่เล็กเกินไป)
-        noScale = Math.max(0.45, noScale * 0.82);
-        
-        // 2. ขยับตำแหน่งแบบสุ่ม (หนี)
-        const randomX = (Math.random() - 0.5) * 2 * maxMoveX;
-        const randomY = (Math.random() - 0.5) * 2 * maxMoveY;
-        noTranslateX = randomX;
-        noTranslateY = randomY;
-        
-        // 3. ทำให้ปุ่ม "เป็นแฟน" ใหญ่ขึ้น (แต่ไม่เกิน 2.6 เท่า)
-        yesScale = Math.min(2.6, yesScale * 1.2);
-        
-        // 4. อัปเดตการแสดงผล
-        updateNoButtonStyle();
-        updateYesButtonStyle();
-
-        // 5. เพิ่มลูกเล่น: ถ้ากด "ไม่เป็น" หลายครั้งจนเล็กมาก อาจเด้งคำใบ้
-        if (noScale < 0.65) {
-          // ขยับเพิ่มความซน
-        }
-      }
-
-      // ----- การกระทำเมื่อกดปุ่ม "เป็นแฟน" -----
-      function handleYesClick() {
-        // ซ่อนหน้าคำถาม แสดงหน้าสำเร็จ
-        questionSection.style.display = 'none';
-        successSection.style.display = 'block';
-        
-        // (optional) ล็อคไม่ให้กดอะไรอีกแล้ว
-      }
-
-      // ----- ระบบส่งข้อความหวาน -----
-      function handleSendLove() {
-        const msg = messageInput.value.trim();
-        if (msg === '') {
-          loveMessageDisplay.innerHTML = '💬 อยากอ่านข้อความจากใจเธอจัง... 🥺';
+        if (noClickCount >= MAX_NO_CLICKS) {
+          // ถ้าหายไปแล้วไม่ทำอะไร
           return;
         }
-        // แสดงข้อความน่ารัก
-        loveMessageDisplay.innerHTML = `💕 "${escapeHtml(msg)}" 💕<br><span style="font-size:1.2rem;">ขอบคุณที่เป็นแฟนเค้านะะ รักที่สุดเลยย 😘</span>`;
-        messageInput.value = ''; // เคลียร์ช่อง
+
+        // เพิ่มจำนวนคลิก
+        noClickCount++;
         
-        // เพิ่มลูกเล่นหัวใจลอย (ไม่ทำก็ได้)
+        // ทำให้ปุ่ม "เป็นแฟน" ใหญ่ขึ้นทุกครั้ง (ใหญ่ขึ้นเรื่อยๆ)
+        yesScale = Math.min(2.5, yesScale + 0.22);
+        updateYesSize();
+
+        // ขยับปุ่มไม่เป็นแบบสุ่ม (หนี)
+        const maxMove = 90;
+        noBtnPosition.x = (Math.random() - 0.5) * 2 * maxMove;
+        noBtnPosition.y = (Math.random() - 0.5) * 2 * maxMove;
+        
+        // ลด opacity ลงเล็กน้อย (แต่ไม่ให้หายก่อนกำหนด)
+        if (noClickCount < MAX_NO_CLICKS) {
+          noBtnOpacity = Math.max(0.6, 1.0 - (noClickCount * 0.12));
+        } else {
+          noBtnOpacity = 0;
+        }
+
+        // ถ้าครบจำนวนครั้งที่กำหนด → ปุ่มไม่เป็นจะหายไป
+        if (noClickCount === MAX_NO_CLICKS) {
+          // ทำให้ปุ่มจางหายไปและห้ามกด
+          noBtn.style.pointerEvents = 'none';
+          noBtn.style.opacity = '0';
+          hintBox.textContent = "💘 เห็นมั้ย! เหลือแค่ 'เป็นแฟน' แล้ว กดเลยยย 💘";
+          // ทำให้ปุ่ม Yes เด่นขึ้นอีก
+          yesScale = Math.min(3.0, yesScale + 0.3);
+          updateYesSize();
+        }
+
+        // อัปเดตข้อความปุ่มและ hint
+        updateNoButton();
+
+        // เพิ่มลูกเล่น: ถ้ากดไม่เป็นเยอะๆ อาจมีเสียง? (ไม่มีเสียง ใช้แอนิเมชันแทน)
+        if (noClickCount === 3) {
+          hintBox.style.transform = 'scale(1.05)';
+          setTimeout(() => hintBox.style.transform = 'scale(1)', 150);
+        }
       }
 
-      // ฟังก์ชันกัน XSS แบบง่าย
-      function escapeHtml(text) {
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
+      // ----- เมื่อกดปุ่ม "เป็นแฟน" -----
+      function onYesClick() {
+        // ซ่อนหน้าคำถาม แสดงหน้าสำเร็จ
+        questionPart.style.display = 'none';
+        successPart.style.display = 'block';
+        
+        // เพิ่มลูกเล่น: หัวใจลอยเต็มจอแบบง่ายๆ (ใช้ class เพิ่ม)
+        createHeartsBurst();
       }
 
-      // เพิ่ม event ให้ปุ่ม "ไม่เป็น" (ใช้ click เพื่อให้รู้สึกว่ากดแล้วหนี)
-      noBtn.addEventListener('click', handleNoClick);
-      
-      // แต่ปัญหาคือ: ถ้าปุ่มมันหนีไปเรื่อยๆ การกดจะยากขึ้นเอง
-      // นอกจากนี้ถ้า mouse enter ก็ไม่ต้องหนี เพราะเราใช้ click อย่างเดียวตามที่ขอ
-      
-      // Event ปุ่ม "เป็นแฟน"
-      yesBtn.addEventListener('click', handleYesClick);
+      // ----- สร้างหัวใจกระจาย (สนุกๆ) -----
+      function createHeartsBurst() {
+        for (let i = 0; i < 12; i++) {
+          const heart = document.createElement('span');
+          heart.innerHTML = ['💖','💗','💘','💝','💕','🌸'][Math.floor(Math.random()*6)];
+          heart.style.position = 'fixed';
+          heart.style.left = Math.random() * 100 + '%';
+          heart.style.top = Math.random() * 100 + '%';
+          heart.style.fontSize = (20 + Math.random() * 40) + 'px';
+          heart.style.pointerEvents = 'none';
+          heart.style.zIndex = '999';
+          heart.style.animation = 'floatUp 2s ease-out forwards';
+          heart.style.opacity = '0.9';
+          document.body.appendChild(heart);
+          setTimeout(() => heart.remove(), 2000);
+        }
+      }
 
-      // Event ปุ่มส่งข้อความ
-      sendLoveBtn.addEventListener('click', handleSendLove);
+      // เพิ่ม keyframe floatUp ถ้ายังไม่มี
+      const styleSheet = document.createElement("style");
+      styleSheet.textContent = `
+        @keyframes floatUp {
+          0% { opacity: 0.8; transform: translateY(0) scale(1); }
+          100% { opacity: 0; transform: translateY(-120px) scale(1.8); }
+        }
+      `;
+      document.head.appendChild(styleSheet);
+
+      // ----- ส่งข้อความหวาน -----
+      function submitLoveMessage() {
+        const msg = loveInput.value.trim();
+        if (msg === '') {
+          displayMsg.innerHTML = '💬 อยากอ่านข้อความจากใจเธอจัง... 🥺';
+          return;
+        }
+        // escape ง่ายๆ
+        const safeMsg = msg.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        displayMsg.innerHTML = `💕 "${safeMsg}" 💕<br><span style="font-size:1.3rem;">ขอบคุณที่รับรักเค้านะ! รักที่สุดเลย 😽💖</span>`;
+        loveInput.value = '';
+        // เพิ่มหัวใจอีกนิด
+        for (let i=0;i<5;i++) {
+          setTimeout(() => {
+            const h = document.createElement('span');
+            h.innerHTML = '💗';
+            h.style.position = 'fixed';
+            h.style.left = Math.random()*100+'%';
+            h.style.bottom = '10%';
+            h.style.fontSize = '30px';
+            h.style.pointerEvents = 'none';
+            h.style.zIndex = '1000';
+            h.style.animation = 'floatUp 1.5s ease-out';
+            document.body.appendChild(h);
+            setTimeout(() => h.remove(), 1500);
+          }, i*80);
+        }
+      }
+
+      // ----- Event Listeners -----
+      noBtn.addEventListener('click', onNoClick);
+      yesBtn.addEventListener('click', onYesClick);
       
-      // สามารถกด Enter ในช่อง input ก็ได้
-      messageInput.addEventListener('keypress', (e) => {
+      submitLove.addEventListener('click', submitLoveMessage);
+      loveInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
           e.preventDefault();
-          sendLoveBtn.click();
+          submitLove.click();
         }
       });
 
-      // ป้องกันการกดปุ่มไม่เป็นโดยบังเอิญดับเบิลคลิก (ไม่ต้องทำอะไรเพิ่ม)
-      // เสริม: ถ้าคนพยายามกดไม่เป็นมือถือจะโอเค
+      // ป้องกันการเกิดบั๊กเวลากดปุ่มไม่เป็นเร็วๆ (ไม่มีปัญหา)
+      // เพิ่มความซน: ถ้าเอาเมาส์ไปจ่อปุ่มไม่เป็นแล้วมันจะขยับอีกนิด? (ไม่ทำเพิ่ม จะหนีตอนคลิกพอ)
+      // แต่สามารถเพิ่ม easter egg เล็ก ๆ ได้
+      
+      // ถ้าผู้ใช้พยายามกดไม่เป็นหลังจากมันหายไปแล้วจะไม่เกิดอะไร
 
-      // เพิ่มเติมความน่ารัก: ถ้ากด "ไม่เป็น" หลายครั้งมากๆ อาจมีข้อความ pop เล็กๆ
-      // แต่ไม่จำเป็น ปล่อยให้ขำๆ
-
-      // ----- รีเซ็ตตำแหน่งปุ่มหากมีการเปลี่ยนขนาดหน้าจอ (ไม่ให้หลุดจอ) -----
+      // ปรับขนาดตามหน้าจอเมื่อ resize (ป้องกันปุ่มหลุดจอ)
       window.addEventListener('resize', () => {
-        // clamp ตำแหน่งคร่าวๆ
-        updateMoveBoundary();
-        noTranslateX = Math.min(maxMoveX, Math.max(-maxMoveX, noTranslateX));
-        noTranslateY = Math.min(maxMoveY, Math.max(-maxMoveY, noTranslateY));
-        updateNoButtonStyle();
+        // ไม่ต้องทำไรเพราะ transform ใช้ pixel
       });
 
-      // ป้องกัน iOS zoom เวลาดับเบิลแตะ (ไม่จำเป็น)
+      // แก้ปัญหาเวลาแตะบนมือถือ: ใส่ touch event ป้องกันการ zoom (ไม่ต้อง)
     })();
   </script>
 </body>
