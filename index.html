@@ -6,488 +6,801 @@
   <title>🌸 ช่อดอกไม้ให้กัคญาภัค 🌸</title>
   <link href="https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Mitr', sans-serif;
+    :root {
+      --pink: #ff7daa;
+      --pink-light: #ffb0cb;
+      --pink-pale: #ffeef4;
+      --blue: #7aa7ff;
+      --blue-light: #c8dbff;
+      --purple: #c07de8;
+      --text-dark: #3f2e4a;
+      --text-mid: #7a5070;
     }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Mitr', sans-serif; }
 
     body {
       min-height: 100vh;
-      background: linear-gradient(145deg, #ffe6f0 0%, #d4e6ff 100%);
+      background: #ffe6f3;
       display: flex;
       justify-content: center;
       align-items: center;
       padding: 16px;
+      overflow-x: hidden;
+    }
+
+    .bg-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .bg-blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(70px);
+      opacity: 0.5;
+      animation: blobFloat 8s ease-in-out infinite alternate;
+    }
+    .bg-blob:nth-child(1) { width: 380px; height: 380px; background: #ffb0d4; top: -100px; left: -100px; animation-delay: 0s; }
+    .bg-blob:nth-child(2) { width: 300px; height: 300px; background: #a8c4ff; bottom: -80px; right: -80px; animation-delay: -3s; }
+    .bg-blob:nth-child(3) { width: 220px; height: 220px; background: #d4b0ff; top: 45%; left: 55%; animation-delay: -5s; }
+    .bg-blob:nth-child(4) { width: 160px; height: 160px; background: #ffd4a0; top: 65%; left: 5%; animation-delay: -2s; }
+
+    @keyframes blobFloat {
+      0%   { transform: translate(0,0) scale(1); }
+      100% { transform: translate(25px, 30px) scale(1.1); }
+    }
+
+    .petal {
+      position: fixed;
+      font-size: 18px;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 1;
+      animation: petalFall linear infinite;
+    }
+    @keyframes petalFall {
+      0%   { opacity: 0; transform: translateY(-30px) rotate(0deg); }
+      10%  { opacity: 0.8; }
+      90%  { opacity: 0.4; }
+      100% { opacity: 0; transform: translateY(110vh) rotate(720deg); }
     }
 
     .page-container {
-      background: rgba(255, 255, 255, 0.75);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-radius: 60px;
-      padding: 30px 25px;
-      max-width: 600px;
+      position: relative;
+      z-index: 2;
+      background: rgba(255,255,255,0.72);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-radius: 52px;
+      padding: 34px 26px;
+      max-width: 560px;
       width: 100%;
-      box-shadow: 0 25px 35px rgba(170, 120, 150, 0.15),
-                  0 0 0 4px #fce4f0 inset,
-                  0 0 0 8px #c8e2ff inset;
+      box-shadow:
+        0 30px 60px rgba(200,100,150,0.18),
+        0 0 0 4px rgba(255,200,220,0.6) inset,
+        0 0 0 8px rgba(180,210,255,0.35) inset;
+      border: 2px solid rgba(255,160,190,0.5);
       text-align: center;
-      border: 2px solid #ffb7c5;
-      transition: opacity 0.2s;
     }
 
-    .page {
-      display: none;
-    }
-
+    .page { display: none; }
     .page.active {
       display: block;
+      animation: pageIn 0.45s cubic-bezier(.22,1,.36,1);
+    }
+    @keyframes pageIn {
+      from { opacity: 0; transform: translateY(22px) scale(0.97); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
     }
 
     h1 {
-      font-size: 2.3rem;
+      font-size: 2.2rem;
       color: #a1426e;
       text-shadow: 3px 3px 0 #ffbfd5;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
-
-    h2 {
-      font-size: 2rem;
-      color: #4f6f9f;
-      margin: 10px 0;
-    }
+    h2 { font-size: 1.9rem; color: #4f6f9f; margin: 8px 0; }
 
     .birthday-name {
-      font-size: 2.8rem;
+      font-size: 2.6rem;
       font-weight: 600;
       color: #9c3e6a;
-      background: #ffeef4;
-      padding: 10px 30px;
+      background: linear-gradient(135deg, #fff0f6, #ffe4ef);
+      padding: 12px 30px;
       border-radius: 60px;
-      box-shadow: 0 6px 0 #c98aa5;
+      box-shadow: 0 7px 0 #c98aa5, 0 14px 20px rgba(180,80,120,0.15);
       border: 3px solid #b3d4ff;
-      margin: 15px 0;
+      margin: 14px 0;
+      display: inline-block;
+      animation: nameBounce 2.5s ease-in-out infinite;
+    }
+    @keyframes nameBounce {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-6px); }
     }
 
-    .birth-date {
-      font-size: 1.8rem;
-      color: #5c4e7a;
-    }
+    .birth-date { font-size: 1.7rem; color: #5c4e7a; margin: 6px 0; }
 
-    .cute-emoji-big {
-      font-size: 3.2rem;
-      line-height: 1.3;
-    }
+    .cute-emoji-big { font-size: 3rem; line-height: 1.4; display: block; }
 
-    /* ปุ่ม */
+    /* ===== BUTTONS ===== */
     .btn {
       border: none;
       border-radius: 999px;
-      padding: 16px 30px;
-      font-size: 1.8rem;
+      padding: 15px 28px;
+      font-size: 1.7rem;
       font-weight: 600;
       cursor: pointer;
-      box-shadow: 0 8px 0 #a13e63;
-      transition: 0.1s;
-      border: 4px solid #fff5fc;
+      box-shadow: 0 8px 0 #a13e63, 0 12px 24px rgba(180,60,100,0.2);
+      transition: transform 0.1s, box-shadow 0.1s;
+      border: 4px solid rgba(255,245,252,0.8);
       color: white;
       text-shadow: 2px 2px 0 #a1426e;
-      background: #ff90b5;
       background: linear-gradient(145deg, #ffb0cb, #ff7da8);
-      margin: 10px 5px;
-      min-width: 180px;
+      margin: 8px 5px;
+      min-width: 175px;
+      position: relative;
+      overflow: hidden;
     }
-
+    .btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(145deg, rgba(255,255,255,0.3), transparent);
+      border-radius: inherit;
+      pointer-events: none;
+    }
     .btn:active {
       transform: translateY(5px);
       box-shadow: 0 3px 0 #a13e63;
     }
+    .btn:hover:not(:active) {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 0 #a13e63, 0 16px 28px rgba(180,60,100,0.25);
+    }
 
     .btn-outline {
-      background: #b0c8ff;
       background: linear-gradient(145deg, #c8dbff, #9bb9ff);
-      box-shadow: 0 8px 0 #5f6f9c;
+      box-shadow: 0 8px 0 #5f6f9c, 0 12px 24px rgba(80,100,180,0.2);
       text-shadow: 2px 2px 0 #5a6a8f;
+    }
+    .btn-outline:active { box-shadow: 0 3px 0 #5f6f9c; }
+    .btn-outline:hover:not(:active) {
+      box-shadow: 0 10px 0 #5f6f9c, 0 16px 28px rgba(80,100,180,0.25);
     }
 
     .small-btn {
-      font-size: 1.3rem;
-      padding: 12px 20px;
+      font-size: 1.2rem;
+      padding: 10px 18px;
       min-width: auto;
+      box-shadow: 0 5px 0 #5f6f9c;
+    }
+    .small-btn:active { transform: translateY(4px); box-shadow: 0 1px 0 #5f6f9c; }
+
+    /* ===== FLOWER CARD ===== */
+    .flower-card {
+      background: linear-gradient(145deg, #fff5f9, #f0f6ff);
+      border-radius: 44px;
+      padding: 18px 14px;
+      border: 4px dashed #ffb0cb;
+      margin: 14px 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .flower-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 30% 30%, rgba(255,200,220,0.2), transparent 60%);
+      pointer-events: none;
     }
 
-    /* หน้า 2 : การ์ดรูปดอกไม้ */
-    .flower-card {
-      background: #fff0f7;
-      border-radius: 50px;
-      padding: 20px 15px;
-      border: 5px dashed #ffb0cb;
-      margin: 15px 0;
+    .flower-img-wrap {
+      position: relative;
+      display: inline-block;
+      margin: 8px auto;
+    }
+    .flower-img-wrap::before {
+      content: '';
+      position: absolute;
+      inset: -8px;
+      border-radius: 48px;
+      background: conic-gradient(from 0deg, #ffb0cb, #a8c4ff, #d4b0ff, #ffb0cb);
+      animation: spinBorder 4s linear infinite;
+      z-index: 0;
+    }
+    @keyframes spinBorder {
+      to { transform: rotate(360deg); }
+    }
+    .flower-img-wrap::after {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border-radius: 44px;
+      background: white;
+      z-index: 1;
     }
 
     .flower-img {
+      position: relative;
+      z-index: 2;
       width: 100%;
-      max-width: 320px;
-      height: 280px;
+      max-width: 300px;
+      height: 260px;
       object-fit: cover;
-      border-radius: 40px;
-      border: 6px solid #ffe7f0;
-      box-shadow: 0 12px 0 #b5798a, 0 10px 20px rgba(0,0,0,0.1);
-      margin: 10px auto;
+      border-radius: 38px;
+      display: block;
       background: #fcd4e2;
+      transition: transform 0.3s cubic-bezier(.34,1.56,.64,1);
+    }
+    .flower-img:hover { transform: scale(1.03); }
+
+    .flower-img.swap-out { animation: imgOut 0.2s ease forwards; }
+    .flower-img.swap-in  { animation: imgIn  0.35s cubic-bezier(.22,1,.36,1) forwards; }
+    @keyframes imgOut {
+      to { opacity: 0; transform: scale(0.92) translateY(10px); }
+    }
+    @keyframes imgIn {
+      from { opacity: 0; transform: scale(0.92) translateY(-10px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
     }
 
     .counter {
-      font-size: 1.5rem;
+      font-size: 1.4rem;
       color: #825e73;
+      margin: 10px 0 4px;
+    }
+
+    .dot-indicators {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
       margin: 8px 0;
+    }
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #ffb0cb;
+      opacity: 0.4;
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+    .dot.active {
+      opacity: 1;
+      background: #ff7daa;
+      transform: scale(1.4);
     }
 
     .button-group {
       display: flex;
       justify-content: center;
-      gap: 15px;
+      gap: 12px;
       flex-wrap: wrap;
       margin: 10px 0;
     }
 
-    /* หน้า 3 : ฟอร์มแต่งดอกไม้ */
+    /* ===== FORM PAGE ===== */
     .custom-box {
-      background: #e7f0ff;
-      border-radius: 45px;
-      padding: 25px 20px;
-      border: 4px solid #ffb7cf;
-      margin: 15px 0;
+      background: linear-gradient(145deg, #eef4ff, #f5eeff);
+      border-radius: 40px;
+      padding: 22px 18px;
+      border: 3px solid #ffb7cf;
+      margin: 14px 0;
     }
 
     .cute-input {
       width: 100%;
-      padding: 16px 18px;
-      font-size: 1.4rem;
-      border: 4px solid #ffb0ca;
+      padding: 14px 18px;
+      font-size: 1.35rem;
+      border: 3px solid #ffb0ca;
       border-radius: 60px;
-      background: white;
+      background: rgba(255,255,255,0.9);
       outline: none;
       color: #4a3a5c;
       text-align: center;
-      margin: 12px 0;
+      margin: 10px 0;
+      transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
     }
+    .cute-input:focus {
+      border-color: #ff7daa;
+      box-shadow: 0 0 0 4px rgba(255,125,170,0.15);
+      transform: scale(1.01);
+    }
+    textarea.cute-input { border-radius: 28px; resize: none; }
 
     .input-label {
-      font-size: 1.5rem;
+      font-size: 1.4rem;
       color: #6b4b6a;
       margin-top: 10px;
       display: block;
       font-weight: 500;
     }
 
-    /* หน้า 4 : สรุปพร้อมแคป */
+    /* ===== SUMMARY PAGE ===== */
     .summary-card {
-      background: #ffeef4;
-      border-radius: 45px;
-      padding: 25px 20px;
-      border: 5px solid #b4d0ff;
+      background: linear-gradient(145deg, #fff5f9, #f0f4ff);
+      border-radius: 44px;
+      padding: 22px 18px;
+      border: 4px solid #b4d0ff;
+      position: relative;
+      overflow: hidden;
+    }
+    .summary-card::before {
+      content: '🌸';
+      position: absolute;
+      font-size: 120px;
+      opacity: 0.05;
+      top: -20px;
+      right: -20px;
+      pointer-events: none;
     }
 
     .selected-flower-preview {
-      width: 200px;
-      height: 200px;
+      width: 180px;
+      height: 180px;
       object-fit: cover;
-      border-radius: 40px;
-      border: 6px solid white;
-      box-shadow: 0 10px 0 #b38092;
+      border-radius: 38px;
+      border: 5px solid white;
+      box-shadow: 0 10px 0 #b38092, 0 18px 30px rgba(150,80,110,0.2);
       margin: 10px auto;
+      display: block;
+      animation: previewPop 0.5s cubic-bezier(.34,1.56,.64,1) both;
+    }
+    @keyframes previewPop {
+      from { transform: scale(0.5) rotate(-8deg); opacity: 0; }
+      to   { transform: scale(1) rotate(0); opacity: 1; }
     }
 
     .detail-row {
-      background: white;
-      border-radius: 40px;
-      padding: 15px;
-      margin: 15px 0;
+      background: rgba(255,255,255,0.85);
+      border-radius: 32px;
+      padding: 14px 18px;
+      margin: 12px 0;
       text-align: left;
       border: 2px solid #ffb7cf;
     }
-
     .detail-item {
-      font-size: 1.5rem;
-      margin: 8px 0;
+      font-size: 1.4rem;
+      margin: 7px 0;
       color: #3f2e4a;
     }
 
     .caption-note {
-      background: #d4e6ff;
-      border-radius: 30px;
-      padding: 12px;
-      font-size: 1.6rem;
+      background: linear-gradient(135deg, #d4e6ff, #e8d4ff);
+      border-radius: 28px;
+      padding: 14px;
+      font-size: 1.5rem;
       color: #4a3162;
-      margin-top: 20px;
+      margin-top: 18px;
       border: 2px dashed #ff99b9;
+      line-height: 1.8;
     }
 
-    /* ตกแต่ง */
-    .float-deco {
-      position: absolute;
-      font-size: 28px;
+    /* ===== SPARKLE BURST ===== */
+    .sparkle {
+      position: fixed;
       pointer-events: none;
-      z-index: 1;
+      z-index: 999;
+      font-size: 22px;
+      animation: sparklePop 0.7s ease forwards;
+    }
+    @keyframes sparklePop {
+      0%   { opacity: 1; transform: translate(0,0) scale(1); }
+      100% { opacity: 0; transform: translate(var(--tx), var(--ty)) scale(0.3); }
+    }
+
+    /* ===== HEART BURST on like ===== */
+    .heart-burst {
+      position: fixed;
+      pointer-events: none;
+      z-index: 999;
+      font-size: 28px;
+      animation: heartFly 0.9s ease forwards;
+    }
+    @keyframes heartFly {
+      0%   { opacity: 1; transform: translate(0,0) scale(1.4); }
+      100% { opacity: 0; transform: translate(var(--tx), var(--ty)) scale(0.2); }
+    }
+
+    /* ===== PROGRESS BAR ===== */
+    .progress-bar-wrap {
+      background: rgba(255,180,210,0.2);
+      border-radius: 99px;
+      height: 8px;
+      margin: 10px 0 4px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #ffb0cb, #ff7daa, #c07de8);
+      border-radius: 99px;
+      transition: width 0.4s cubic-bezier(.22,1,.36,1);
+    }
+
+    /* ===== STEP INDICATOR ===== */
+    .steps {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    .step {
+      width: 32px;
+      height: 8px;
+      border-radius: 99px;
+      background: rgba(255,160,190,0.25);
+      transition: all 0.35s cubic-bezier(.22,1,.36,1);
+    }
+    .step.done  { background: #ffb0cb; }
+    .step.active { background: #ff7daa; width: 50px; }
+
+    /* ===== LIKE COUNTER BADGE ===== */
+    .like-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #ff7daa, #c07de8);
+      color: white;
+      font-size: 1.1rem;
+      padding: 4px 14px;
+      border-radius: 99px;
+      margin-bottom: 6px;
+      box-shadow: 0 3px 8px rgba(180,60,120,0.3);
+    }
+
+    p.hint {
+      font-size: 1.4rem;
+      color: #a15f7c;
+      margin: 8px 0;
     }
 
     @media (max-width: 480px) {
-      .page-container { padding: 20px 12px; }
-      h1 { font-size: 2rem; }
-      .birthday-name { font-size: 2.2rem; }
+      .page-container { padding: 20px 12px; border-radius: 38px; }
+      h1 { font-size: 1.9rem; }
+      .birthday-name { font-size: 2rem; }
+      .btn { font-size: 1.5rem; padding: 13px 22px; }
     }
   </style>
 </head>
 <body>
-  <!-- ของตกแต่ง -->
-  <div class="float-deco" style="top: 5%; left: 5%;">🐱</div>
-  <div class="float-deco" style="bottom: 8%; right: 6%;">🎀</div>
-  <div class="float-deco" style="top: 20%; right: 8%;">🫧</div>
-  <div class="float-deco" style="bottom: 20%; left: 10%;">🌸</div>
+
+  <!-- BG BLOBS -->
+  <div class="bg-canvas">
+    <div class="bg-blob"></div>
+    <div class="bg-blob"></div>
+    <div class="bg-blob"></div>
+    <div class="bg-blob"></div>
+  </div>
+
+  <!-- PETALS injected by JS -->
 
   <div class="page-container">
-    
-    <!-- ********** PAGE 1 : WELCOME ********** -->
+
+    <!-- STEP INDICATOR -->
+    <div class="steps" id="stepIndicator">
+      <div class="step active" id="s1"></div>
+      <div class="step" id="s2"></div>
+      <div class="step" id="s3"></div>
+      <div class="step" id="s4"></div>
+    </div>
+
+    <!-- ========== PAGE 1 : WELCOME ========== -->
     <div id="page1" class="page active">
-      <div class="cute-emoji-big">🎂🐣🌸</div>
+      <span class="cute-emoji-big">🎂🐣🌸</span>
       <h1>🎉 สุขสันต์วันเกิด 🎉</h1>
       <div class="birthday-name">🌸 กัคญาภัค อารียา 🌸</div>
       <div class="birth-date">🎈 20 กันยายน 2012 🎈</div>
-      <div class="cute-emoji-big" style="font-size:2.5rem;">🐻‍❄️💐🧸</div>
-      <p style="font-size:1.5rem; color:#855a6e; margin:20px 0;">วันพิเศษนี้ มาเลือกดอกไม้ที่ชอบกันน้า 💖</p>
+      <span class="cute-emoji-big" style="font-size:2.4rem;margin:8px 0;">🐻‍❄️💐🧸</span>
+      <p style="font-size:1.45rem; color:#855a6e; margin:18px 0 22px;">วันพิเศษนี้ มาเลือกดอกไม้ที่ชอบกันน้า 💖</p>
       <button class="btn" id="startBtn">✨ เริ่มเลือกดอกไม้ ✨</button>
     </div>
 
-    <!-- ********** PAGE 2 : เลือกดอกไม้ ********** -->
+    <!-- ========== PAGE 2 : เลือกดอกไม้ ========== -->
     <div id="page2" class="page">
       <h2>🌸 เลือกช่อที่ถูกใจ 🌸</h2>
       <div class="flower-card">
-        <img id="flowerImage" class="flower-img" src="" alt="ดอกไม้">
-        <div id="flowerCounter" class="counter">รูปที่ 1 / 8</div>
+        <div class="flower-img-wrap">
+          <img id="flowerImage" class="flower-img" src="" alt="ดอกไม้">
+        </div>
+        <div class="progress-bar-wrap">
+          <div class="progress-bar-fill" id="progressBar" style="width:12.5%"></div>
+        </div>
+        <div id="flowerCounter" class="counter"></div>
+        <div class="dot-indicators" id="dotWrap"></div>
       </div>
       <div class="button-group">
-        <button class="btn" id="likeBtn">❤️ ถูกใจ ❤️</button>
+        <button class="btn" id="likeBtn">❤️ ถูกใจ!</button>
         <button class="btn btn-outline" id="nextBtn">➡️ รูปถัดไป</button>
       </div>
-      <p style="margin:10px 0; color:#a15f7c;">กดถูกใจเพื่อเลือกช่อนี้เลย~</p>
-      <button class="btn-outline small-btn" id="backToWelcomeBtn">⬅️ กลับหน้าแรก</button>
+      <p class="hint">กดถูกใจเพื่อเลือกช่อนี้เลย~</p>
+      <button class="btn btn-outline small-btn" id="backToWelcomeBtn">⬅️ กลับหน้าแรก</button>
     </div>
 
-    <!-- ********** PAGE 3 : ตกแต่งรายละเอียด ********** -->
+    <!-- ========== PAGE 3 : ตกแต่งรายละเอียด ========== -->
     <div id="page3" class="page">
       <h2>🎀 แต่งดอกไม้ตามใจคุณ 🎀</h2>
       <div class="custom-box">
         <label class="input-label">🌸 สีของดอกไม้</label>
         <input type="text" id="flowerColorInput" class="cute-input" placeholder="เช่น ชมพูพาสเทล, ขาว, ฟ้าอ่อน...">
-        
+
         <label class="input-label">🎗️ สีริบบิ้น / โบว์</label>
         <input type="text" id="ribbonColorInput" class="cute-input" placeholder="เช่น ริบบิ้นสีชมพู, โบว์สีทอง...">
-        
+
         <label class="input-label">💬 ข้อความเพิ่มเติม (หรือความในใจ)</label>
         <textarea id="extraMessageInput" class="cute-input" rows="2" placeholder="อยากบอกอะไรเพิ่มไหมคะ?"></textarea>
       </div>
       <div class="button-group">
         <button class="btn" id="toSummaryBtn">🎁 ดูสรุปของขวัญ 🎁</button>
       </div>
-      <button class="btn-outline small-btn" id="backToSelectBtn">⬅️ กลับไปเลือกดอกไม้ใหม่</button>
+      <button class="btn btn-outline small-btn" id="backToSelectBtn">⬅️ กลับไปเลือกดอกไม้ใหม่</button>
     </div>
 
-    <!-- ********** PAGE 4 : สรุป (สำหรับแคปหน้าจอ) ********** -->
+    <!-- ========== PAGE 4 : สรุป ========== -->
     <div id="page4" class="page">
       <h2>💝 สรุปดอกไม้ของกัคญาภัค 💝</h2>
       <div class="summary-card">
-        <div class="cute-emoji-big">🌸🎂🌸</div>
-        <p style="font-size:2.2rem; font-weight:600;">กัคญาภัค อารียา</p>
-        <p style="font-size:1.5rem;">🎂 20 กันยายน 2012 (อายุ <span id="displayAge"></span> ปี)</p>
-        
+        <span class="cute-emoji-big">🌸🎂🌸</span>
+        <p style="font-size:2rem; font-weight:600; margin:6px 0;">กัคญาภัค อารียา</p>
+        <p style="font-size:1.4rem; color:#5c4e7a;">🎂 20 กันยายน 2012 (อายุ <span id="displayAge"></span> ปี)</p>
+
         <img id="summaryFlowerImg" class="selected-flower-preview" src="" alt="ดอกไม้ที่เลือก">
-        <p id="summaryFlowerName" style="font-size:1.6rem; font-weight:500;">🌸 ช่อดอกไม้ที่เลือก 🌸</p>
-        
+        <p id="summaryFlowerName" style="font-size:1.5rem; font-weight:500; margin:6px 0;">🌸 ช่อดอกไม้ที่เลือก 🌸</p>
+
         <div class="detail-row">
-          <div class="detail-item"><strong>🎨 สีดอกไม้ :</strong> <span id="summaryColor">-</span></div>
-          <div class="detail-item"><strong>🎀 สีริบบิ้น :</strong> <span id="summaryRibbon">-</span></div>
-          <div class="detail-item"><strong>💌 ข้อความ :</strong> <span id="summaryMessage">-</span></div>
+          <div class="detail-item">🎨 <strong>สีดอกไม้ :</strong> <span id="summaryColor">-</span></div>
+          <div class="detail-item">🎀 <strong>สีริบบิ้น :</strong> <span id="summaryRibbon">-</span></div>
+          <div class="detail-item">💌 <strong>ข้อความ :</strong> <span id="summaryMessage">-</span></div>
         </div>
-        
+
         <div class="caption-note">
           ⭐ แคปหน้าจอนี้ส่งให้ผมน้าา ⭐<br>
           📸 กดปุ่มด้านล่างค้างไว้ แล้วเลือก "แคปภาพ" ได้เลย
         </div>
-        
-        <button class="btn" id="backToStartBtn" style="margin-top:20px;">🏠 กลับไปเริ่มใหม่</button>
+
+        <button class="btn" id="backToStartBtn" style="margin-top:18px;">🏠 กลับไปเริ่มใหม่</button>
       </div>
     </div>
 
   </div>
 
   <script>
-    (function(){
-      "use strict";
+  (function(){
+    "use strict";
 
-      // ---------- ข้อมูล ----------
-      const receiver = "กัคญาภัค อารียา";
-      const birthYear = 2012;
-      
-      // ลิงก์รูปดอกไม้ (ตัดซ้ำแล้ว)
-      const rawUrls = [
-        "https://cdn.phototourl.com/free/2026-04-09-7201ed65-ed7f-4bdf-8cb6-1c2a4d7585b6.jpg",
-        "https://cdn.phototourl.com/free/2026-04-09-f0232230-ff17-4f85-bbe5-4c57ae23c815.jpg",
-        "https://cdn.phototourl.com/free/2026-04-09-75c68463-b1a8-4e5f-9b5f-3f0e293dcc49.jpg",
-        "https://cdn.phototourl.com/free/2026-04-09-6199066c-300b-464c-8f6a-b6891a6c4d9c.jpg",
-        "https://cdn.phototourl.com/free/2026-04-09-fb28f491-de6e-4fbf-a301-ee027f99129f.jpg",
-        "https://cdn.phototourl.com/free/2026-04-09-5aa553e2-c68a-4c95-8bf5-61154bcca238.jpg",
-        "https://cdn.phototourl.com/free/2026-04-09-b7e0f235-5fbc-4380-8f47-a396fb470c9d.jpg",
-        "https://cdn.phototourl.com/free/2026-04-09-a12ba0bf-9fd6-4a04-931a-f75c5f198efe.jpg"
-      ];
-      const flowerImages = [...new Set(rawUrls)];
-      
-      const flowerNames = [
-        "🌸 ช่อดอกไม้สีชมพูหวาน", "🌷 ทิวลิปน่ารัก", "🌻 ทานตะวันสดใส", 
-        "💐 ช่อดอกไม้รวม", "🌼 ดอกเดซี่ขาว", "🌸 ช่อพิเศษ", 
-        "🌺 ดอกไม้สีสัน", "🎀 ช่อเซอร์ไพรส์"
-      ];
+    const birthYear = 2012;
 
-      // ---------- State ----------
-      let currentIndex = 0;
-      let selectedFlowerUrl = null;
-      let selectedFlowerName = '';
-      
-      // ข้อมูลจากหน้าแต่ง
-      let flowerColor = '';
-      let ribbonColor = '';
-      let extraMsg = '';
+    const rawUrls = [
+      "https://cdn.phototourl.com/free/2026-04-09-7201ed65-ed7f-4bdf-8cb6-1c2a4d7585b6.jpg",
+      "https://cdn.phototourl.com/free/2026-04-09-f0232230-ff17-4f85-bbe5-4c57ae23c815.jpg",
+      "https://cdn.phototourl.com/free/2026-04-09-75c68463-b1a8-4e5f-9b5f-3f0e293dcc49.jpg",
+      "https://cdn.phototourl.com/free/2026-04-09-6199066c-300b-464c-8f6a-b6891a6c4d9c.jpg",
+      "https://cdn.phototourl.com/free/2026-04-09-fb28f491-de6e-4fbf-a301-ee027f99129f.jpg",
+      "https://cdn.phototourl.com/free/2026-04-09-5aa553e2-c68a-4c95-8bf5-61154bcca238.jpg",
+      "https://cdn.phototourl.com/free/2026-04-09-b7e0f235-5fbc-4380-8f47-a396fb470c9d.jpg",
+      "https://cdn.phototourl.com/free/2026-04-09-a12ba0bf-9fd6-4a04-931a-f75c5f198efe.jpg"
+    ];
+    const flowerImages = [...new Set(rawUrls)];
 
-      // ---------- DOM Elements ----------
-      const pages = {
-        page1: document.getElementById('page1'),
-        page2: document.getElementById('page2'),
-        page3: document.getElementById('page3'),
-        page4: document.getElementById('page4')
-      };
-      
-      const flowerImg = document.getElementById('flowerImage');
-      const counterDiv = document.getElementById('flowerCounter');
-      const likeBtn = document.getElementById('likeBtn');
-      const nextBtn = document.getElementById('nextBtn');
-      const startBtn = document.getElementById('startBtn');
-      const backToWelcome = document.getElementById('backToWelcomeBtn');
-      const backToSelect = document.getElementById('backToSelectBtn');
-      const toSummaryBtn = document.getElementById('toSummaryBtn');
-      const backToStartBtn = document.getElementById('backToStartBtn');
-      
-      const flowerColorInput = document.getElementById('flowerColorInput');
-      const ribbonColorInput = document.getElementById('ribbonColorInput');
-      const extraMessageInput = document.getElementById('extraMessageInput');
-      
-      const summaryFlowerImg = document.getElementById('summaryFlowerImg');
-      const summaryFlowerName = document.getElementById('summaryFlowerName');
-      const summaryColor = document.getElementById('summaryColor');
-      const summaryRibbon = document.getElementById('summaryRibbon');
-      const summaryMessage = document.getElementById('summaryMessage');
-      const displayAgeSpan = document.getElementById('displayAge');
+    const flowerNames = [
+      "🌸 ช่อดอกไม้สีชมพูหวาน", "🌷 ทิวลิปน่ารัก", "🌻 ทานตะวันสดใส",
+      "💐 ช่อดอกไม้รวม", "🌼 ดอกเดซี่ขาว", "🌸 ช่อพิเศษ",
+      "🌺 ดอกไม้สีสัน", "🎀 ช่อเซอร์ไพรส์"
+    ];
 
-      // ---------- ฟังก์ชันเปลี่ยนหน้า ----------
-      function showPage(pageId) {
-        Object.values(pages).forEach(p => p.classList.remove('active'));
-        pages[pageId].classList.add('active');
-        window.scrollTo(0, 0);
-      }
+    let currentIndex = 0;
+    let selectedFlowerUrl = null;
+    let selectedFlowerName = '';
+    let flowerColor = '', ribbonColor = '', extraMsg = '';
 
-      // อัปเดตรูปตาม index
-      function updateFlowerDisplay() {
-        if (flowerImages.length) {
+    // DOM
+    const pages = {
+      page1: document.getElementById('page1'),
+      page2: document.getElementById('page2'),
+      page3: document.getElementById('page3'),
+      page4: document.getElementById('page4')
+    };
+    const steps = [
+      document.getElementById('s1'),
+      document.getElementById('s2'),
+      document.getElementById('s3'),
+      document.getElementById('s4')
+    ];
+
+    const flowerImg       = document.getElementById('flowerImage');
+    const counterDiv      = document.getElementById('flowerCounter');
+    const progressBar     = document.getElementById('progressBar');
+    const dotWrap         = document.getElementById('dotWrap');
+    const likeBtn         = document.getElementById('likeBtn');
+    const nextBtn         = document.getElementById('nextBtn');
+    const startBtn        = document.getElementById('startBtn');
+    const backToWelcome   = document.getElementById('backToWelcomeBtn');
+    const backToSelect    = document.getElementById('backToSelectBtn');
+    const toSummaryBtn    = document.getElementById('toSummaryBtn');
+    const backToStartBtn  = document.getElementById('backToStartBtn');
+    const flowerColorInput   = document.getElementById('flowerColorInput');
+    const ribbonColorInput   = document.getElementById('ribbonColorInput');
+    const extraMessageInput  = document.getElementById('extraMessageInput');
+    const summaryFlowerImg   = document.getElementById('summaryFlowerImg');
+    const summaryFlowerName  = document.getElementById('summaryFlowerName');
+    const summaryColor       = document.getElementById('summaryColor');
+    const summaryRibbon      = document.getElementById('summaryRibbon');
+    const summaryMessage     = document.getElementById('summaryMessage');
+    const displayAgeSpan     = document.getElementById('displayAge');
+
+    // ===== PETALS =====
+    const petalEmojis = ['🌸','🌺','🌷','✿','❀','🌼','💮'];
+    for (let i = 0; i < 14; i++) {
+      const p = document.createElement('div');
+      p.className = 'petal';
+      p.textContent = petalEmojis[i % petalEmojis.length];
+      p.style.left = (Math.random() * 100) + 'vw';
+      p.style.animationDuration = (7 + Math.random() * 8) + 's';
+      p.style.animationDelay    = (Math.random() * 10) + 's';
+      p.style.fontSize = (14 + Math.random() * 14) + 'px';
+      document.body.appendChild(p);
+    }
+
+    // ===== DOTS =====
+    function buildDots() {
+      dotWrap.innerHTML = '';
+      flowerImages.forEach((_, i) => {
+        const d = document.createElement('div');
+        d.className = 'dot' + (i === currentIndex ? ' active' : '');
+        d.addEventListener('click', () => goToImage(i));
+        dotWrap.appendChild(d);
+      });
+    }
+
+    function updateDots() {
+      const dots = dotWrap.querySelectorAll('.dot');
+      dots.forEach((d, i) => {
+        d.className = 'dot' + (i === currentIndex ? ' active' : '');
+      });
+    }
+
+    // ===== STEP INDICATOR =====
+    const pageOrder = ['page1','page2','page3','page4'];
+    function updateSteps(pageId) {
+      const idx = pageOrder.indexOf(pageId);
+      steps.forEach((s, i) => {
+        s.className = 'step' + (i < idx ? ' done' : '') + (i === idx ? ' active' : '');
+      });
+    }
+
+    // ===== PAGE SWITCH =====
+    function showPage(pageId) {
+      Object.values(pages).forEach(p => p.classList.remove('active'));
+      pages[pageId].classList.add('active');
+      updateSteps(pageId);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ===== FLOWER DISPLAY =====
+    function goToImage(idx) {
+      currentIndex = (idx + flowerImages.length) % flowerImages.length;
+      updateFlowerDisplay(true);
+    }
+
+    function updateFlowerDisplay(animate) {
+      const name = flowerNames[currentIndex % flowerNames.length];
+      counterDiv.innerHTML = `${name}<br><span style="font-size:1.2rem;opacity:.7;">รูปที่ ${currentIndex+1} / ${flowerImages.length}</span>`;
+      progressBar.style.width = ((currentIndex + 1) / flowerImages.length * 100) + '%';
+      updateDots();
+
+      if (animate) {
+        flowerImg.classList.add('swap-out');
+        setTimeout(() => {
           flowerImg.src = flowerImages[currentIndex];
-          const nameIndex = currentIndex % flowerNames.length;
-          counterDiv.innerHTML = `🌸 ${flowerNames[nameIndex]} <br> รูปที่ ${currentIndex+1} / ${flowerImages.length}`;
-        }
+          flowerImg.classList.remove('swap-out');
+          flowerImg.classList.add('swap-in');
+          setTimeout(() => flowerImg.classList.remove('swap-in'), 400);
+        }, 180);
+      } else {
+        flowerImg.src = flowerImages[currentIndex];
       }
+    }
 
-      // เตรียมข้อมูลหน้า 4
-      function prepareSummary() {
-        const age = new Date().getFullYear() - birthYear;
-        displayAgeSpan.textContent = age;
-        
-        if (selectedFlowerUrl) {
-          summaryFlowerImg.src = selectedFlowerUrl;
-          summaryFlowerName.textContent = selectedFlowerName || '🌸 ช่อดอกไม้ที่ถูกใจ 🌸';
-        } else {
-          summaryFlowerImg.src = '';
-          summaryFlowerName.textContent = 'ยังไม่ได้เลือกดอกไม้';
-        }
-        
-        summaryColor.textContent = flowerColor || '(ไม่ได้ระบุ)';
-        summaryRibbon.textContent = ribbonColor || '(ไม่ได้ระบุ)';
-        summaryMessage.textContent = extraMsg || '(ไม่มีข้อความ)';
+    // ===== SPARKLE EFFECT =====
+    function spawnSparkles(x, y, emojis, count) {
+      for (let i = 0; i < count; i++) {
+        const el = document.createElement('div');
+        el.className = 'sparkle';
+        el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+        const angle = (Math.PI * 2 / count) * i + Math.random() * 0.5;
+        const dist  = 60 + Math.random() * 80;
+        el.style.setProperty('--tx', Math.cos(angle) * dist + 'px');
+        el.style.setProperty('--ty', Math.sin(angle) * dist + 'px');
+        el.style.left = x + 'px';
+        el.style.top  = y + 'px';
+        el.style.animationDelay = (Math.random() * 0.15) + 's';
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 900);
       }
+    }
 
-      // ---------- Event Listeners ----------
-      
-      startBtn.addEventListener('click', () => {
-        currentIndex = 0;
-        updateFlowerDisplay();
-        showPage('page2');
-      });
-
-      likeBtn.addEventListener('click', () => {
-        if (flowerImages.length) {
-          selectedFlowerUrl = flowerImages[currentIndex];
-          const nameIdx = currentIndex % flowerNames.length;
-          selectedFlowerName = flowerNames[nameIdx];
-          showPage('page3');
-        }
-      });
-
-      nextBtn.addEventListener('click', () => {
-        currentIndex = (currentIndex + 1) % flowerImages.length;
-        updateFlowerDisplay();
-      });
-
-      backToWelcome.addEventListener('click', () => showPage('page1'));
-      
-      backToSelect.addEventListener('click', () => showPage('page2'));
-
-      toSummaryBtn.addEventListener('click', () => {
-        flowerColor = flowerColorInput.value.trim();
-        ribbonColor = ribbonColorInput.value.trim();
-        extraMsg = extraMessageInput.value.trim();
-        prepareSummary();
-        showPage('page4');
-      });
-
-      backToStartBtn.addEventListener('click', () => {
-        // รีเซ็ตทุกอย่างกลับไปหน้าแรก
-        currentIndex = 0;
-        selectedFlowerUrl = null;
-        selectedFlowerName = '';
-        flowerColorInput.value = '';
-        ribbonColorInput.value = '';
-        extraMessageInput.value = '';
-        flowerColor = ribbonColor = extraMsg = '';
-        showPage('page1');
-      });
-
-      // เริ่มต้นโหลดรูปแรก
-      if (flowerImages.length) {
-        flowerImg.src = flowerImages[0];
-        counterDiv.innerHTML = `🌸 ${flowerNames[0]} <br> รูปที่ 1 / ${flowerImages.length}`;
+    function spawnHearts(x, y) {
+      const hearts = ['❤️','💖','💗','💕','🌸'];
+      for (let i = 0; i < 8; i++) {
+        const el = document.createElement('div');
+        el.className = 'heart-burst';
+        el.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+        const angle = (Math.PI * 2 / 8) * i;
+        const dist  = 70 + Math.random() * 90;
+        el.style.setProperty('--tx', Math.cos(angle) * dist + 'px');
+        el.style.setProperty('--ty', Math.sin(angle) * dist + 'px');
+        el.style.left = x + 'px';
+        el.style.top  = y + 'px';
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 1000);
       }
+    }
 
-      // ป้องกันการ submit form (ไม่มี form)
-      
-      // เพิ่มลูกเล่น: ตกแต่งเพิ่ม
-      const style = document.createElement('style');
-      style.textContent = `
-        @keyframes floatPop {
-          0% { opacity: 0.7; transform: translateY(0) scale(1); }
-          100% { opacity: 0; transform: translateY(-100px) scale(1.8); }
-        }
-      `;
-      document.head.appendChild(style);
+    // ===== SUMMARY =====
+    function prepareSummary() {
+      const today = new Date();
+      const bday  = new Date(today.getFullYear(), 8, 20);
+      const age   = today.getFullYear() - birthYear - (today < bday ? 1 : 0);
+      displayAgeSpan.textContent = age;
 
-    })();
+      summaryFlowerImg.src = selectedFlowerUrl || '';
+      summaryFlowerName.textContent = selectedFlowerName || '🌸 ช่อดอกไม้ที่ถูกใจ 🌸';
+      summaryColor.textContent   = flowerColor  || '(ไม่ได้ระบุ)';
+      summaryRibbon.textContent  = ribbonColor  || '(ไม่ได้ระบุ)';
+      summaryMessage.textContent = extraMsg     || '(ไม่มีข้อความ)';
+    }
+
+    // ===== EVENTS =====
+    startBtn.addEventListener('click', e => {
+      const r = startBtn.getBoundingClientRect();
+      spawnSparkles(r.left + r.width/2, r.top + r.height/2, ['✨','⭐','💫','🌟'], 8);
+      currentIndex = 0;
+      buildDots();
+      updateFlowerDisplay(false);
+      showPage('page2');
+    });
+
+    likeBtn.addEventListener('click', e => {
+      if (!flowerImages.length) return;
+      selectedFlowerUrl  = flowerImages[currentIndex];
+      selectedFlowerName = flowerNames[currentIndex % flowerNames.length];
+      const r = likeBtn.getBoundingClientRect();
+      spawnHearts(r.left + r.width/2, r.top + r.height/2);
+      setTimeout(() => showPage('page3'), 250);
+    });
+
+    nextBtn.addEventListener('click', () => {
+      currentIndex = (currentIndex + 1) % flowerImages.length;
+      updateFlowerDisplay(true);
+    });
+
+    backToWelcome.addEventListener('click', () => showPage('page1'));
+    backToSelect.addEventListener('click',  () => showPage('page2'));
+
+    toSummaryBtn.addEventListener('click', e => {
+      flowerColor = flowerColorInput.value.trim();
+      ribbonColor = ribbonColorInput.value.trim();
+      extraMsg    = extraMessageInput.value.trim();
+      const r = toSummaryBtn.getBoundingClientRect();
+      spawnSparkles(r.left + r.width/2, r.top + r.height/2, ['🎁','🎀','💝','🌸'], 8);
+      prepareSummary();
+      setTimeout(() => showPage('page4'), 200);
+    });
+
+    backToStartBtn.addEventListener('click', () => {
+      currentIndex = 0;
+      selectedFlowerUrl = null; selectedFlowerName = '';
+      flowerColorInput.value = ''; ribbonColorInput.value = ''; extraMessageInput.value = '';
+      flowerColor = ribbonColor = extraMsg = '';
+      showPage('page1');
+    });
+
+    // init
+    buildDots();
+    updateFlowerDisplay(false);
+
+  })();
   </script>
 </body>
-</html>
+    </html>
