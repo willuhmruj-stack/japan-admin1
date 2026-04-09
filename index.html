@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>🌸 สุขสันต์วันเกิดนะ กัคญาภัค 🌸</title>
+  <title>🌸 เลือกดอกไม้ให้กัคญาภัค 🌸</title>
   <!-- ฟอนต์น่ารัก -->
   <link href="https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
@@ -16,8 +16,7 @@
 
     body {
       min-height: 100vh;
-      background: #fce8e0;
-      background-image: radial-gradient(circle at 20% 30%, #ffe6d5 0%, #ffd9c5 100%);
+      background: linear-gradient(145deg, #ffe6f0 0%, #d4e6ff 100%);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -25,364 +24,451 @@
       position: relative;
     }
 
-    /* กล่องหลัก */
-    .birthday-box {
-      background: rgba(255, 248, 240, 0.85);
+    /* กล่องหลักแต่ละหน้า */
+    .page-container {
+      background: rgba(255, 255, 255, 0.7);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       border-radius: 60px;
-      padding: 35px 25px;
-      max-width: 700px;
+      padding: 30px 25px;
+      max-width: 600px;
       width: 100%;
-      box-shadow: 0 30px 35px rgba(200, 120, 100, 0.15),
-                  0 0 0 4px #fde4d3 inset,
-                  0 0 0 8px #ffcab8 inset;
+      box-shadow: 0 25px 35px rgba(170, 120, 150, 0.15),
+                  0 0 0 4px #fce4f0 inset,
+                  0 0 0 8px #c8e2ff inset;
       text-align: center;
-      border: 2px solid #ffb79a;
-      position: relative;
-      z-index: 10;
+      border: 2px solid #ffb7c5;
+      transition: opacity 0.3s ease;
+    }
+
+    /* ซ่อนหน้าที่ยังไม่แสดง */
+    .page {
+      display: none;
+    }
+
+    .page.active {
+      display: block;
     }
 
     h1 {
-      font-size: 2.5rem;
-      color: #b3513a;
-      text-shadow: 3px 3px 0 #ffc6ad;
-      margin-bottom: 5px;
-      letter-spacing: 1px;
+      font-size: 2.4rem;
+      color: #a1426e;
+      text-shadow: 3px 3px 0 #ffbfd5;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      font-size: 1.9rem;
+      color: #4f6f9f;
+      margin: 15px 0;
     }
 
     .birthday-name {
-      font-size: 2.8rem;
+      font-size: 2.6rem;
       font-weight: 600;
-      color: #9c3e2a;
-      background: #fff1e6;
+      color: #9c3e6a;
+      background: #ffeef4;
       display: inline-block;
-      padding: 5px 30px;
+      padding: 8px 30px;
       border-radius: 60px;
-      margin: 10px 0 5px;
-      box-shadow: 0 6px 0 #d49b84;
-      border: 2px solid #ffc3aa;
+      box-shadow: 0 6px 0 #c98aa5;
+      border: 3px solid #b3d4ff;
+      margin: 10px 0;
     }
 
     .birth-date {
-      font-size: 1.6rem;
-      color: #a6523e;
-      margin-bottom: 15px;
+      font-size: 1.7rem;
+      color: #5c4e7a;
     }
 
-    .photo-gallery {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      margin: 20px 0 25px;
-      flex-wrap: wrap;
-    }
-
-    .flower-photo {
-      width: 150px;
-      height: 150px;
-      object-fit: cover;
-      border-radius: 35px;
-      border: 5px solid #fff4ec;
-      box-shadow: 0 12px 0 #b57962, 0 8px 15px rgba(160, 80, 60, 0.2);
-      background: #ffe2d4;
-      transition: transform 0.2s;
-    }
-
-    .flower-photo:hover {
-      transform: scale(1.02);
-    }
-
-    .question-text {
-      font-size: 2rem;
-      color: #af4f37;
-      margin: 10px 0 5px;
-    }
-
-    .cute-emoji {
-      font-size: 2.8rem;
+    .cute-emoji-big {
+      font-size: 3.2rem;
       line-height: 1.3;
     }
 
-    /* ตัวเลือกดอกไม้ */
-    .flower-options {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 12px;
-      margin: 20px 0 10px;
-    }
-
-    .flower-btn {
-      background: #ffe0d1;
-      border: 4px solid #ffb294;
-      border-radius: 80px;
-      padding: 14px 22px;
-      font-size: 1.5rem;
-      font-weight: 500;
-      color: #712e1c;
-      box-shadow: 0 7px 0 #b16f58;
-      cursor: pointer;
-      transition: 0.1s ease;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      border: 3px solid #fff1e9;
-      user-select: none;
-    }
-
-    .flower-btn:active {
-      transform: translateY(5px);
-      box-shadow: 0 2px 0 #b16f58;
-    }
-
-    .flower-btn.selected {
-      background: #fec9b3;
-      box-shadow: 0 4px 0 #9f5f48;
-      transform: translateY(3px);
-      border-color: #ff987a;
-    }
-
-    .action-area {
-      margin: 30px 0 15px;
-    }
-
-    .confirm-btn {
-      background: #f8a68c;
-      background: linear-gradient(145deg, #fcb9a2, #f28e74);
+    /* ปุ่ม */
+    .btn {
       border: none;
       border-radius: 999px;
-      padding: 20px 40px;
-      font-size: 2.2rem;
-      font-weight: 600;
-      color: white;
-      text-shadow: 2px 2px 0 #b1533a;
-      box-shadow: 0 12px 0 #a1452e, 0 8px 15px #d49a84;
-      cursor: pointer;
-      border: 4px solid #ffede3;
-      transition: 0.1s;
-      width: 90%;
-      max-width: 400px;
-      margin: 0 auto;
-    }
-
-    .confirm-btn:active {
-      transform: translateY(6px);
-      box-shadow: 0 6px 0 #a1452e, 0 8px 15px #c0816b;
-    }
-
-    .message-box {
-      margin-top: 25px;
-      background: #fff6ef;
-      border-radius: 50px;
-      padding: 18px 20px;
-      border: 3px dashed #e09b83;
-      font-size: 1.4rem;
-      color: #6a3422;
-    }
-
-    .final-message {
+      padding: 16px 30px;
       font-size: 1.8rem;
-      color: #b14127;
-      font-weight: 500;
-      margin-top: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 8px 0 #a13e63, 0 8px 15px rgba(160, 60, 100, 0.2);
+      transition: 0.1s;
+      border: 4px solid #fff5fc;
+      color: white;
+      text-shadow: 2px 2px 0 #a1426e;
+      background: #ff90b5;
+      background: linear-gradient(145deg, #ffb0cb, #ff7da8);
+      margin: 15px 5px;
+      min-width: 180px;
     }
 
-    .note {
-      font-size: 1.2rem;
-      color: #b5654f;
+    .btn:active {
+      transform: translateY(5px);
+      box-shadow: 0 3px 0 #a13e63, 0 8px 15px rgba(160, 60, 100, 0.2);
+    }
+
+    .btn-outline {
+      background: #b0c8ff;
+      background: linear-gradient(145deg, #c8dbff, #9bb9ff);
+      box-shadow: 0 8px 0 #5f6f9c;
+      text-shadow: 2px 2px 0 #5a6a8f;
+    }
+
+    /* หน้ารูปดอกไม้ */
+    .flower-card {
+      background: #fff0f7;
+      border-radius: 50px;
+      padding: 20px 15px;
+      border: 5px dashed #ffb0cb;
+      margin: 15px 0;
+    }
+
+    .flower-img {
+      width: 100%;
+      max-width: 320px;
+      height: 280px;
+      object-fit: cover;
+      border-radius: 40px;
+      border: 6px solid #ffe7f0;
+      box-shadow: 0 12px 0 #b5798a, 0 10px 20px rgba(0,0,0,0.1);
+      margin: 10px auto;
+      background: #fcd4e2;
+    }
+
+    .counter {
+      font-size: 1.6rem;
+      color: #825e73;
+      margin: 5px;
+    }
+
+    .button-group {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
       margin-top: 10px;
     }
 
-    .float-decoration {
-      position: absolute;
-      pointer-events: none;
-      z-index: 1;
-      font-size: 30px;
+    /* หน้าคำถาม */
+    .question-box {
+      background: #e7f0ff;
+      border-radius: 45px;
+      padding: 25px 20px;
+      border: 4px solid #ffb7cf;
     }
 
-    /* responsive */
-    @media (max-width: 500px) {
-      .birthday-box { padding: 25px 15px; }
+    .cute-input {
+      width: 90%;
+      padding: 18px 20px;
+      font-size: 1.4rem;
+      border: 4px solid #ffb0ca;
+      border-radius: 60px;
+      background: white;
+      outline: none;
+      color: #4a3a5c;
+      text-align: center;
+      margin: 15px 0;
+    }
+
+    /* สรุป */
+    .summary-card {
+      background: #ffeef4;
+      border-radius: 45px;
+      padding: 25px;
+      border: 5px solid #b4d0ff;
+    }
+
+    .selected-flower-preview {
+      width: 180px;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 35px;
+      border: 5px solid white;
+      box-shadow: 0 8px 0 #b38092;
+      margin: 10px auto;
+    }
+
+    .final-message {
+      margin-top: 25px;
+      font-size: 2rem;
+    }
+
+    /* ตกแต่ง */
+    .float-deco {
+      position: absolute;
+      font-size: 28px;
+      pointer-events: none;
+      z-index: 1;
+    }
+    @media (max-width: 480px) {
+      .page-container { padding: 20px 15px; }
       h1 { font-size: 2rem; }
-      .birthday-name { font-size: 2.2rem; }
-      .flower-photo { width: 120px; height: 120px; }
     }
   </style>
 </head>
 <body>
 
   <!-- ของตกแต่ง -->
-  <div class="float-decoration" style="top: 5%; left: 5%;">🌸</div>
-  <div class="float-decoration" style="bottom: 8%; right: 6%;">🎂</div>
-  <div class="float-decoration" style="top: 20%; right: 8%;">🧁</div>
-  <div class="float-decoration" style="bottom: 20%; left: 10%;">🎁</div>
+  <div class="float-deco" style="top: 5%; left: 5%;">🐱</div>
+  <div class="float-deco" style="bottom: 8%; right: 6%;">🎀</div>
+  <div class="float-deco" style="top: 20%; right: 8%;">🫧</div>
+  <div class="float-deco" style="bottom: 20%; left: 10%;">🌸</div>
 
-  <div class="birthday-box">
-    <!-- หัวข้อหลัก -->
-    <div class="cute-emoji">🌸🎂🌸</div>
-    <h1>🎉 สุขสันต์วันเกิดนะ 🎉</h1>
-    <div class="birthday-name">🌸 กัคญาภัค อารียา 🌸</div>
-    <div class="birth-date">🎈 20 กันยายน 2012 🎈</div>
-    <div class="cute-emoji">🐣💐🐻‍❄️</div>
-
-    <!-- รูปภาพดอกไม้ 2 รูป (จากลิงก์ที่ให้มา) -->
-    <div class="photo-gallery">
-      <img class="flower-photo" src="https://cdn.phototourl.com/free/2026-04-09-05d725b3-8394-4683-a8d3-4545ab73140b.jpg" alt="ดอกไม้ช่อที่1" loading="lazy">
-      <img class="flower-photo" src="https://cdn.phototourl.com/free/2026-04-09-fa77c4e6-954f-4035-9c57-4db69d3c6535.jpg" alt="ดอกไม้ช่อที่2" loading="lazy">
+  <div class="page-container">
+    
+    <!-- ********** PAGE 1: WELCOME ********** -->
+    <div id="page1" class="page active">
+      <div class="cute-emoji-big">🎂🐣🌸</div>
+      <h1>🎉 สุขสันต์วันเกิดนะ 🎉</h1>
+      <div class="birthday-name">🌸 กัคญาภัค อารียา 🌸</div>
+      <div class="birth-date">🎈 20 กันยายน 2012 🎈</div>
+      <div class="cute-emoji-big" style="font-size:2.5rem;">🐻‍❄️💐🧸</div>
+      <p style="font-size:1.5rem; color:#855a6e; margin:20px 0;">วันพิเศษนี้ เราเตรียมดอกไม้สวย ๆ ให้เลือกนะ 💖</p>
+      <button class="btn" id="startBtn">✨ เริ่มเลือกดอกไม้กันเลย ✨</button>
     </div>
 
-    <!-- คำถามเล็ก ๆ -->
-    <div class="question-text">💬 อยากได้ดอกไม้แบบไหนดี?</div>
-    <div class="cute-emoji" style="font-size: 2rem;">👇 เลือกเลย ไม่ต้องเกรงใจนะ! 👇</div>
-
-    <!-- ตัวเลือกดอกไม้ (ช้อย) -->
-    <div class="flower-options">
-      <div class="flower-btn" data-flower="🌸 ช่อดอกไม้สีชมพูหวาน ๆ">🌸 ชมพูหวาน</div>
-      <div class="flower-btn" data-flower="🌻 ช่อทานตะวันสดใส">🌻 ทานตะวัน</div>
-      <div class="flower-btn" data-flower="🌷 ช่อทิวลิปน่ารัก">🌷 ทิวลิป</div>
-      <div class="flower-btn" data-flower="💐 ช่อดอกไม้รวม (เซอร์ไพรส์)">💐 แบบเซอร์ไพรส์</div>
+    <!-- ********** PAGE 2: เลือกดอกไม้ (Swipe-like) ********** -->
+    <div id="page2" class="page">
+      <h2>🌸 เลือกช่อที่ชอบ 🌸</h2>
+      <div class="flower-card">
+        <img id="flowerImage" class="flower-img" src="" alt="ดอกไม้">
+        <div id="flowerCounter" class="counter">รูปที่ 1 / 9</div>
+      </div>
+      <div class="button-group">
+        <button class="btn" id="likeBtn">❤️ ถูกใจ ❤️</button>
+        <button class="btn btn-outline" id="nextBtn">➡️ รูปถัดไป</button>
+      </div>
+      <p style="margin-top:15px; color:#a15f7c;">กดถูกใจเพื่อเลือกช่อนี้เลย~</p>
+      <!-- ปุ่มย้อนกลับ (optional) -->
+      <button class="btn-outline" id="backToWelcomeBtn" style="background:#d9c4ff; box-shadow:0 5px 0 #7a6a9c; font-size:1.2rem; padding:10px 20px;">⬅️ กลับหน้าแรก</button>
     </div>
 
-    <!-- ปุ่มยืนยัน "ซื้อให้เลย" -->
-    <div class="action-area">
-      <button id="buyButton" class="confirm-btn">🎁 ซื้อดอกไม้ให้เลย! 🎁</button>
+    <!-- ********** PAGE 3: คำถามเกี่ยวกับดอกไม้ ********** -->
+    <div id="page3" class="page">
+      <h2>💬 คำถามน่ารัก ๆ 💬</h2>
+      <div class="question-box">
+        <p style="font-size:1.8rem; color:#734b62;">🌸 ดอกไม้ที่เลือก...</p>
+        <p style="font-size:1.4rem; margin-bottom:20px;">คุณคิดว่าดอกไม้สีอะไรที่เหมาะกับวันเกิดที่สุด?</p>
+        <input type="text" id="colorAnswer" class="cute-input" placeholder="เช่น สีชมพู สีขาว สีฟ้า...">
+        <p style="font-size:1.4rem; margin:20px 0 10px;">📝 หรืออยากบอกอะไรเกี่ยวกับดอกไม้ไหม?</p>
+        <textarea id="flowerMessage" class="cute-input" rows="2" placeholder="ข้อความหวาน ๆ..."></textarea>
+      </div>
+      <div style="margin-top:20px;">
+        <button class="btn" id="toSummaryBtn">🎁 ไปหน้าสรุป 🎁</button>
+      </div>
+      <button class="btn-outline" id="backToSelectBtn" style="margin-top:10px;">⬅️ กลับไปเลือกดอกไม้ใหม่</button>
     </div>
 
-    <!-- ส่วนแสดงข้อความหลังจากเลือก + ซื้อ -->
-    <div id="resultArea" class="message-box">
-      <span id="selectedFlowerText">ยังไม่ได้เลือกดอกไม้</span>
+    <!-- ********** PAGE 4: สรุป ********** -->
+    <div id="page4" class="page">
+      <h2>🎀 สรุปของขวัญวันเกิด 🎀</h2>
+      <div class="summary-card">
+        <div class="cute-emoji-big">💝</div>
+        <p style="font-size:2rem; font-weight:500;">กัคญาภัค อารียา</p>
+        <p>🎂 20 กันยายน 2012 (อายุ <span id="displayAge"></span> ปี)</p>
+        <img id="summaryFlowerImg" class="selected-flower-preview" src="" alt="ดอกไม้ที่เลือก">
+        <p id="summaryFlowerName" style="font-size:1.5rem; margin:5px;">🌸 ช่อดอกไม้สุดพิเศษ 🌸</p>
+        <div style="background:#fce4f0; border-radius:30px; padding:15px; margin-top:15px;">
+          <p><strong>💭 คำตอบ:</strong> <span id="summaryColor"></span></p>
+          <p><strong>💌 ข้อความ:</strong> <span id="summaryMessage"></span></p>
+        </div>
+        <button class="btn" id="finishBtn" style="margin-top:25px;">💖 เสร็จสิ้น ส่งคำอวยพร 💖</button>
+      </div>
     </div>
-    <div id="finalMessage" class="final-message"></div>
-    <div class="note">💖 ไม่ต้องเกรงใจเลยน้าา ซื้อให้เพราะอยากให้จริง ๆ 💖</div>
+
+    <!-- ********** หน้าสุดท้าย (หลังจากกดเสร็จ) อาจเป็น popup ********** -->
+    <div id="finalMessagePage" class="page" style="text-align:center;">
+      <div class="cute-emoji-big">🎉💐🎂</div>
+      <h2>ส่งให้แล้วน้าาา!</h2>
+      <p style="font-size:2rem;">สุขสันต์วันเกิดอีกครั้งนะ กัคญาภัค 🥳</p>
+      <p>ขอบคุณที่ร่วมสนุกเลือกดอกไม้ด้วยกัน 💕</p>
+      <div class="cute-emoji-big">🐣🌸🐻‍❄️</div>
+    </div>
+
   </div>
 
   <script>
-    (function() {
+    (function(){
       "use strict";
 
-      // ----- ข้อมูลผู้รับ -----
-      const receiverName = "กัคญาภัค อารียา";
-      const birthInfo = "20 กันยายน 2012";
+      // ---------- ข้อมูล ----------
+      const receiver = "กัคญาภัค อารียา";
+      const birthYear = 2012;
+      
+      // ลิงก์รูปดอกไม้ (unique)
+      const rawUrls = [
+        "https://cdn.phototourl.com/free/2026-04-09-7201ed65-ed7f-4bdf-8cb6-1c2a4d7585b6.jpg",
+        "https://cdn.phototourl.com/free/2026-04-09-f0232230-ff17-4f85-bbe5-4c57ae23c815.jpg",
+        "https://cdn.phototourl.com/free/2026-04-09-75c68463-b1a8-4e5f-9b5f-3f0e293dcc49.jpg",
+        "https://cdn.phototourl.com/free/2026-04-09-6199066c-300b-464c-8f6a-b6891a6c4d9c.jpg",
+        "https://cdn.phototourl.com/free/2026-04-09-fb28f491-de6e-4fbf-a301-ee027f99129f.jpg",
+        "https://cdn.phototourl.com/free/2026-04-09-5aa553e2-c68a-4c95-8bf5-61154bcca238.jpg",
+        "https://cdn.phototourl.com/free/2026-04-09-b7e0f235-5fbc-4380-8f47-a396fb470c9d.jpg",
+        "https://cdn.phototourl.com/free/2026-04-09-a12ba0bf-9fd6-4a04-931a-f75c5f198efe.jpg"
+      ];
+      // กำจัดรูปซ้ำ (มีลิงก์ซ้ำกัน)
+      const flowerImages = [...new Set(rawUrls)];
+      
+      // ตั้งชื่อเล่นให้แต่ละรูป (optional)
+      const flowerNames = [
+        "🌸 ช่อดอกไม้สีชมพูหวาน", "🌷 ทิวลิปน่ารัก", "🌻 ทานตะวันสดใส", 
+        "💐 ช่อดอกไม้รวม", "🌼 ดอกเดซี่ขาว", "🌸 ช่อพิเศษ", 
+        "🌺 ดอกไม้สีสัน", "🎀 ช่อเซอร์ไพรส์"
+      ];
 
-      // ----- Elements -----
-      const flowerBtns = document.querySelectorAll('.flower-btn');
-      const buyBtn = document.getElementById('buyButton');
-      const selectedFlowerSpan = document.getElementById('selectedFlowerText');
-      const finalMessageDiv = document.getElementById('finalMessage');
+      // ---------- State ----------
+      let currentIndex = 0;                // index ของรูปที่แสดง
+      let selectedFlowerUrl = null;        // รูปที่ถูกใจ
+      let selectedFlowerName = '';
+      
+      // คำตอบ
+      let colorAnswer = '';
+      let messageAnswer = '';
 
-      // ----- State -----
-      let selectedFlower = null;          // เก็บข้อความดอกไม้ที่เลือก
-      let hasPurchased = false;
+      // ---------- DOM Elements ----------
+      const pages = {
+        page1: document.getElementById('page1'),
+        page2: document.getElementById('page2'),
+        page3: document.getElementById('page3'),
+        page4: document.getElementById('page4'),
+        finalPage: document.getElementById('finalMessagePage')
+      };
+      
+      const flowerImg = document.getElementById('flowerImage');
+      const counterDiv = document.getElementById('flowerCounter');
+      const likeBtn = document.getElementById('likeBtn');
+      const nextBtn = document.getElementById('nextBtn');
+      const startBtn = document.getElementById('startBtn');
+      const backToWelcome = document.getElementById('backToWelcomeBtn');
+      const backToSelect = document.getElementById('backToSelectBtn');
+      const toSummaryBtn = document.getElementById('toSummaryBtn');
+      const finishBtn = document.getElementById('finishBtn');
+      
+      const colorInput = document.getElementById('colorAnswer');
+      const msgTextarea = document.getElementById('flowerMessage');
+      const summaryFlowerImg = document.getElementById('summaryFlowerImg');
+      const summaryFlowerName = document.getElementById('summaryFlowerName');
+      const summaryColor = document.getElementById('summaryColor');
+      const summaryMessage = document.getElementById('summaryMessage');
+      const displayAgeSpan = document.getElementById('displayAge');
 
-      // ----- ฟังก์ชันจัดการเลือกดอกไม้ -----
-      function selectFlower(btn, flowerName) {
-        // ลบคลาส selected จากทุกปุ่ม
-        flowerBtns.forEach(b => b.classList.remove('selected'));
-        btn.classList.add('selected');
-        selectedFlower = flowerName;
-        
-        // อัปเดตข้อความแสดงผล
-        selectedFlowerSpan.innerHTML = `🌸 คุณเลือก: <strong>${flowerName}</strong> 🌸`;
-        
-        // ถ้าเคยกดซื้อแล้วแต่เปลี่ยนใจเปลี่ยนดอกไม้ ให้เคลียร์ข้อความสุดท้าย
-        if (hasPurchased) {
-          finalMessageDiv.innerHTML = '';
-          hasPurchased = false;
+      // ---------- Helper: switch page ----------
+      function showPage(pageId) {
+        Object.values(pages).forEach(p => p.classList.remove('active'));
+        pages[pageId].classList.add('active');
+        window.scrollTo(0, 0);
+      }
+
+      // ---------- อัปเดตรูปตาม index ----------
+      function updateFlowerDisplay() {
+        if (flowerImages.length > 0) {
+          flowerImg.src = flowerImages[currentIndex];
+          const nameIndex = currentIndex % flowerNames.length;
+          // แสดงชื่อเล่นประกอบ
+          counterDiv.innerHTML = `🌸 ${flowerNames[nameIndex]} <br> รูปที่ ${currentIndex+1} / ${flowerImages.length}`;
         }
       }
 
-      // ----- Event listener ปุ่มดอกไม้ -----
-      flowerBtns.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          const flower = btn.getAttribute('data-flower');
-          selectFlower(btn, flower);
-        });
+      // ---------- ไปหน้าสรุป เตรียมข้อมูล ----------
+      function prepareSummary() {
+        const age = new Date().getFullYear() - birthYear;
+        displayAgeSpan.textContent = age;
+        if (selectedFlowerUrl) {
+          summaryFlowerImg.src = selectedFlowerUrl;
+          summaryFlowerName.textContent = selectedFlowerName || '🌸 ช่อดอกไม้ที่ถูกใจ 🌸';
+        }
+        summaryColor.textContent = colorAnswer || '(ไม่ได้ระบุ)';
+        summaryMessage.textContent = messageAnswer || '(ไม่มีข้อความ)';
+      }
+
+      // ---------- Event Listeners ----------
+      
+      // เริ่มจากหน้าแรก
+      startBtn.addEventListener('click', () => {
+        currentIndex = 0;
+        updateFlowerDisplay();
+        showPage('page2');
       });
 
-      // ----- เมื่อกดปุ่ม "ซื้อดอกไม้ให้เลย" -----
-      function handlePurchase() {
-        if (!selectedFlower) {
-          // ยังไม่ได้เลือก
-          selectedFlowerSpan.innerHTML = '🥺 กรุณาเลือกดอกไม้ก่อนน้าา ~';
-          finalMessageDiv.innerHTML = '👉 กดเลือกช่อที่ชอบด้านบนเลย 👈';
-          return;
-        }
-
-        // สร้างข้อความน่ารัก
-        const purchaseMessage = `🎉 ซื้อให้แล้วนะ! ${selectedFlower} 🎉`;
-        const extraMessage = `💝 สุขสันต์วันเกิดอีกครั้งนะ ${receiverName} 🎂✨<br>🌼 อายุครบ ${new Date().getFullYear() - 2012} ขวบแล้ว ขอให้มีความสุขมาก ๆ นะ 🌼`;
-        
-        finalMessageDiv.innerHTML = `${purchaseMessage}<br><span style="font-size:1.4rem;">${extraMessage}</span>`;
-        
-        // เพิ่มลูกเล่น: หัวใจหรือดอกไม้ปลิว (เล็กน้อย)
-        createConfetti();
-        
-        hasPurchased = true;
-
-        // เปลี่ยนข้อความในกล่องแสดงผลให้รู้ว่าซื้อแล้ว
-        selectedFlowerSpan.innerHTML = `✅ สำเร็จ! ${selectedFlower} กำลังจัดส่งให้ ${receiverName} แล้วค่าา ✅`;
-      }
-
-      // ----- สร้าง effect ดอกไม้/หัวใจลอย (แบบง่าย) -----
-      function createConfetti() {
-        for (let i = 0; i < 10; i++) {
-          const particle = document.createElement('span');
-          particle.innerHTML = ['🌸','💐','🌼','🌷','🎀','✨'][Math.floor(Math.random()*6)];
-          particle.style.position = 'fixed';
-          particle.style.left = Math.random() * 100 + '%';
-          particle.style.top = Math.random() * 100 + '%';
-          particle.style.fontSize = (20 + Math.random() * 30) + 'px';
-          particle.style.pointerEvents = 'none';
-          particle.style.zIndex = '999';
-          particle.style.animation = 'floatPop 1.8s ease-out forwards';
-          particle.style.opacity = '0.9';
-          document.body.appendChild(particle);
-          setTimeout(() => particle.remove(), 1800);
-        }
-      }
-
-      // เพิ่ม keyframe ถ้ายังไม่มี
-      if (!document.getElementById('animStyle')) {
-        const style = document.createElement('style');
-        style.id = 'animStyle';
-        style.textContent = `
-          @keyframes floatPop {
-            0% { opacity: 0.7; transform: translateY(0) scale(1); }
-            100% { opacity: 0; transform: translateY(-100px) scale(1.5); }
-          }
-        `;
-        document.head.appendChild(style);
-      }
-
-      buyBtn.addEventListener('click', handlePurchase);
-
-      // ตั้งค่าเริ่มต้น: ยังไม่เลือกอะไร
-      selectedFlowerSpan.innerHTML = '🌸 รอเลือกดอกไม้สวย ๆ อยู่น้าา 🌸';
-
-      // Optional: ถ้าอยากให้มีข้อความเริ่มต้นน่ารัก
-      // สามารถเพิ่มคำแนะนำเล็ก ๆ
-      const noteHint = document.createElement('div');
-      
-      // ถ้ามีการกดปุ่มโดยไม่เลือก แสดงข้อความตามที่ทำไปแล้ว
-      
-      // ใส่ข้อมูลเพิ่มเติมให้คนใช้รู้ว่าไม่ต้องเกรงใจ
-      // แสดงอายุแบบ dynamic
-      const age = new Date().getFullYear() - 2012;
-      // สามารถใส่ในส่วนข้อความได้เลย
-      
-      // เพิ่มเติม: ปรับข้อความ final ให้มีอายุ
-      // เราได้ใส่ใน handlePurchase แล้ว
-      
-      // ถ้าต้องการให้มีข้อความตอนโหลดหน้าเว็บ
-      window.addEventListener('load', () => {
-        // ข้อความต้อนรับเล็กน้อย
+      // ปุ่มถูกใจ
+      likeBtn.addEventListener('click', () => {
+        selectedFlowerUrl = flowerImages[currentIndex];
+        const nameIdx = currentIndex % flowerNames.length;
+        selectedFlowerName = flowerNames[nameIdx];
+        // ไปหน้าคำถาม
+        showPage('page3');
       });
 
+      // ปุ่มถัดไป
+      nextBtn.addEventListener('click', () => {
+        currentIndex = (currentIndex + 1) % flowerImages.length;
+        updateFlowerDisplay();
+      });
+
+      // ปุ่มกลับไปหน้าแรกจากหน้า2
+      backToWelcome.addEventListener('click', () => {
+        showPage('page1');
+      });
+
+      // ปุ่มกลับไปเลือกดอกไม้ใหม่จากหน้า3
+      backToSelect.addEventListener('click', () => {
+        showPage('page2');
+      });
+
+      // ไปหน้าสรุป
+      toSummaryBtn.addEventListener('click', () => {
+        colorAnswer = colorInput.value.trim();
+        messageAnswer = msgTextarea.value.trim();
+        prepareSummary();
+        showPage('page4');
+      });
+
+      // กดเสร็จสิ้น
+      finishBtn.addEventListener('click', () => {
+        showPage('finalPage');
+        // เพิ่มเอฟเฟกต์หัวใจ (optional)
+        for(let i=0;i<8;i++) {
+          setTimeout(() => {
+            const heart = document.createElement('span');
+            heart.innerHTML = '💖';
+            heart.style.position = 'fixed';
+            heart.style.left = Math.random()*100+'%';
+            heart.style.top = Math.random()*100+'%';
+            heart.style.fontSize = '30px';
+            heart.style.pointerEvents = 'none';
+            heart.style.zIndex = '999';
+            heart.style.animation = 'floatPop 1.8s ease-out';
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 1800);
+          }, i*70);
+        }
+      });
+
+      // เริ่มต้นโหลดรูปแรก
+      if (flowerImages.length > 0) {
+        flowerImg.src = flowerImages[0];
+        counterDiv.innerHTML = `🌸 ${flowerNames[0]} <br> รูปที่ 1 / ${flowerImages.length}`;
+      }
+
+      // เพิ่ม animation
+      const style = document.createElement('style');
+      style.textContent = `
+        @keyframes floatPop {
+          0% { opacity: 0.7; transform: translateY(0) scale(1); }
+          100% { opacity: 0; transform: translateY(-100px) scale(1.8); }
+        }
+      `;
+      document.head.appendChild(style);
+
+      // กันลืม: ถ้าผู้ใช้กดถูกใจแต่ไม่มีรูป
+      // จัดการเผื่อ
+      
+      // ปรับให้ปุ่มย้อนกลับหน้าแรกจากทุกที่ (ใส่แล้ว)
+      
     })();
   </script>
-
-  <!-- เพิ่มเติมการตกแต่งและข้อความไม่ต้องเกรงใจ -->
-  <div style="display:none;">🎂🎂🎂</div>
 </body>
-</html>
+  </html>
