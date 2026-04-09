@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>💘 รับรักเค้าหน่อยมั้ย 💘</title>
-  <link href="https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;600&display=swap" rel="stylesheet">
+  <title>🌸 สุขสันต์วันเกิดนะ กัคญาภัค 🌸</title>
+  <!-- ฟอนต์น่ารัก -->
+  <link href="https://fonts.googleapis.com/css2?family=Mitr:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     * {
       margin: 0;
@@ -15,460 +16,373 @@
 
     body {
       min-height: 100vh;
-      background: #ffecf0;
-      background-image: radial-gradient(circle at 20% 30%, #ffe5f1 0%, #ffd9e4 100%);
+      background: #fce8e0;
+      background-image: radial-gradient(circle at 20% 30%, #ffe6d5 0%, #ffd9c5 100%);
       display: flex;
       justify-content: center;
       align-items: center;
       padding: 16px;
       position: relative;
-      overflow-x: hidden;
     }
 
-    /* กล่องเนื้อหา */
-    .love-box {
-      background: rgba(255, 250, 245, 0.8);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border-radius: 70px;
-      padding: 40px 24px;
-      max-width: 650px;
+    /* กล่องหลัก */
+    .birthday-box {
+      background: rgba(255, 248, 240, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 60px;
+      padding: 35px 25px;
+      max-width: 700px;
       width: 100%;
-      box-shadow: 0 30px 40px rgba(210, 80, 120, 0.2),
-                  0 0 0 3px #fff0f5 inset,
-                  0 0 0 6px #ffc1d4 inset;
+      box-shadow: 0 30px 35px rgba(200, 120, 100, 0.15),
+                  0 0 0 4px #fde4d3 inset,
+                  0 0 0 8px #ffcab8 inset;
       text-align: center;
-      transition: box-shadow 0.3s;
-      border: 2px solid #ffb6c1;
+      border: 2px solid #ffb79a;
       position: relative;
       z-index: 10;
     }
 
     h1 {
-      font-size: 2.7rem;
-      color: #a63462;
-      text-shadow: 3px 3px 0 #ffb7c5;
-      margin-bottom: 8px;
-      letter-spacing: 2px;
+      font-size: 2.5rem;
+      color: #b3513a;
+      text-shadow: 3px 3px 0 #ffc6ad;
+      margin-bottom: 5px;
+      letter-spacing: 1px;
     }
 
-    .cute-emoji-big {
-      font-size: 3.8rem;
-      line-height: 1.3;
-      filter: drop-shadow(0 6px 8px rgba(230, 100, 130, 0.2));
+    .birthday-name {
+      font-size: 2.8rem;
+      font-weight: 600;
+      color: #9c3e2a;
+      background: #fff1e6;
+      display: inline-block;
+      padding: 5px 30px;
+      border-radius: 60px;
+      margin: 10px 0 5px;
+      box-shadow: 0 6px 0 #d49b84;
+      border: 2px solid #ffc3aa;
     }
 
-    .button-area {
-      position: relative;
-      min-height: 240px;
-      margin: 25px 0 15px;
+    .birth-date {
+      font-size: 1.6rem;
+      color: #a6523e;
+      margin-bottom: 15px;
+    }
+
+    .photo-gallery {
       display: flex;
       justify-content: center;
-      align-items: center;
+      gap: 15px;
+      margin: 20px 0 25px;
       flex-wrap: wrap;
-      gap: 20px;
     }
 
-    /* ปุ่มพื้นฐาน */
-    .love-btn {
+    .flower-photo {
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 35px;
+      border: 5px solid #fff4ec;
+      box-shadow: 0 12px 0 #b57962, 0 8px 15px rgba(160, 80, 60, 0.2);
+      background: #ffe2d4;
+      transition: transform 0.2s;
+    }
+
+    .flower-photo:hover {
+      transform: scale(1.02);
+    }
+
+    .question-text {
+      font-size: 2rem;
+      color: #af4f37;
+      margin: 10px 0 5px;
+    }
+
+    .cute-emoji {
+      font-size: 2.8rem;
+      line-height: 1.3;
+    }
+
+    /* ตัวเลือกดอกไม้ */
+    .flower-options {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin: 20px 0 10px;
+    }
+
+    .flower-btn {
+      background: #ffe0d1;
+      border: 4px solid #ffb294;
+      border-radius: 80px;
+      padding: 14px 22px;
+      font-size: 1.5rem;
+      font-weight: 500;
+      color: #712e1c;
+      box-shadow: 0 7px 0 #b16f58;
+      cursor: pointer;
+      transition: 0.1s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 3px solid #fff1e9;
+      user-select: none;
+    }
+
+    .flower-btn:active {
+      transform: translateY(5px);
+      box-shadow: 0 2px 0 #b16f58;
+    }
+
+    .flower-btn.selected {
+      background: #fec9b3;
+      box-shadow: 0 4px 0 #9f5f48;
+      transform: translateY(3px);
+      border-color: #ff987a;
+    }
+
+    .action-area {
+      margin: 30px 0 15px;
+    }
+
+    .confirm-btn {
+      background: #f8a68c;
+      background: linear-gradient(145deg, #fcb9a2, #f28e74);
       border: none;
-      border-radius: 200px;
-      padding: 22px 40px;
+      border-radius: 999px;
+      padding: 20px 40px;
       font-size: 2.2rem;
       font-weight: 600;
-      cursor: pointer;
-      box-shadow: 0 12px 0 #ac3a64, 0 10px 20px rgba(170, 50, 90, 0.25);
-      transition: all 0.2s cubic-bezier(0.25, 0.1, 0.15, 1.3);
-      border: 4px solid #ffeef4;
       color: white;
-      text-shadow: 2px 2px 0 #b34e7a;
-      letter-spacing: 2px;
-      transform: scale(1);
-      background: #ff8dae;
-      background: linear-gradient(145deg, #ffa7c2, #ff709b);
-      min-width: 180px;
-      user-select: none;
-      touch-action: manipulation;
-      position: relative;
-    }
-
-    .yes-btn {
-      background: #ff8dae;
-      background: linear-gradient(145deg, #ffb0c8, #ff7da3);
-      box-shadow: 0 12px 0 #9e3c62, 0 10px 25px #e07a9e;
-      z-index: 20;
-    }
-
-    .no-btn {
-      background: #c0b7c9;
-      background: linear-gradient(145deg, #d4c9db, #b8aac0);
-      box-shadow: 0 12px 0 #7a637f, 0 10px 20px rgba(100, 70, 100, 0.3);
-      color: #fcf4f9;
-      text-shadow: 2px 2px 0 #6e5474;
-      z-index: 15;
-      transition: transform 0.25s, opacity 0.3s, box-shadow 0.2s, left 0.2s, top 0.2s, font-size 0.2s, padding 0.2s;
-    }
-
-    /* เอฟเฟกต์กดปุ่ม */
-    .love-btn:active {
-      transform: translateY(6px) scale(0.98);
-      box-shadow: 0 6px 0 #9e3c62, 0 8px 15px rgba(0,0,0,0.1);
-    }
-
-    /* ข้อความเตือนเล็ก ๆ */
-    .hint-message {
-      margin-top: 8px;
-      font-size: 1.3rem;
-      color: #bc6c8a;
-      min-height: 40px;
-      font-weight: 400;
-      transition: 0.2s;
-    }
-
-    /* หน้าสำเร็จ */
-    .success-panel {
-      display: none;
-      animation: popHeart 0.6s;
-    }
-
-    @keyframes popHeart {
-      0% { opacity: 0; transform: scale(0.2) rotate(-5deg); }
-      80% { transform: scale(1.05); }
-      100% { opacity: 1; transform: scale(1) rotate(0); }
-    }
-
-    .success-card {
-      background: #fff3f8;
-      border-radius: 50px;
-      padding: 35px 20px;
-      border: 5px dashed #ff8aac;
-      box-shadow: 0 15px 0 #b35f7c, inset 0 0 20px #ffe0ec;
-    }
-
-    .success-card h2 {
-      font-size: 2.5rem;
-      color: #a03a60;
-      margin: 15px 0;
-    }
-
-    .love-input {
-      width: 90%;
-      padding: 18px 20px;
-      font-size: 1.5rem;
-      border: 4px solid #ffb0ca;
-      border-radius: 60px;
-      background: white;
-      outline: none;
-      color: #632c44;
-      text-align: center;
-      margin: 15px 0;
-    }
-
-    .send-love {
-      background: #ff8aae;
-      border: none;
-      color: white;
-      font-size: 2rem;
-      padding: 18px 30px;
-      border-radius: 60px;
-      font-weight: bold;
-      box-shadow: 0 9px 0 #ac3e65;
+      text-shadow: 2px 2px 0 #b1533a;
+      box-shadow: 0 12px 0 #a1452e, 0 8px 15px #d49a84;
       cursor: pointer;
-      border: 3px solid #fff1f7;
-      width: 85%;
+      border: 4px solid #ffede3;
       transition: 0.1s;
+      width: 90%;
+      max-width: 400px;
+      margin: 0 auto;
     }
 
-    .send-love:active {
-      transform: translateY(5px);
-      box-shadow: 0 4px 0 #ac3e65;
+    .confirm-btn:active {
+      transform: translateY(6px);
+      box-shadow: 0 6px 0 #a1452e, 0 8px 15px #c0816b;
     }
 
-    #displayMessage {
-      margin-top: 20px;
-      font-size: 2rem;
-      color: #b13f66;
-      min-height: 70px;
+    .message-box {
+      margin-top: 25px;
+      background: #fff6ef;
+      border-radius: 50px;
+      padding: 18px 20px;
+      border: 3px dashed #e09b83;
+      font-size: 1.4rem;
+      color: #6a3422;
     }
 
-    /* หัวใจลอย (ตกแต่ง) */
-    .floaty {
+    .final-message {
+      font-size: 1.8rem;
+      color: #b14127;
+      font-weight: 500;
+      margin-top: 15px;
+    }
+
+    .note {
+      font-size: 1.2rem;
+      color: #b5654f;
+      margin-top: 10px;
+    }
+
+    .float-decoration {
       position: absolute;
-      font-size: 24px;
       pointer-events: none;
       z-index: 1;
+      font-size: 30px;
     }
 
     /* responsive */
-    @media (max-width: 480px) {
-      .love-box { padding: 30px 16px; border-radius: 45px; }
-      h1 { font-size: 2.2rem; }
-      .love-btn { font-size: 1.8rem; padding: 18px 25px; min-width: 140px; }
+    @media (max-width: 500px) {
+      .birthday-box { padding: 25px 15px; }
+      h1 { font-size: 2rem; }
+      .birthday-name { font-size: 2.2rem; }
+      .flower-photo { width: 120px; height: 120px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- หัวใจ/อิโมจิตกแต่ง -->
-  <div class="floaty" style="top: 8%; left: 5%;">🐣</div>
-  <div class="floaty" style="bottom: 12%; right: 8%;">🌸</div>
-  <div class="floaty" style="top: 25%; right: 6%;">🫧</div>
-  <div class="floaty" style="bottom: 25%; left: 7%;">🧸</div>
+  <!-- ของตกแต่ง -->
+  <div class="float-decoration" style="top: 5%; left: 5%;">🌸</div>
+  <div class="float-decoration" style="bottom: 8%; right: 6%;">🎂</div>
+  <div class="float-decoration" style="top: 20%; right: 8%;">🧁</div>
+  <div class="float-decoration" style="bottom: 20%; left: 10%;">🎁</div>
 
-  <div class="love-box">
-    <!-- ********** ส่วนถามคำถาม ********** -->
-    <div id="questionPart">
-      <div class="cute-emoji-big">🥺💭💗</div>
-      <h1>เป็นแฟนเค้ามั้ยอ่าา</h1>
-      <div class="cute-emoji-big" style="font-size: 2.5rem;">👇 กดเลย 👇</div>
+  <div class="birthday-box">
+    <!-- หัวข้อหลัก -->
+    <div class="cute-emoji">🌸🎂🌸</div>
+    <h1>🎉 สุขสันต์วันเกิดนะ 🎉</h1>
+    <div class="birthday-name">🌸 กัคญาภัค อารียา 🌸</div>
+    <div class="birth-date">🎈 20 กันยายน 2012 🎈</div>
+    <div class="cute-emoji">🐣💐🐻‍❄️</div>
 
-      <div class="button-area">
-        <button id="yesButton" class="love-btn yes-btn">💖 เป็นแฟน 💖</button>
-        <button id="noButton" class="love-btn no-btn">😢 ไม่เป็น 😢</button>
-      </div>
-
-      <div id="hintBox" class="hint-message">🐰 กดสิ กดสิ ~</div>
+    <!-- รูปภาพดอกไม้ 2 รูป (จากลิงก์ที่ให้มา) -->
+    <div class="photo-gallery">
+      <img class="flower-photo" src="https://cdn.phototourl.com/free/2026-04-09-05d725b3-8394-4683-a8d3-4545ab73140b.jpg" alt="ดอกไม้ช่อที่1" loading="lazy">
+      <img class="flower-photo" src="https://cdn.phototourl.com/free/2026-04-09-fa77c4e6-954f-4035-9c57-4db69d3c6535.jpg" alt="ดอกไม้ช่อที่2" loading="lazy">
     </div>
 
-    <!-- ********** ส่วนสำเร็จ ********** -->
-    <div id="successPart" class="success-panel">
-      <div class="success-card">
-        <div class="cute-emoji-big">💘✨💘</div>
-        <h2>เย้! เป็นแฟนกันแล้วนะะ</h2>
-        <div class="cute-emoji-big">🐻‍❄️💕🐣</div>
-        <input type="text" id="loveMessageInput" class="love-input" placeholder="พิมพ์ข้อความหวาน ๆ ตรงนี้...">
-        <button id="submitLoveBtn" class="send-love">ส่งรักให้เค้าหน่อย 💌</button>
-        <div id="displayMessage"></div>
-        <p style="margin-top: 15px; color:#c06a8a;">⬆️ ข้อความจะขึ้นตรงนี้เลยน้าา</p>
-      </div>
+    <!-- คำถามเล็ก ๆ -->
+    <div class="question-text">💬 อยากได้ดอกไม้แบบไหนดี?</div>
+    <div class="cute-emoji" style="font-size: 2rem;">👇 เลือกเลย ไม่ต้องเกรงใจนะ! 👇</div>
+
+    <!-- ตัวเลือกดอกไม้ (ช้อย) -->
+    <div class="flower-options">
+      <div class="flower-btn" data-flower="🌸 ช่อดอกไม้สีชมพูหวาน ๆ">🌸 ชมพูหวาน</div>
+      <div class="flower-btn" data-flower="🌻 ช่อทานตะวันสดใส">🌻 ทานตะวัน</div>
+      <div class="flower-btn" data-flower="🌷 ช่อทิวลิปน่ารัก">🌷 ทิวลิป</div>
+      <div class="flower-btn" data-flower="💐 ช่อดอกไม้รวม (เซอร์ไพรส์)">💐 แบบเซอร์ไพรส์</div>
     </div>
+
+    <!-- ปุ่มยืนยัน "ซื้อให้เลย" -->
+    <div class="action-area">
+      <button id="buyButton" class="confirm-btn">🎁 ซื้อดอกไม้ให้เลย! 🎁</button>
+    </div>
+
+    <!-- ส่วนแสดงข้อความหลังจากเลือก + ซื้อ -->
+    <div id="resultArea" class="message-box">
+      <span id="selectedFlowerText">ยังไม่ได้เลือกดอกไม้</span>
+    </div>
+    <div id="finalMessage" class="final-message"></div>
+    <div class="note">💖 ไม่ต้องเกรงใจเลยน้าา ซื้อให้เพราะอยากให้จริง ๆ 💖</div>
   </div>
 
   <script>
-    (function(){
+    (function() {
       "use strict";
 
-      // --- Elements ---
-      const questionPart = document.getElementById('questionPart');
-      const successPart = document.getElementById('successPart');
-      const yesBtn = document.getElementById('yesButton');
-      const noBtn = document.getElementById('noButton');
-      const hintBox = document.getElementById('hintBox');
-      const loveInput = document.getElementById('loveMessageInput');
-      const submitLove = document.getElementById('submitLoveBtn');
-      const displayMsg = document.getElementById('displayMessage');
+      // ----- ข้อมูลผู้รับ -----
+      const receiverName = "กัคญาภัค อารียา";
+      const birthInfo = "20 กันยายน 2012";
 
-      // --- State variables ---
-      let noClickCount = 0;           // จำนวนครั้งที่กด "ไม่เป็น"
-      const MAX_NO_CLICKS = 5;        // กดครบ 5 ครั้ง ปุ่มไม่เป็นจะหายไป
-      let yesScale = 1.0;             // ขนาดปุ่มเป็นแฟน
-      let noBtnOpacity = 1.0;
-      let noBtnPosition = { x: 0, y: 0 }; // ใช้ transform translate
-      
-      // ข้อความเปลี่ยนตามจำนวนครั้งที่กดไม่เป็น
-      const hintMessages = [
-        "😳 เอ้า… กดไม่เป็นหรอ?",
-        "🐣 ยังไงแน่ะ ลองอีกทีสิ",
-        "💧 ใจร้ายจัง… แต่เค้าไม่ยอมแพ้หรอก",
-        "🥺 งื้อ… กดไม่เป็นอีกแล้ว",
-        "😈 ครั้งสุดท้ายแล้วนะ! ปุ่มไม่เป็นจะหายไปแล้วน้า~"
-      ];
+      // ----- Elements -----
+      const flowerBtns = document.querySelectorAll('.flower-btn');
+      const buyBtn = document.getElementById('buyButton');
+      const selectedFlowerSpan = document.getElementById('selectedFlowerText');
+      const finalMessageDiv = document.getElementById('finalMessage');
 
-      // ข้อความบนปุ่ม "ไม่เป็น" เปลี่ยนด้วย
-      const noBtnTexts = [
-        "😢 ไม่เป็น",
-        "😭 ไม่เอาน่า",
-        "🥺 แน่ใจหรอ",
-        "💔 ใจร้าย",
-        "🙏 ลองเป็นมั้ย"
-      ];
+      // ----- State -----
+      let selectedFlower = null;          // เก็บข้อความดอกไม้ที่เลือก
+      let hasPurchased = false;
 
-      // เริ่มต้น
-      updateYesSize();
-
-      // ----- ฟังก์ชันอัปเดตปุ่ม "เป็นแฟน" ตาม scale -----
-      function updateYesSize() {
-        yesBtn.style.transform = `scale(${yesScale})`;
-        // ปรับขนาดตัวอักษรและ padding เล็กน้อยตาม scale
-        const baseFont = 2.2; // rem
-        yesBtn.style.fontSize = (baseFont * yesScale) + 'rem';
-        // padding ด้วย
-      }
-
-      // ----- ฟังก์ชันอัปเดตปุ่มไม่เป็น (ตำแหน่ง + opacity + ข้อความ)-----
-      function updateNoButton() {
-        // เปลี่ยนข้อความปุ่มตามจำนวนคลิก
-        if (noClickCount < noBtnTexts.length) {
-          noBtn.textContent = noBtnTexts[noClickCount];
-        } else {
-          noBtn.textContent = "😶‍🌫️ หายไปละ...";
-        }
-
-        // ปรับตำแหน่ง (ขยับหนีแบบสุ่ม)
-        noBtn.style.transform = `translate(${noBtnPosition.x}px, ${noBtnPosition.y}px)`;
+      // ----- ฟังก์ชันจัดการเลือกดอกไม้ -----
+      function selectFlower(btn, flowerName) {
+        // ลบคลาส selected จากทุกปุ่ม
+        flowerBtns.forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        selectedFlower = flowerName;
         
-        // เมื่อถึงจำนวนที่กำหนดให้ปุ่มค่อยๆหาย
-        if (noClickCount >= MAX_NO_CLICKS) {
-          noBtn.style.opacity = '0';
-          noBtn.style.pointerEvents = 'none';  // กดไม่ได้แล้ว
-          noBtn.style.transition = 'opacity 0.5s, transform 0.3s';
-          hintBox.textContent = "💕 เหลือแต่ปุ่ม 'เป็นแฟน' แล้วน้าา กดเลยย~ 💕";
-        } else {
-          noBtn.style.opacity = noBtnOpacity;
-          noBtn.style.pointerEvents = 'auto';
-        }
-
-        // เปลี่ยน hint message
-        if (noClickCount < hintMessages.length) {
-          hintBox.textContent = hintMessages[noClickCount];
-        } else if (noClickCount >= MAX_NO_CLICKS) {
-          hintBox.textContent = "💖 ไม่มีทางเลือกอื่นแล้ว besides love 💖";
-        } else {
-          hintBox.textContent = "😢 อย่ากดไม่เป็นอีกเลยน้าา...";
+        // อัปเดตข้อความแสดงผล
+        selectedFlowerSpan.innerHTML = `🌸 คุณเลือก: <strong>${flowerName}</strong> 🌸`;
+        
+        // ถ้าเคยกดซื้อแล้วแต่เปลี่ยนใจเปลี่ยนดอกไม้ ให้เคลียร์ข้อความสุดท้าย
+        if (hasPurchased) {
+          finalMessageDiv.innerHTML = '';
+          hasPurchased = false;
         }
       }
 
-      // ----- เมื่อกดปุ่ม "ไม่เป็น" -----
-      function onNoClick(e) {
-        e.preventDefault();
-        
-        if (noClickCount >= MAX_NO_CLICKS) {
-          // ถ้าหายไปแล้วไม่ทำอะไร
+      // ----- Event listener ปุ่มดอกไม้ -----
+      flowerBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const flower = btn.getAttribute('data-flower');
+          selectFlower(btn, flower);
+        });
+      });
+
+      // ----- เมื่อกดปุ่ม "ซื้อดอกไม้ให้เลย" -----
+      function handlePurchase() {
+        if (!selectedFlower) {
+          // ยังไม่ได้เลือก
+          selectedFlowerSpan.innerHTML = '🥺 กรุณาเลือกดอกไม้ก่อนน้าา ~';
+          finalMessageDiv.innerHTML = '👉 กดเลือกช่อที่ชอบด้านบนเลย 👈';
           return;
         }
 
-        // เพิ่มจำนวนคลิก
-        noClickCount++;
+        // สร้างข้อความน่ารัก
+        const purchaseMessage = `🎉 ซื้อให้แล้วนะ! ${selectedFlower} 🎉`;
+        const extraMessage = `💝 สุขสันต์วันเกิดอีกครั้งนะ ${receiverName} 🎂✨<br>🌼 อายุครบ ${new Date().getFullYear() - 2012} ขวบแล้ว ขอให้มีความสุขมาก ๆ นะ 🌼`;
         
-        // ทำให้ปุ่ม "เป็นแฟน" ใหญ่ขึ้นทุกครั้ง (ใหญ่ขึ้นเรื่อยๆ)
-        yesScale = Math.min(2.5, yesScale + 0.22);
-        updateYesSize();
-
-        // ขยับปุ่มไม่เป็นแบบสุ่ม (หนี)
-        const maxMove = 90;
-        noBtnPosition.x = (Math.random() - 0.5) * 2 * maxMove;
-        noBtnPosition.y = (Math.random() - 0.5) * 2 * maxMove;
+        finalMessageDiv.innerHTML = `${purchaseMessage}<br><span style="font-size:1.4rem;">${extraMessage}</span>`;
         
-        // ลด opacity ลงเล็กน้อย (แต่ไม่ให้หายก่อนกำหนด)
-        if (noClickCount < MAX_NO_CLICKS) {
-          noBtnOpacity = Math.max(0.6, 1.0 - (noClickCount * 0.12));
-        } else {
-          noBtnOpacity = 0;
-        }
-
-        // ถ้าครบจำนวนครั้งที่กำหนด → ปุ่มไม่เป็นจะหายไป
-        if (noClickCount === MAX_NO_CLICKS) {
-          // ทำให้ปุ่มจางหายไปและห้ามกด
-          noBtn.style.pointerEvents = 'none';
-          noBtn.style.opacity = '0';
-          hintBox.textContent = "💘 เห็นมั้ย! เหลือแค่ 'เป็นแฟน' แล้ว กดเลยยย 💘";
-          // ทำให้ปุ่ม Yes เด่นขึ้นอีก
-          yesScale = Math.min(3.0, yesScale + 0.3);
-          updateYesSize();
-        }
-
-        // อัปเดตข้อความปุ่มและ hint
-        updateNoButton();
-
-        // เพิ่มลูกเล่น: ถ้ากดไม่เป็นเยอะๆ อาจมีเสียง? (ไม่มีเสียง ใช้แอนิเมชันแทน)
-        if (noClickCount === 3) {
-          hintBox.style.transform = 'scale(1.05)';
-          setTimeout(() => hintBox.style.transform = 'scale(1)', 150);
-        }
-      }
-
-      // ----- เมื่อกดปุ่ม "เป็นแฟน" -----
-      function onYesClick() {
-        // ซ่อนหน้าคำถาม แสดงหน้าสำเร็จ
-        questionPart.style.display = 'none';
-        successPart.style.display = 'block';
+        // เพิ่มลูกเล่น: หัวใจหรือดอกไม้ปลิว (เล็กน้อย)
+        createConfetti();
         
-        // เพิ่มลูกเล่น: หัวใจลอยเต็มจอแบบง่ายๆ (ใช้ class เพิ่ม)
-        createHeartsBurst();
+        hasPurchased = true;
+
+        // เปลี่ยนข้อความในกล่องแสดงผลให้รู้ว่าซื้อแล้ว
+        selectedFlowerSpan.innerHTML = `✅ สำเร็จ! ${selectedFlower} กำลังจัดส่งให้ ${receiverName} แล้วค่าา ✅`;
       }
 
-      // ----- สร้างหัวใจกระจาย (สนุกๆ) -----
-      function createHeartsBurst() {
-        for (let i = 0; i < 12; i++) {
-          const heart = document.createElement('span');
-          heart.innerHTML = ['💖','💗','💘','💝','💕','🌸'][Math.floor(Math.random()*6)];
-          heart.style.position = 'fixed';
-          heart.style.left = Math.random() * 100 + '%';
-          heart.style.top = Math.random() * 100 + '%';
-          heart.style.fontSize = (20 + Math.random() * 40) + 'px';
-          heart.style.pointerEvents = 'none';
-          heart.style.zIndex = '999';
-          heart.style.animation = 'floatUp 2s ease-out forwards';
-          heart.style.opacity = '0.9';
-          document.body.appendChild(heart);
-          setTimeout(() => heart.remove(), 2000);
-        }
-      }
-
-      // เพิ่ม keyframe floatUp ถ้ายังไม่มี
-      const styleSheet = document.createElement("style");
-      styleSheet.textContent = `
-        @keyframes floatUp {
-          0% { opacity: 0.8; transform: translateY(0) scale(1); }
-          100% { opacity: 0; transform: translateY(-120px) scale(1.8); }
-        }
-      `;
-      document.head.appendChild(styleSheet);
-
-      // ----- ส่งข้อความหวาน -----
-      function submitLoveMessage() {
-        const msg = loveInput.value.trim();
-        if (msg === '') {
-          displayMsg.innerHTML = '💬 อยากอ่านข้อความจากใจเธอจัง... 🥺';
-          return;
-        }
-        // escape ง่ายๆ
-        const safeMsg = msg.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-        displayMsg.innerHTML = `💕 "${safeMsg}" 💕<br><span style="font-size:1.3rem;">ขอบคุณที่รับรักเค้านะ! รักที่สุดเลย 😽💖</span>`;
-        loveInput.value = '';
-        // เพิ่มหัวใจอีกนิด
-        for (let i=0;i<5;i++) {
-          setTimeout(() => {
-            const h = document.createElement('span');
-            h.innerHTML = '💗';
-            h.style.position = 'fixed';
-            h.style.left = Math.random()*100+'%';
-            h.style.bottom = '10%';
-            h.style.fontSize = '30px';
-            h.style.pointerEvents = 'none';
-            h.style.zIndex = '1000';
-            h.style.animation = 'floatUp 1.5s ease-out';
-            document.body.appendChild(h);
-            setTimeout(() => h.remove(), 1500);
-          }, i*80);
+      // ----- สร้าง effect ดอกไม้/หัวใจลอย (แบบง่าย) -----
+      function createConfetti() {
+        for (let i = 0; i < 10; i++) {
+          const particle = document.createElement('span');
+          particle.innerHTML = ['🌸','💐','🌼','🌷','🎀','✨'][Math.floor(Math.random()*6)];
+          particle.style.position = 'fixed';
+          particle.style.left = Math.random() * 100 + '%';
+          particle.style.top = Math.random() * 100 + '%';
+          particle.style.fontSize = (20 + Math.random() * 30) + 'px';
+          particle.style.pointerEvents = 'none';
+          particle.style.zIndex = '999';
+          particle.style.animation = 'floatPop 1.8s ease-out forwards';
+          particle.style.opacity = '0.9';
+          document.body.appendChild(particle);
+          setTimeout(() => particle.remove(), 1800);
         }
       }
 
-      // ----- Event Listeners -----
-      noBtn.addEventListener('click', onNoClick);
-      yesBtn.addEventListener('click', onYesClick);
+      // เพิ่ม keyframe ถ้ายังไม่มี
+      if (!document.getElementById('animStyle')) {
+        const style = document.createElement('style');
+        style.id = 'animStyle';
+        style.textContent = `
+          @keyframes floatPop {
+            0% { opacity: 0.7; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(-100px) scale(1.5); }
+          }
+        `;
+        document.head.appendChild(style);
+      }
+
+      buyBtn.addEventListener('click', handlePurchase);
+
+      // ตั้งค่าเริ่มต้น: ยังไม่เลือกอะไร
+      selectedFlowerSpan.innerHTML = '🌸 รอเลือกดอกไม้สวย ๆ อยู่น้าา 🌸';
+
+      // Optional: ถ้าอยากให้มีข้อความเริ่มต้นน่ารัก
+      // สามารถเพิ่มคำแนะนำเล็ก ๆ
+      const noteHint = document.createElement('div');
       
-      submitLove.addEventListener('click', submitLoveMessage);
-      loveInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-          e.preventDefault();
-          submitLove.click();
-        }
+      // ถ้ามีการกดปุ่มโดยไม่เลือก แสดงข้อความตามที่ทำไปแล้ว
+      
+      // ใส่ข้อมูลเพิ่มเติมให้คนใช้รู้ว่าไม่ต้องเกรงใจ
+      // แสดงอายุแบบ dynamic
+      const age = new Date().getFullYear() - 2012;
+      // สามารถใส่ในส่วนข้อความได้เลย
+      
+      // เพิ่มเติม: ปรับข้อความ final ให้มีอายุ
+      // เราได้ใส่ใน handlePurchase แล้ว
+      
+      // ถ้าต้องการให้มีข้อความตอนโหลดหน้าเว็บ
+      window.addEventListener('load', () => {
+        // ข้อความต้อนรับเล็กน้อย
       });
 
-      // ป้องกันการเกิดบั๊กเวลากดปุ่มไม่เป็นเร็วๆ (ไม่มีปัญหา)
-      // เพิ่มความซน: ถ้าเอาเมาส์ไปจ่อปุ่มไม่เป็นแล้วมันจะขยับอีกนิด? (ไม่ทำเพิ่ม จะหนีตอนคลิกพอ)
-      // แต่สามารถเพิ่ม easter egg เล็ก ๆ ได้
-      
-      // ถ้าผู้ใช้พยายามกดไม่เป็นหลังจากมันหายไปแล้วจะไม่เกิดอะไร
-
-      // ปรับขนาดตามหน้าจอเมื่อ resize (ป้องกันปุ่มหลุดจอ)
-      window.addEventListener('resize', () => {
-        // ไม่ต้องทำไรเพราะ transform ใช้ pixel
-      });
-
-      // แก้ปัญหาเวลาแตะบนมือถือ: ใส่ touch event ป้องกันการ zoom (ไม่ต้อง)
     })();
   </script>
+
+  <!-- เพิ่มเติมการตกแต่งและข้อความไม่ต้องเกรงใจ -->
+  <div style="display:none;">🎂🎂🎂</div>
 </body>
 </html>
