@@ -1,1 +1,122 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.container {
+    max-width: 500px;
+    width: 100%;
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(10px);
+    border-radius: 30px;
+    padding: 30px 20px;
+    text-align: center;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+h2 {
+    color: white;
+    margin-bottom: 20px;
+}
+
+h3 {
+    color: white;
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+#user-info {
+    color: #00d4ff;
+    margin: 10px 0;
+    font-size: 16px;
+}
+
+.google-btn {
+    background: white;
+    color: #333;
+    border: none;
+    padding: 15px 30px;
+    font-size: 18px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin: 20px 0;
+    transition: 0.2s;
+}
+
+.google-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+}
+
+.logout-btn {
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 16px;
+    margin: 15px 0;
+    transition: 0.2s;
+}
+
+.logout-btn:hover {
+    background: #c82333;
+}
+
+.app-icon {
+    width: 100px;
+    height: 100px;
+    border-radius: 22px;
+    margin: 20px auto;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    border: 3px solid #00d4ff;
+}
+
+.price {
+    font-size: 32px;
+    font-weight: bold;
+    color: #FFD700;
+    margin: 15px 0;
+}
+
+.buy-button {
+    display: block;
+    background: linear-gradient(135deg, #06C755, #00a347);
+    color: white;
+    padding: 18px 20px;
+    font-size: 20px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: bold;
+    margin: 25px 0 15px;
+    box-shadow: 0 8px 0 #008c3a;
+    transition: 0.1s;
+}
+
+.buy-button:active {
+    transform: translateY(8px);
+    box-shadow: 0 0 0 #008c3a;
+}
+
+.note {
+    color: #aaa;
+    font-size: 14px;
+    margin: 15px 0;
+  }
