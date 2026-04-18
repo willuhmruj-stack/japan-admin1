@@ -1,1 +1,177 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ดาวน์โหลด APK - ร้าน APK</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+</head>
+<body>
+    <div class="container">
+        <a href="dashboard.html" class="back-link">⬅️ กลับแดชบอร์ด</a>
+        
+        <div class="download-container">
+            <h2>⬇️ ดาวน์โหลด APK</h2>
+            
+            <div id="download-content">
+                <p>กำลังตรวจสอบสิทธิ์...</p>
+            </div>
+        </div>
+    </div>
 
+    <script src="js/firebase.js"></script>
+    <script src="js/auth.js"></script>
+    
+    <script>
+        // รับค่า orderId จาก URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const orderId = urlParams.get('orderId');
+        
+        const contentDiv = document.getElementById('download-content');
+        
+        // ตรวจสอบว่ามี orderId หรือไม่
+        if (!orderId) {
+            contentDiv.innerHTML = '<p style="color: red;">❌ ไม่พบรหัสออเดอร์</p>';
+        } else {
+            // ตรวจสอบสถานะล็อกอิน
+            auth.onAuthStateChanged(async user => {
+                if (!user) {
+                    window.location.href = 'login.html';
+                    return;
+                }
+                
+                try {
+                    // ดึงข้อมูลออเดอร์
+                    const orderDoc = await db.collection('orders').doc(orderId).get();
+                    
+                    if (!orderDoc.exists) {
+                        contentDiv.innerHTML = '<p style="color: red;">❌ ไม่พบออเดอร์นี้</p>';
+                        return;
+                    }
+                    
+                    const order = orderDoc.data();
+                    
+                    // ตรวจสอบว่าเป็นเจ้าของออเดอร์หรือไม่
+                    if (order.customerEmail !== user.email) {
+                        contentDiv.innerHTML = '<p style="color: red;">❌ คุณไม่มีสิทธิ์เข้าถึงออเดอร์นี้</p>';
+                        return;
+                    }
+                    
+                    // ตรวจสอบสถานะออเดอร์
+                    if (order.status !== 'approved') {
+                        contentDiv.innerHTML = `
+                            <p style="color: #ffc107;">⏳ ออเดอร์นี้ยังไม่ได้รับการยืนยัน</p>
+                            <p>สถานะปัจจุบัน: ${getStatusText(order.status)}</p>
+                            <a href="dashboard.html" class="btn">กลับไปแดชบอร์ด</a>
+                        `;
+                        return;
+                    }
+                    
+                    // ดึงข้อมูลสินค้าเพื่อแสดงลิงก์ดาวน์โหลด
+                    const productDoc = await db.collection('products').doc(order.productId).get();
+                    
+                    if (!productDoc.exists) {
+                        contentDiv.innerHTML = '<p style="color: red;">❌ ไม่พบข้อมูลสินค้า</p>';
+                        return;
+                    }
+                    
+                    const product = productDoc.data();
+                    
+                    // แสดงปุ่มดาวน์โหลด
+                    contentDiv.innerHTML = `
+                        <div class="download-card">
+                            <h3>✅ พร้อมดาวน์โหลด</h3>
+                            <p><strong>สินค้า:</strong> ${product.name}</p>
+                            <p><strong>ราคา:</strong> ${product.price} บาท</p>
+                            <p><strong>รหัสออเดอร์:</strong> ${orderId}</p>
+                            
+                            <div class="download-button-container">
+                                <a href="${product.downloadUrl}" class="btn-download" target="_blank">
+                                    ⬇️ ดาวน์โหลด ${product.name}.apk
+                                </a>
+                            </div>
+                            
+                            <p class="note">📌 กดปุ่มด้านบนเพื่อดาวน์โหลดไฟล์ APK</p>
+                            <p class="warning">⚠️ กรุณาติดตั้งจากแหล่งที่ไม่รู้จักในการตั้งค่า</p>
+                        </div>
+                    `;
+                    
+                } catch (error) {
+                    console.error('Error:', error);
+                    contentDiv.innerHTML = '<p style="color: red;">❌ เกิดข้อผิดพลาด กรุณาลองใหม่</p>';
+                }
+            });
+        }
+        
+        function getStatusText(status) {
+            switch(status) {
+                case 'pending': return 'รอตรวจสอบ';
+                case 'approved': return 'ยืนยันแล้ว';
+                case 'rejected': return 'ถูกปฏิเสธ';
+                default: return status;
+            }
+        }
+    </script>
+    
+    <style>
+        .download-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .download-card {
+            text-align: center;
+        }
+        .download-card h3 {
+            color: #06C755;
+            margin-bottom: 20px;
+        }
+        .download-button-container {
+            margin: 30px 0;
+        }
+        .btn-download {
+            display: inline-block;
+            background: linear-gradient(135deg, #06C755, #00a347);
+            color: white;
+            padding: 20px 40px;
+            font-size: 20px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            box-shadow: 0 8px 0 #008c3a;
+            transition: 0.1s;
+        }
+        .btn-download:active {
+            transform: translateY(8px);
+            box-shadow: 0 0 0 #008c3a;
+        }
+        .note {
+            color: #aaa;
+            margin-top: 20px;
+        }
+        .warning {
+            color: #ffc107;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        .btn {
+            display: inline-block;
+            background: #333;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            text-decoration: none;
+            margin-top: 15px;
+        }
+    </style>
+</body>
+</html>
