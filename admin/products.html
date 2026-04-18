@@ -1,1 +1,193 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>จัดการสินค้า - แอดมิน</title>
+    <link rel="stylesheet" href="../style.css">
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="admin-header">
+            <h1>📦 จัดการสินค้า</h1>
+            <div>
+                <a href="orders.html" class="btn">📋 ออเดอร์</a>
+                <button id="logout-btn" class="btn-logout">ออกจากระบบ</button>
+            </div>
+        </div>
 
+        <button id="add-product-btn" class="btn-primary">➕ เพิ่มสินค้าใหม่</button>
+
+        <div id="products-table-container">
+            <p>กำลังโหลด...</p>
+        </div>
+
+        <!-- Modal เพิ่ม/แก้ไขสินค้า -->
+        <div id="product-modal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <h2 id="modal-title">เพิ่มสินค้า</h2>
+                <form id="product-form">
+                    <input type="hidden" id="product-id">
+                    <div class="form-group">
+                        <label>ชื่อสินค้า</label>
+                        <input type="text" id="product-name" required class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>ราคา (บาท)</label>
+                        <input type="number" id="product-price" required class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>คำอธิบาย</label>
+                        <textarea id="product-desc" class="form-control"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>ลิงก์รูปภาพ</label>
+                        <input type="text" id="product-image" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>ลิงก์ดาวน์โหลด (Google Drive)</label>
+                        <input type="text" id="product-download" required class="form-control">
+                    </div>
+                    <div class="modal-buttons">
+                        <button type="submit" class="btn-save">💾 บันทึก</button>
+                        <button type="button" class="btn-cancel" onclick="closeModal()">ยกเลิก</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/firebase.js"></script>
+    <script>
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        let editingId = null;
+
+        auth.onAuthStateChanged(async user => {
+            if (!user) {
+                window.location.href = 'admin-login.html';
+                return;
+            }
+            const adminDoc = await db.collection('admins').doc(user.email).get();
+            if (!adminDoc.exists) {
+                await auth.signOut();
+                window.location.href = 'admin-login.html';
+                return;
+            }
+            loadProducts();
+        });
+
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            auth.signOut().then(() => window.location.href = 'admin-login.html');
+        });
+
+        document.getElementById('add-product-btn').addEventListener('click', () => {
+            editingId = null;
+            document.getElementById('modal-title').innerText = 'เพิ่มสินค้า';
+            document.getElementById('product-form').reset();
+            document.getElementById('product-modal').style.display = 'flex';
+        });
+
+        document.getElementById('product-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const productData = {
+                name: document.getElementById('product-name').value,
+                price: parseInt(document.getElementById('product-price').value),
+                description: document.getElementById('product-desc').value,
+                imageUrl: document.getElementById('product-image').value,
+                downloadUrl: document.getElementById('product-download').value,
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            };
+
+            try {
+                if (editingId) {
+                    await db.collection('products').doc(editingId).update(productData);
+                } else {
+                    productData.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+                    await db.collection('products').add(productData);
+                }
+                closeModal();
+                loadProducts();
+            } catch (error) {
+                alert('เกิดข้อผิดพลาด: ' + error.message);
+            }
+        });
+
+        async function loadProducts() {
+            const container = document.getElementById('products-table-container');
+            try {
+                const snapshot = await db.collection('products').orderBy('createdAt', 'desc').get();
+                let html = `
+                    <table class="admin-table">
+                        <thead>
+                            <tr><th>ชื่อ</th><th>ราคา</th><th>ลิงก์ดาวน์โหลด</th><th>จัดการ</th></tr>
+                        </thead>
+                        <tbody>
+                `;
+                snapshot.forEach(doc => {
+                    const p = doc.data();
+                    html += `
+                        <tr>
+                            <td>${p.name}</td>
+                            <td>${p.price}</td>
+                            <td><a href="${p.downloadUrl}" target="_blank">ลิงก์</a></td>
+                            <td>
+                                <button onclick="editProduct('${doc.id}')">✏️ แก้ไข</button>
+                                <button onclick="deleteProduct('${doc.id}')">🗑️ ลบ</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+                html += '</tbody></table>';
+                container.innerHTML = html;
+            } catch (error) {
+                container.innerHTML = '<p style="color:red;">❌ โหลดไม่สำเร็จ</p>';
+            }
+        }
+
+        window.editProduct = async (id) => {
+            const doc = await db.collection('products').doc(id).get();
+            if (doc.exists) {
+                const p = doc.data();
+                document.getElementById('product-id').value = id;
+                document.getElementById('product-name').value = p.name;
+                document.getElementById('product-price').value = p.price;
+                document.getElementById('product-desc').value = p.description || '';
+                document.getElementById('product-image').value = p.imageUrl || '';
+                document.getElementById('product-download').value = p.downloadUrl || '';
+                document.getElementById('modal-title').innerText = 'แก้ไขสินค้า';
+                editingId = id;
+                document.getElementById('product-modal').style.display = 'flex';
+            }
+        };
+
+        window.deleteProduct = async (id) => {
+            if (confirm('ยืนยันการลบสินค้า?')) {
+                await db.collection('products').doc(id).delete();
+                loadProducts();
+            }
+        };
+
+        window.closeModal = () => {
+            document.getElementById('product-modal').style.display = 'none';
+        };
+    </script>
+    <style>
+        .modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7); display: flex; justify-content: center;
+            align-items: center; z-index: 1000;
+        }
+        .modal-content {
+            background: #1e1e3a; padding: 25px; border-radius: 15px;
+            max-width: 500px; width: 90%; color: white;
+        }
+        .btn-save, .btn-cancel { padding: 10px 20px; margin: 5px; border-radius: 8px; border: none; cursor: pointer; }
+        .btn-save { background: #06C755; color: white; }
+        .btn-cancel { background: #666; color: white; }
+    </style>
+</body>
+  </html>
