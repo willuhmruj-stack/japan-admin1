@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ล็อกอิน</title>
+    <title>ล็อกอิน · รุจ</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
     
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
@@ -12,6 +13,12 @@
 </head>
 <body>
     <div class="container">
+        <!-- พื้นหลังแอนิเมชัน -->
+        <div class="bg-animation">
+            <div class="gradient-orb orb-1"></div>
+            <div class="gradient-orb orb-2"></div>
+        </div>
+        
         <div class="login-box">
             <!-- ไอคอนล็อก -->
             <div class="login-icon">
@@ -33,6 +40,7 @@
         const provider = new firebase.auth.GoogleAuthProvider();
         const container = document.getElementById('auth-container');
         
+        // หน้า login (ยังไม่ล็อกอิน)
         function renderLogin() {
             container.innerHTML = `
                 <h2>ยินดีต้อนรับ</h2>
@@ -47,39 +55,45 @@
                     ล็อกอินด้วย Google
                 </button>
                 <p id="error-message"></p>
+                <a href="index.html" class="back-link">⬅️ กลับหน้าแนะนำตัว</a>
             `;
             
             document.getElementById('google-login-btn').addEventListener('click', () => {
                 auth.signInWithPopup(provider)
-                    .then(() => {
-                        // ล็อกอินสำเร็จ → ไปหน้า index.html
-                        window.location.href = 'index.html';
-                    })
                     .catch(error => {
                         document.getElementById('error-message').innerText = '❌ ' + error.message;
                     });
             });
         }
         
+        // หน้าหลังล็อกอินสำเร็จ
         function renderProfile(user) {
             container.innerHTML = `
                 <h2>✅ ล็อกอินสำเร็จ</h2>
                 <img src="${user.photoURL}" class="profile-image" alt="Profile">
                 <div class="user-name">${user.displayName}</div>
                 <div class="user-email">${user.email}</div>
+                
                 <button id="logout-btn" class="logout-btn">ออกจากระบบ</button>
-                <button id="go-home-btn" class="google-btn" style="margin-top:10px;">🏠 ไปหน้าหลัก</button>
+                <button id="home-btn" class="home-btn">🏠 ไปหน้าหลัก</button>
+                <button id="play-btn" class="play-btn">🎮 เล่นเว็บนี้ครับ</button>
             `;
             
             document.getElementById('logout-btn').addEventListener('click', () => {
                 auth.signOut();
             });
             
-            document.getElementById('go-home-btn').addEventListener('click', () => {
+            document.getElementById('home-btn').addEventListener('click', () => {
                 window.location.href = 'index.html';
+            });
+            
+            document.getElementById('play-btn').addEventListener('click', () => {
+                // 👇 เปลี่ยนเป็นหน้าที่คุณต้องการให้ปุ่มนี้ไป
+                window.location.href = 'play.html';
             });
         }
         
+        // เช็คสถานะล็อกอิน
         auth.onAuthStateChanged(user => {
             if (user) {
                 renderProfile(user);
@@ -88,5 +102,63 @@
             }
         });
     </script>
+    
+    <style>
+        /* CSS เฉพาะปุ่มเพิ่มเติม (รวมกับ style.css ก็ได้) */
+        .home-btn {
+            background: rgba(255, 255, 255, 0.05);
+            color: #ccc;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 14px 25px;
+            border-radius: 60px;
+            cursor: pointer;
+            font-weight: 500;
+            width: 100%;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+            font-family: 'Prompt', sans-serif;
+            font-size: 16px;
+        }
+        
+        .home-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            transform: translateY(-2px);
+        }
+        
+        .play-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 16px 25px;
+            border-radius: 60px;
+            cursor: pointer;
+            font-weight: 500;
+            width: 100%;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+            font-family: 'Prompt', sans-serif;
+            font-size: 16px;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .play-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(102, 126, 234, 0.4);
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #666;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+        
+        .back-link:hover {
+            color: #888;
+        }
+    </style>
 </body>
 </html>
