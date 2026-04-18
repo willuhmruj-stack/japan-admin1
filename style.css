@@ -13,7 +13,8 @@ body {
 }
 
 /* ========== LANDING CONTAINER ========== */
-.landing-container {
+.landing-container,
+.container {
     min-height: 100vh;
     display: flex;
     align-items: center;
@@ -65,7 +66,7 @@ body {
     66% { transform: translate(-20px, 20px) scale(0.95); }
 }
 
-/* ========== POPUP CARD ========== */
+/* ========== POPUP CARD (index.html) ========== */
 .popup-card {
     max-width: 380px;
     width: 100%;
@@ -215,16 +216,6 @@ body {
 }
 
 /* ========== LOGIN PAGE ========== */
-.container {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    position: relative;
-    z-index: 1;
-}
-
 .login-box {
     max-width: 400px;
     width: 100%;
@@ -309,6 +300,48 @@ body {
     border-color: rgba(220, 53, 69, 0.4);
 }
 
+.home-btn {
+    background: rgba(255, 255, 255, 0.05);
+    color: #ccc;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 14px 25px;
+    border-radius: 60px;
+    cursor: pointer;
+    font-weight: 500;
+    width: 100%;
+    margin-top: 10px;
+    transition: all 0.3s ease;
+    font-family: 'Prompt', sans-serif;
+    font-size: 16px;
+}
+
+.home-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+.play-btn {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    padding: 16px 25px;
+    border-radius: 60px;
+    cursor: pointer;
+    font-weight: 500;
+    width: 100%;
+    margin-top: 10px;
+    transition: all 0.3s ease;
+    font-family: 'Prompt', sans-serif;
+    font-size: 16px;
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+}
+
+.play-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(102, 126, 234, 0.4);
+}
+
 .profile-image {
     width: 90px;
     height: 90px;
@@ -338,7 +371,6 @@ body {
     font-size: 14px;
 }
 
-/* ========== BACK LINK ========== */
 .back-link {
     display: inline-block;
     margin-top: 20px;
@@ -369,4 +401,4 @@ body {
     .login-box {
         padding: 35px 25px;
     }
-        }
+    }
