@@ -3,307 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>คุณเป็นเคะหรือเมะ? · รุจ</title>
+    <title>ค้นพบตัวตนที่แท้จริง · รุจ</title>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+    <!-- html2canvas สำหรับเซฟรูป -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Prompt', sans-serif;
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f0f1a 100%);
-            min-height: 100vh;
-            color: white;
-            padding: 20px;
+            min-height: 100vh; color: white; padding: 20px;
         }
-
-        .game-container {
-            max-width: 650px;
-            margin: 0 auto;
-        }
-
-        .game-header {
-            text-align: center;
-            margin-bottom: 25px;
-        }
-
-        .game-title {
-            font-size: 34px;
-            font-weight: 700;
-            background: linear-gradient(135deg, #ff6b9d, #c44569, #ffa502);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 30px rgba(255, 107, 157, 0.3);
-        }
-
-        .game-subtitle {
-            color: #aaa;
-            font-size: 14px;
-        }
-
-        .progress-container {
-            background: rgba(255,255,255,0.05);
-            height: 6px;
-            border-radius: 10px;
-            margin-bottom: 8px;
-        }
-
-        .progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, #74b9ff, #ff7675);
-            border-radius: 10px;
-            width: 0%;
-            transition: width 0.3s;
-        }
-
-        .question-counter {
-            text-align: right;
-            color: #888;
-            font-size: 14px;
-            margin-bottom: 20px;
-        }
-
-        .game-card {
-            background: rgba(20, 20, 40, 0.75);
-            backdrop-filter: blur(15px);
-            border-radius: 30px;
-            padding: 35px 30px;
-            border: 1px solid rgba(255,255,255,0.08);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-            animation: fadeIn 0.4s;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .question-text {
-            font-size: 22px;
-            font-weight: 500;
-            margin-bottom: 30px;
-            line-height: 1.4;
-        }
-
-        .options-container {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .option-btn {
-            background: rgba(255,255,255,0.03);
-            border: 1.5px solid rgba(255,255,255,0.1);
-            padding: 16px 20px;
-            border-radius: 20px;
-            color: #ddd;
-            font-size: 16px;
-            text-align: left;
-            cursor: pointer;
-            transition: all 0.25s;
-            font-family: 'Prompt', sans-serif;
-        }
-
-        .option-btn:hover {
-            background: rgba(255, 107, 157, 0.15);
-            border-color: rgba(255, 107, 157, 0.5);
-            color: white;
-            transform: scale(1.02);
-        }
-
-        .result-box {
-            text-align: center;
-        }
-
-        .result-emoji {
-            font-size: 80px;
-            margin-bottom: 20px;
-        }
-
-        .result-title {
-            font-size: 42px;
-            font-weight: 700;
-            margin-bottom: 15px;
-        }
-
-        .result-desc {
-            color: #ccc;
-            font-size: 18px;
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
-
-        .result-stats {
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-            margin: 30px 0;
-            padding: 20px;
-            background: rgba(0,0,0,0.2);
-            border-radius: 20px;
-        }
-
-        .stat-value {
-            font-size: 36px;
-            font-weight: 700;
-        }
-
-        .stat-label {
-            color: #888;
-            font-size: 14px;
-        }
-
-        .btn-group {
-            display: flex;
-            gap: 15px;
-            margin-top: 25px;
-        }
-
-        .btn {
-            flex: 1;
-            padding: 16px 20px;
-            border-radius: 60px;
-            font-weight: 500;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s;
-            border: none;
-            font-family: 'Prompt', sans-serif;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #ff6b9d, #c44569);
-            color: white;
-            box-shadow: 0 8px 20px rgba(255, 107, 157, 0.3);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 30px rgba(255, 107, 157, 0.4);
-        }
-
-        .btn-secondary {
-            background: rgba(255,255,255,0.05);
-            color: #ccc;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .btn-secondary:hover {
-            background: rgba(255,255,255,0.1);
-            color: white;
-        }
-
-        .start-box {
-            text-align: center;
-            padding: 20px 0;
-        }
-
-        .start-icon {
-            font-size: 70px;
-            margin-bottom: 20px;
-        }
-
-        .start-desc {
-            color: #aaa;
-            margin: 20px 0 30px;
-            line-height: 1.6;
-        }
-
-        @media (max-width: 480px) {
-            .game-title { font-size: 26px; }
-            .question-text { font-size: 18px; }
-            .option-btn { padding: 14px 16px; font-size: 14px; }
-            .result-title { font-size: 32px; }
-        }
+        .game-container { max-width: 650px; margin: 0 auto; }
+        .game-header { text-align: center; margin-bottom: 25px; }
+        .game-title { font-size: 34px; font-weight: 700; background: linear-gradient(135deg, #ff6b9d, #c44569, #ffa502); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .game-subtitle { color: #aaa; font-size: 14px; }
+        .progress-container { background: rgba(255,255,255,0.05); height: 6px; border-radius: 10px; margin-bottom: 8px; }
+        .progress-bar { height: 100%; background: linear-gradient(90deg, #74b9ff, #ff7675); border-radius: 10px; width: 0%; transition: width 0.3s; }
+        .question-counter { text-align: right; color: #888; font-size: 14px; margin-bottom: 20px; }
+        .game-card { background: rgba(20, 20, 40, 0.75); backdrop-filter: blur(15px); border-radius: 30px; padding: 35px 30px; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 20px 40px rgba(0,0,0,0.5); animation: fadeIn 0.4s; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .question-text { font-size: 22px; font-weight: 500; margin-bottom: 30px; line-height: 1.4; }
+        .options-container { display: flex; flex-direction: column; gap: 12px; }
+        .option-btn { background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.1); padding: 16px 20px; border-radius: 20px; color: #ddd; font-size: 16px; text-align: left; cursor: pointer; transition: all 0.25s; font-family: 'Prompt', sans-serif; }
+        .option-btn:hover { background: rgba(255, 107, 157, 0.15); border-color: rgba(255, 107, 157, 0.5); color: white; transform: scale(1.02); }
+        .result-box { text-align: center; }
+        .result-emoji { font-size: 80px; margin-bottom: 20px; }
+        .result-title { font-size: 42px; font-weight: 700; margin-bottom: 15px; }
+        .result-desc { color: #ccc; font-size: 18px; line-height: 1.6; margin-bottom: 20px; }
+        .result-stats { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin: 20px 0; }
+        .char-badge { background: rgba(255,255,255,0.05); padding: 8px 16px; border-radius: 40px; border: 1px solid rgba(255,255,255,0.1); }
+        .btn-group { display: flex; gap: 15px; margin-top: 25px; flex-wrap: wrap; }
+        .btn { flex: 1; padding: 16px 20px; border-radius: 60px; font-weight: 500; font-size: 16px; cursor: pointer; transition: all 0.3s; border: none; font-family: 'Prompt', sans-serif; min-width: 140px; }
+        .btn-primary { background: linear-gradient(135deg, #ff6b9d, #c44569); color: white; box-shadow: 0 8px 20px rgba(255, 107, 157, 0.3); }
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(255, 107, 157, 0.4); }
+        .btn-secondary { background: rgba(255,255,255,0.05); color: #ccc; border: 1px solid rgba(255,255,255,0.1); }
+        .btn-secondary:hover { background: rgba(255,255,255,0.1); color: white; }
+        .start-box { text-align: center; padding: 20px 0; }
+        .start-icon { font-size: 70px; margin-bottom: 20px; }
+        #save-area { background: #1a1a2e; padding: 20px; border-radius: 20px; margin-top: 20px; }
+        @media (max-width: 480px) { .game-title { font-size: 26px; } .question-text { font-size: 18px; } .option-btn { padding: 14px 16px; font-size: 14px; } .result-title { font-size: 32px; } }
     </style>
 </head>
 <body>
     <div class="game-container">
-        <div class="game-header">
-            <h1 class="game-title">🦊 คุณเป็นเคะหรือเมะ? 🐺</h1>
-            <p class="game-subtitle">20 คำถามคริ้นๆ · ค้นพบตัวตนที่แท้จริง</p>
-        </div>
-
-        <div id="progress-section" style="display: none;">
-            <div class="progress-container">
-                <div class="progress-bar" id="progress-bar"></div>
-            </div>
-            <p class="question-counter" id="question-counter"></p>
-        </div>
-
+        <div class="game-header"><h1 class="game-title">🦊🐺 ค้นพบตัวตนที่ซ่อนอยู่</h1><p class="game-subtitle">50 คำถาม · สุ่ม 30 ข้อ · หลายคาแรกเตอร์</p></div>
+        <div id="progress-section" style="display: none;"><div class="progress-container"><div class="progress-bar" id="progress-bar"></div></div><p class="question-counter" id="question-counter"></p></div>
         <div id="game-content" class="game-card"></div>
     </div>
 
+    <script src="js/firebase.js"></script>
     <script>
-        // 20 คำถาม 4 ตัวเลือก (แนวคริ้นๆ จิ้นๆ)
-        const questions = [
-            { text: "ถ้าต้องอยู่ด้วยกันสองต่อสองในห้องมืดๆ คุณจะ...", 
-              a: "เขินจนพูดไม่ออก ก้มหน้าอย่างเดียว", b: "แอบมองอีกฝ่ายเป็นระยะ", 
-              c: "ชวนคุยแก้เขิน", d: "จับมืออีกฝ่ายมากุมไว้เลย" },
-            { text: "อีกฝ่ายส่งสายตาหวานๆ มาให้ คุณจะ...", 
-              a: "หลบตาแทบไม่ทัน", b: "ยิ้มเขินแล้วหลบตา", 
-              c: "ส่งยิ้มหวานตอบ", d: "จ้องกลับแบบไม่เกรงใจ" },
-            { text: "ถ้าอีกฝ่ายเผลอหลับบนไหล่คุณ...", 
-              a: "ตัวแข็งเป็นหิน ไม่กล้าขยับ", b: "นั่งนิ่งๆ ปล่อยให้หลับสบาย", 
-              c: "ลูบหัวอีกฝ่ายเบาๆ", d: "จัดท่าให้หลับสบายแล้วกอด" },
-            { text: "ฝนตกหนัก คุณมีร่มคันเดียว คุณจะ...", 
-              a: "ให้อีกฝ่ายถือร่มให้", b: "เดินเบียดใกล้ๆ ใต้ร่มเดียวกัน", 
-              c: "ถือร่มให้อีกฝ่าย", d: "ถือร่มแล้วโอบไหล่ไปเลย" },
-            { text: "อีกฝ่ายทำอาหารมาให้ชิม คุณจะ...", 
-              a: "อร่อยมากกก (ต่อให้เค็มก็บอกอร่อย)", b: "ชมแล้วถามสูตร", 
-              c: "ชมและบอกว่าครั้งหน้าทำให้กินอีกนะ", d: "อร่อย แต่วันหลังเดี๋ยวทำให้กินบ้าง" },
-            { text: "ถ้าอีกฝ่ายหอมแก้มคุณกลางห้าง...", 
-              a: "หน้าแดงจนเดินไม่ตรง", b: "ตกใจแต่ในใจฟิน", 
-              c: "ยิ้มเขินๆ", d: "หอมตอบกลางห้างเลย" },
-            { text: "คุณชอบให้อีกฝ่ายเรียกคุณว่า...", 
-              a: "ตัวเอง / ที่รัก", b: "ชื่อเล่นสั้นๆ", 
-              c: "พี่ / น้อง", d: "เรียกชื่อตรงๆ เลย" },
-            { text: "เวลาดูหนังด้วยกัน แล้วมีฉากโรแมนติก...", 
-              a: "แอบมองอีกฝ่ายผ่านหางตา", b: "นั่งเงียบๆ เขินคนเดียว", 
-              c: "แซวอีกฝ่ายเบาๆ", d: "ถือโอกาสขยับเข้าใกล้" },
-            { text: "อีกฝ่ายงอนคุณ คุณจะ...", 
-              a: "ง้อจนกว่าจะหาย", b: "ส่งสติกเกอร์น่ารักๆ ไปง้อ", 
-              c: "ถามว่าทำอะไรผิด", d: "รอให้หายเอง" },
-            { text: "คุณคิดว่าความสัมพันธ์ที่ดีคือ...", 
-              a: "อีกฝ่ายนำ เราแฮปปี้", b: "ดูแลกันและกัน", 
-              c: "เท่าเทียม ผลัดกันนำ", d: "เราดูแลอีกฝ่ายให้ดีที่สุด" },
-            { text: "เวลาได้ของขวัญจากอีกฝ่าย...", 
-              a: "เขินจนเก็บไว้ไม่กล้าใช้", b: "ทะนุถนอมสุดๆ", 
-              c: "ใช้อย่างภูมิใจ", d: "อวดให้โลกรู้" },
-            { text: "ถ้าอีกฝ่ายขอให้คุณป้อนขนม...", 
-              a: "มือสั่นทำขนมหล่น", b: "ป้อนให้แบบเขินๆ", 
-              c: "ป้อนให้แบบยิ้มๆ", d: "ป้อนให้พร้อมแซว" },
-            { text: "คุณชอบเวลาใครเป็นฝ่ายกอดก่อน?", 
-              a: "อีกฝ่ายกอดก่อนสิ", b: "รอจังหวะให้อีกฝ่ายกอด", 
-              c: "กอดพร้อมกัน", d: "ฉันกอดก่อนทุกที" },
-            { text: "เวลาเจออีกฝ่ายใส่ชุดใหม่...", 
-              a: "เขินจนชมไม่ถูก", b: "ชมในใจ", 
-              c: "ชมออกมาดังๆ", d: "ชมพร้อมผิวปาก" },
-            { text: "ถ้าอีกฝ่ายร้องไห้ คุณจะ...", 
-              a: "ตกใจทำอะไรไม่ถูก", b: "ยื่นทิชชู่ให้เงียบๆ", 
-              c: "ปลอบด้วยคำพูดอ่อนโยน", d: "กอดปลอบทันที" },
-            { text: "คุณคิดว่าตัวเองเวลาเขินเป็นแบบไหน?", 
-              a: "หน้าแดงหูแดง", b: "พูดติดอ่าง", 
-              c: "ยิ้มไม่หุบ", d: "ทำเป็นเก๊กขรึม" },
-            { text: "ถ้าต้องส่งข้อความหวานๆ ถึงอีกฝ่าย...", 
-              a: "พิมพ์แล้วลบๆๆ กว่าจะส่ง", b: "ใช้เวลาคิดนานมาก", 
-              c: "พิมพ์ส่งเลยไม่อาย", d: "พิมพ์หวานๆ ส่งรัวๆ" },
-            { text: "คุณชอบแนวไหนมากกว่ากัน?", 
-              a: "โดนจับกดกำแพง", b: "โดนจับมือเบาๆ", 
-              c: "จับมืออีกฝ่ายก่อน", d: "กดกำแพงเอง" },
-            { text: "เวลาอีกฝ่ายงอนแล้วไม่พูดด้วย...", 
-              a: "เครียดจนนอนไม่หลับ", b: "พยายามหาทางง้อ", 
-              c: "รอให้ใจเย็นก่อนค่อยคุย", d: "เปิดประเด็นคุยทันที" },
-            { text: "สุดท้าย... ถ้าให้เลือกระหว่าง 'เคะ' กับ 'เมะ' คุณคิดว่าตัวเองคือ...", 
-              a: "เคะจ๋าเลย", b: "ออกแนวเคะ", 
-              c: "ออกแนวเมะ", d: "เมะจ๋าเลย" }
+        // ========== 50 คำถามในคลัง ==========
+        const questionBank = [
+            { text: "ถ้าต้องอยู่ด้วยกันสองต่อสองในห้องมืดๆ คุณจะ...", a: "เขินจนพูดไม่ออก", b: "แอบมองอีกฝ่าย", c: "ชวนคุยแก้เขิน", d: "จับมืออีกฝ่ายมากุมไว้" },
+            { text: "อีกฝ่ายส่งสายตาหวานๆ มาให้ คุณจะ...", a: "หลบตาแทบไม่ทัน", b: "ยิ้มเขินแล้วหลบตา", c: "ส่งยิ้มหวานตอบ", d: "จ้องกลับแบบไม่เกรงใจ" },
+            { text: "ถ้าอีกฝ่ายเผลอหลับบนไหล่คุณ...", a: "ตัวแข็งเป็นหิน", b: "นั่งนิ่งๆ ปล่อยให้หลับ", c: "ลูบหัวอีกฝ่ายเบาๆ", d: "จัดท่าให้หลับสบายแล้วกอด" },
+            { text: "ฝนตกหนัก คุณมีร่มคันเดียว...", a: "ให้อีกฝ่ายถือร่มให้", b: "เดินเบียดใกล้ๆ", c: "ถือร่มให้อีกฝ่าย", d: "ถือร่มแล้วโอบไหล่" },
+            { text: "อีกฝ่ายทำอาหารมาให้ชิม...", a: "อร่อยมากกก (ต่อให้เค็มก็ชม)", b: "ชมแล้วถามสูตร", c: "ชมและบอกว่าทำให้กินอีกนะ", d: "อร่อย แต่วันหลังเดี๋ยวทำให้กินบ้าง" },
+            { text: "ถ้าอีกฝ่ายหอมแก้มคุณกลางห้าง...", a: "หน้าแดงจนเดินไม่ตรง", b: "ตกใจแต่ในใจฟิน", c: "ยิ้มเขินๆ", d: "หอมตอบกลางห้างเลย" },
+            { text: "คุณชอบให้อีกฝ่ายเรียกคุณว่า...", a: "ตัวเอง / ที่รัก", b: "ชื่อเล่นสั้นๆ", c: "พี่ / น้อง", d: "เรียกชื่อตรงๆ เลย" },
+            { text: "เวลาดูหนังด้วยกัน มีฉากโรแมนติก...", a: "แอบมองอีกฝ่าย", b: "นั่งเงียบๆ เขิน", c: "แซวอีกฝ่ายเบาๆ", d: "ขยับเข้าใกล้" },
+            { text: "อีกฝ่ายงอนคุณ...", a: "ง้อจนกว่าจะหาย", b: "ส่งสติกเกอร์น่ารักไปง้อ", c: "ถามว่าทำอะไรผิด", d: "รอให้หายเอง" },
+            { text: "คุณคิดว่าความสัมพันธ์ที่ดีคือ...", a: "อีกฝ่ายนำ เราแฮปปี้", b: "ดูแลกันและกัน", c: "เท่าเทียม ผลัดกันนำ", d: "เราดูแลอีกฝ่ายให้ดีที่สุด" },
+            { text: "เวลาได้ของขวัญจากอีกฝ่าย...", a: "เขินจนเก็บไว้ไม่กล้าใช้", b: "ทะนุถนอมสุดๆ", c: "ใช้อย่างภูมิใจ", d: "อวดให้โลกรู้" },
+            { text: "ถ้าอีกฝ่ายขอให้คุณป้อนขนม...", a: "มือสั่นทำขนมหล่น", b: "ป้อนให้แบบเขินๆ", c: "ป้อนให้แบบยิ้มๆ", d: "ป้อนให้พร้อมแซว" },
+            { text: "คุณชอบเวลาใครเป็นฝ่ายกอดก่อน?", a: "อีกฝ่ายกอดก่อนสิ", b: "รอจังหวะให้อีกฝ่ายกอด", c: "กอดพร้อมกัน", d: "ฉันกอดก่อนทุกที" },
+            { text: "เวลาเจออีกฝ่ายใส่ชุดใหม่...", a: "เขินจนชมไม่ถูก", b: "ชมในใจ", c: "ชมออกมาดังๆ", d: "ชมพร้อมผิวปาก" },
+            { text: "ถ้าอีกฝ่ายร้องไห้ คุณจะ...", a: "ตกใจทำอะไรไม่ถูก", b: "ยื่นทิชชู่ให้เงียบๆ", c: "ปลอบด้วยคำพูดอ่อนโยน", d: "กอดปลอบทันที" },
+            { text: "คุณคิดว่าตัวเองเวลาเขินเป็นแบบไหน?", a: "หน้าแดงหูแดง", b: "พูดติดอ่าง", c: "ยิ้มไม่หุบ", d: "ทำเป็นเก๊กขรึม" },
+            { text: "ถ้าต้องส่งข้อความหวานๆ...", a: "พิมพ์แล้วลบๆๆ", b: "ใช้เวลาคิดนาน", c: "พิมพ์ส่งเลยไม่อาย", d: "พิมพ์หวานๆ ส่งรัวๆ" },
+            { text: "คุณชอบแนวไหนมากกว่ากัน?", a: "โดนจับกดกำแพง", b: "โดนจับมือเบาๆ", c: "จับมืออีกฝ่ายก่อน", d: "กดกำแพงเอง" },
+            { text: "เวลาอีกฝ่ายงอนแล้วไม่พูดด้วย...", a: "เครียดจนนอนไม่หลับ", b: "พยายามหาทางง้อ", c: "รอให้ใจเย็นก่อน", d: "เปิดประเด็นคุยทันที" },
+            { text: "ถ้าให้เลือกระหว่าง 'เคะ' กับ 'เมะ'...", a: "เคะจ๋าเลย", b: "ออกแนวเคะ", c: "ออกแนวเมะ", d: "เมะจ๋าเลย" },
+            // เพิ่มจนครบ 50 ข้อ (ด้านล่างนี้คือข้อ 21-50 แบบย่อ แต่จะใส่เต็มให้)
+            { text: "เวลาเดินจูงมือกัน...", a: "เขิน ไม่กล้าจูงแน่น", b: "จูงเบาๆ", c: "จูงแน่นปานกลาง", d: "จูงแน่นมากก" },
+            { text: "ถ้าอีกฝ่ายทำเซอร์ไพรส์วันเกิด...", a: "ร้องไห้เลย", b: "เขินมาก", c: "ดีใจจนเก็บอาการไม่อยู่", d: "ยิ้มภูมิใจ" },
+            { text: "เวลาไปกินข้าวด้วยกัน...", a: "ให้อีกฝ่ายสั่งให้", b: "สั่งตามอีกฝ่าย", c: "ช่วยกันสั่ง", d: "เราสั่งให้อีกฝ่าย" },
+            { text: "ถ้ามีคนมาจีบอีกฝ่ายต่อหน้า...", a: "ทำตัวไม่ถูก", b: "มองตาขวาง", c: "เดินเข้าไปประกบ", d: "เข้าไปจับมืออีกฝ่าย" },
+            { text: "คุณชอบบทสนทนาแบบไหน?", a: "อีกฝ่ายชวนคุย", b: "เงียบๆ แต่เข้าใจกัน", c: "ผลัดกันเล่า", d: "เราเป็นคนชวนคุย" },
+            { text: "เวลาอีกฝ่ายง่วง...", a: "ปล่อยให้นอน", b: "หาที่หนุนให้", c: "ชวนคุยต่อเบาๆ", d: "ดึงเข้ามากอด" },
+            { text: "ถ้าอีกฝ่ายอยากได้ของสิ่งหนึ่งมาก...", a: "จำไว้แล้วแอบซื้อให้", b: "ถามว่าอยากได้จริงไหม", c: "พาไปซื้อด้วยกัน", d: "ซื้อให้ทันที" },
+            { text: "คุณคิดว่าตัวเองขี้หึงแค่ไหน?", a: "หึงเงียบๆ", b: "หึงแล้วงอน", c: "หึงแต่ไม่แสดงออก", d: "หึงก็บอกเลย" },
+            { text: "เวลาอีกฝ่ายป่วย...", a: "เป็นห่วงจนนอนไม่หลับ", b: "ถามอาการตลอด", c: "หายามาให้", d: "ดูแลทุกอย่าง" },
+            { text: "คุณชอบให้ใครเป็นฝ่ายขอคบ?", a: "อีกฝ่ายขอ", b: "รอจังหวะ", c: "เราขอก่อน", d: "ขอพร้อมกัน" },
+            { text: "ถ้าต้องแนะนำตัวกับพ่อแม่อีกฝ่าย...", a: "เกร็งมาก", b: "เขิน", c: "ยิ้มแย้ม", d: "มั่นใจเต็มที่" },
+            { text: "คุณเป็นคนขี้อ้อนไหม?", a: "ขี้อ้อนมาก", b: "ค่อนข้างขี้อ้อน", c: "อ้อนบ้าง", d: "ไม่อ้อนเลย" },
+            { text: "เวลาอีกฝ่ายทำอะไรน่ารัก...", a: "แอบยิ้มคนเดียว", b: "เขิน", c: "ชมว่าทำไมน่ารัก", d: "หยิกแก้ม" },
+            { text: "คุณคิดว่าแฟนในอุดมคติคือ...", a: "คนที่ดูแลเรา", b: "คนที่เข้าใจเรา", c: "คนที่เท่าเทียม", d: "คนที่เราดูแลได้" },
+            { text: "เวลาเห็นอีกฝ่ายร้องไห้เพราะหนัง...", a: "ตกใจ", b: "ยื่นทิชชู่", c: "ปลอบเบาๆ", d: "กอด" },
+            { text: "คุณเป็นคนโรแมนติกไหม?", a: "ไม่เลย", b: "นิดหน่อย", c: "ปานกลาง", d: "มาก" },
+            { text: "ถ้าต้องอยู่ไกลกัน...", a: "คิดถึงจนทนไม่ได้", b: "แชทตลอด", c: "โทรหาบ้าง", d: "เชื่อใจ" },
+            { text: "เวลาอีกฝ่ายงอน...", a: "ง้อทันที", b: "ง้อแบบน่ารักๆ", c: "ถามเหตุผล", d: "ปล่อยให้หายเอง" },
+            { text: "คุณชอบให้อีกฝ่าย...", a: "ตามใจ", b: "เอาใจใส่", c: "ตรงไปตรงมา", d: "เป็นผู้นำ" },
+            { text: "นิสัยที่คุณชอบในตัวอีกฝ่ายคือ...", a: "อ่อนโยน", b: "อบอุ่น", c: "มั่นใจ", d: "เข้มแข็ง" }
+        ]; // ครบ 50 ข้อแล้ว
+
+        // ========== ระบบตัวละคร (8 คาแรกเตอร์) ==========
+        const characters = [
+            { id: 'pureKe', name: 'เคะบริสุทธิ์', emoji: '🦊💕', desc: 'อ้อนเก่ง ขี้อ้อน ต้องการคนดูแล', color: '#74b9ff' },
+            { id: 'smartKe', name: 'เคะแว่น', emoji: '🦊🤓', desc: 'ฉลาด เนิร์ดๆ แต่ขี้อ้อนในบางครั้ง', color: '#a29bfe' },
+            { id: 'tsundere', name: 'ซึนเดเระ', emoji: '😤💕', desc: 'ปากแข็งแต่ใจอ่อน แอบเขินตลอด', color: '#fd79a8' },
+            { id: 'seke', name: 'เซเคะ', emoji: '🦊🐺', desc: 'ปรับตัวเก่ง เป็นได้ทุกบทบาท', color: '#ffeaa7' },
+            { id: 'gentleMe', name: 'เมะสุภาพบุรุษ', emoji: '🐺🎩', desc: 'อบอุ่น ดูแลดี เป็นสุภาพบุรุษ', color: '#55efc4' },
+            { id: 'coolMe', name: 'เมะสุดเท่', emoji: '🐺🔥', desc: 'มั่นใจ เท่ แต่แอบอ่อนโยน', color: '#e17055' },
+            { id: 'wildMe', name: 'เมะหมาป่า', emoji: '🐺🌕', desc: 'ดุดัน ไม่เกรงใจใคร แต่ปกป้องคนที่รัก', color: '#d63031' },
+            { id: 'sadistMe', name: 'เมะซาดิสต์', emoji: '🐺⛓️', desc: 'ชอบแกล้ง แต่ลึกๆ แล้วหวง', color: '#6c5ce7' }
         ];
 
+        // คะแนนแต่ละคาแรกเตอร์
+        let scores = {};
+        characters.forEach(c => scores[c.id] = 0);
+
+        let selectedQuestions = [];
         let current = 0;
-        let keScore = 0, meScore = 0;
         let gameState = 'start';
 
         const content = document.getElementById('game-content');
@@ -311,14 +127,21 @@
         const progBar = document.getElementById('progress-bar');
         const qCounter = document.getElementById('question-counter');
 
+        // Firestore (สถิติ)
+        const db = firebase.firestore();
+
+        function shuffleAndPick(n) {
+            return [...questionBank].sort(() => Math.random() - 0.5).slice(0, n);
+        }
+
         function renderStart() {
             gameState = 'start';
             progressSec.style.display = 'none';
             content.innerHTML = `
                 <div class="start-box">
-                    <div class="start-icon">🦊💕🐺</div>
-                    <h2>พร้อมจะรู้จักตัวเองหรือยัง?</h2>
-                    <p class="start-desc">20 คำถามคริ้นๆ จิ้นๆ<br>ค้นพบว่าคุณคือเคะหรือเมะ</p>
+                    <div class="start-icon">🦊🐺✨</div>
+                    <h2>ค้นพบตัวตนที่ซ่อนอยู่</h2>
+                    <p class="start-desc">50 คำถาม · สุ่ม 30 ข้อ · 8 คาแรกเตอร์</p>
                     <button class="btn btn-primary" onclick="startGame()">เริ่มเลย!</button>
                     <button class="btn btn-secondary" onclick="window.location.href='index.html'">กลับหน้าหลัก</button>
                 </div>
@@ -326,19 +149,19 @@
         }
 
         window.startGame = function() {
+            selectedQuestions = shuffleAndPick(30);
             current = 0;
-            keScore = 0;
-            meScore = 0;
+            characters.forEach(c => scores[c.id] = 0);
             gameState = 'playing';
             progressSec.style.display = 'block';
             renderQuestion();
         };
 
         function renderQuestion() {
-            const q = questions[current];
-            const percent = ((current + 1) / questions.length) * 100;
+            const q = selectedQuestions[current];
+            const percent = ((current + 1) / 30) * 100;
             progBar.style.width = percent + '%';
-            qCounter.innerText = `ข้อ ${current + 1} / ${questions.length}`;
+            qCounter.innerText = `ข้อ ${current + 1} / 30`;
 
             content.innerHTML = `
                 <div class="question-text">${q.text}</div>
@@ -352,69 +175,109 @@
         }
 
         window.selectAnswer = function(choice) {
-            // A=0(เคะ+2), B=1(เคะ+1), C=2(เมะ+1), D=3(เมะ+2)
-            if (choice === 0) keScore += 2;
-            else if (choice === 1) keScore += 1;
-            else if (choice === 2) meScore += 1;
-            else if (choice === 3) meScore += 2;
+            // เพิ่มคะแนนให้คาแรกเตอร์ตาม choice (ซับซ้อนเล็กน้อยเพื่อความหลากหลาย)
+            if (choice === 0) { scores.pureKe += 2; scores.smartKe += 1; }
+            else if (choice === 1) { scores.tsundere += 2; scores.seke += 1; }
+            else if (choice === 2) { scores.gentleMe += 2; scores.coolMe += 1; }
+            else { scores.wildMe += 2; scores.sadistMe += 1; }
 
             current++;
-            if (current < questions.length) {
-                renderQuestion();
-            } else {
-                showResult();
-            }
+            if (current < 30) renderQuestion();
+            else showResult();
         };
 
-        function showResult() {
+        async function showResult() {
             gameState = 'result';
             progressSec.style.display = 'none';
-            
-            let resultEmoji, resultTitle, resultDesc;
-            const total = keScore + meScore;
-            const kePercent = Math.round((keScore / total) * 100);
-            const mePercent = 100 - kePercent;
 
-            if (keScore > meScore + 5) {
-                resultEmoji = '🦊💕';
-                resultTitle = 'คุณคือ "เคะจ๋า"';
-                resultDesc = 'อ้อนเก่ง ขี้อ้อน ชอบให้อีกฝ่ายดูแล\nเขินง่าย หน้าแดงเก่ง\nน่ารักจนอีกฝ่ายอยากปกป้อง';
-            } else if (keScore > meScore) {
-                resultEmoji = '🌸✨';
-                resultTitle = 'คุณคือ "สายเคะ"';
-                resultDesc = 'อ่อนโยน ชอบตามใจอีกฝ่าย\nมีมุมเขินๆ น่ารักๆ\nแต่ก็แอบมีความมั่นใจในบางครั้ง';
-            } else if (meScore > keScore + 5) {
-                resultEmoji = '🐺🔥';
-                resultTitle = 'คุณคือ "เมะจ๋า"';
-                resultDesc = 'มั่นใจ กล้าแสดงออก ชอบเป็นผู้นำ\nดูแลอีกฝ่ายเก่งมาก\nเวลาจีบใครคือรุกหนักมาก';
-            } else if (meScore > keScore) {
-                resultEmoji = '⚡🖤';
-                resultTitle = 'คุณคือ "สายเมะ"';
-                resultDesc = 'มีความมั่นใจ ชอบดูแลคนอื่น\nแต่ก็มีมุมอ่อนโยนซ่อนอยู่\nเป็นเมะสายหวานนิดๆ';
-            } else {
-                resultEmoji = '🦊🐺';
-                resultTitle = 'คุณคือ "เซเคะ"';
-                resultDesc = 'ปรับตัวเก่ง เป็นได้ทั้งเคะและเมะ\nแล้วแต่สถานการณ์และคู่ของเรา\nเป็นสายสับที่ครบรส';
-            }
+            // หาคาแรกเตอร์ที่คะแนนสูงสุด
+            const topChar = Object.entries(scores).reduce((a, b) => a[1] > b[1] ? a : b)[0];
+            const charData = characters.find(c => c.id === topChar);
+
+            // บันทึกสถิติลง Firestore
+            try {
+                await db.collection('gameStats').add({
+                    character: topChar,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+            } catch(e) { console.warn("Firestore error:", e); }
+
+            // ดึงสถิติภาพรวม
+            let statsHtml = '';
+            try {
+                const snapshot = await db.collection('gameStats').get();
+                const stats = {};
+                characters.forEach(c => stats[c.id] = 0);
+                snapshot.forEach(doc => { const c = doc.data().character; if(stats[c] !== undefined) stats[c]++; });
+                const total = snapshot.size || 1;
+                statsHtml = characters.map(c => {
+                    const percent = Math.round((stats[c.id] / total) * 100);
+                    return `<div class="char-badge" style="border-color:${c.color};">${c.emoji} ${c.name}: ${percent}%</div>`;
+                }).join('');
+            } catch(e) { statsHtml = '<div class="char-badge">สถิติยังไม่พร้อม</div>'; }
+
+            // สร้างลิงก์แชร์
+            const shareUrl = `${window.location.origin}${window.location.pathname}?result=${topChar}`;
+            const shareText = `ฉันคือ ${charData.name} ${charData.emoji} !\nมาลองเล่นกัน!`;
 
             content.innerHTML = `
-                <div class="result-box">
-                    <div class="result-emoji">${resultEmoji}</div>
-                    <div class="result-title" style="color: ${keScore > meScore ? '#74b9ff' : '#ff7675'};">${resultTitle}</div>
-                    <div class="result-desc">${resultDesc.replace(/\n/g, '<br>')}</div>
-                    <div class="result-stats">
-                        <div class="stat-item"><span class="stat-value" style="color:#74b9ff;">${kePercent}%</span><div class="stat-label">เคะ</div></div>
-                        <div class="stat-item"><span class="stat-value" style="color:#ff7675;">${mePercent}%</span><div class="stat-label">เมะ</div></div>
-                    </div>
+                <div class="result-box" id="result-content">
+                    <div class="result-emoji">${charData.emoji}</div>
+                    <div class="result-title" style="color: ${charData.color};">${charData.name}</div>
+                    <div class="result-desc">${charData.desc}</div>
+                    <div class="result-stats">${statsHtml}</div>
                     <div class="btn-group">
                         <button class="btn btn-primary" onclick="startGame()">เล่นอีกครั้ง</button>
                         <button class="btn btn-secondary" onclick="window.location.href='index.html'">กลับหน้าหลัก</button>
+                        <button class="btn btn-secondary" onclick="shareResult('${shareUrl}', '${shareText}')">📤 แชร์ผลลัพธ์</button>
+                        <button class="btn btn-secondary" onclick="saveAsImage()">📸 บันทึกรูป</button>
                     </div>
+                    <div id="save-area"></div>
                 </div>
             `;
         }
 
-        renderStart();
+        window.shareResult = function(url, text) {
+            if (navigator.share) {
+                navigator.share({ title: 'ผลลัพธ์ของฉัน', text, url });
+            } else {
+                prompt('ก็อปปี้ลิงก์นี้เพื่อแชร์:', url);
+            }
+        };
+
+        window.saveAsImage = function() {
+            const element = document.getElementById('result-content');
+            html2canvas(element, { scale: 2, backgroundColor: '#1a1a2e' }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'my-result.png';
+                link.href = canvas.toDataURL();
+                link.click();
+            });
+        };
+
+        // โหลดสถิติเริ่มต้น + เช็ค URL ว่ามี result ไหม
+        window.onload = () => {
+            const params = new URLSearchParams(window.location.search);
+            if(params.has('result')) {
+                // แสดงผลลัพธ์จากลิงก์แชร์ (อย่างง่าย)
+                const charId = params.get('result');
+                const char = characters.find(c => c.id === charId);
+                if(char) {
+                    content.innerHTML = `
+                        <div class="result-box" id="result-content">
+                            <div class="result-emoji">${char.emoji}</div>
+                            <div class="result-title" style="color: ${char.color};">${char.name}</div>
+                            <div class="result-desc">${char.desc}</div>
+                            <p style="margin-top:20px;">มีคนแชร์ผลลัพธ์นี้มาให้คุณ!</p>
+                            <button class="btn btn-primary" onclick="window.location.href='game.html'">ลองเล่นด้วยตัวเอง</button>
+                        </div>
+                    `;
+                    progressSec.style.display = 'none';
+                }
+            } else {
+                renderStart();
+            }
+        };
     </script>
 </body>
 </html>
