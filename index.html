@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Willuhmruj Stack</title>
+    <title>รุจ · ผู้สร้าง</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="landing-container">
@@ -17,117 +17,80 @@
         </div>
         
         <!-- เนื้อหาหลัก -->
-        <div class="hero-content">
-            <div class="hero-badge">
-                <span class="pulse-dot"></span> PRODUCTION READY
+        <div class="creator-content">
+            
+            <!-- Avatar -->
+            <div class="creator-avatar">
+                <div class="avatar-inner">
+                    👑
+                </div>
+                <div class="avatar-ring"></div>
             </div>
             
-            <h1 class="hero-title">
-                <span class="title-line">WILLUHM</span>
-                <span class="title-line accent">RUJ STACK</span>
+            <!-- ชื่อ -->
+            <h1 class="creator-name">
+                <span class="name-first">RUJ</span>
             </h1>
             
-            <p class="hero-description">
-                สถาปัตยกรรมระบบที่สร้างมาเพื่ออนาคต<br>
-                พัฒนาโดยทีมวิศวกรไทย เพื่อประสิทธิภาพสูงสุด
+            <!-- แนะนำตัว -->
+            <p class="creator-intro">
+                สวัสดีครับ ผม <span class="highlight">รุจ</span>
             </p>
             
-            <div class="hero-stats">
-                <div class="stat-item">
-                    <span class="stat-number">100%</span>
-                    <span class="stat-label">ความเสถียร</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-number">24/7</span>
-                    <span class="stat-label">รองรับการใช้งาน</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-number">∞</span>
-                    <span class="stat-label">ไม่จำกัด</span>
+            <p class="creator-description">
+                เป็นคนสร้างและดูแลระบบนี้ทั้งหมดครับ<br>
+                ตั้งแต่โค้ดแรกยัน deploy ขึ้นเซิร์ฟเวอร์<br>
+                ใช้เวลาว่างหลังเลิกงานทำคนเดียว
+            </p>
+            
+            <!-- สิ่งที่ใช้สร้าง -->
+            <div class="built-with">
+                <p class="built-title">🛠️ สร้างด้วย</p>
+                <div class="tech-stack">
+                    <span class="tech-tag">มือถือ Android</span>
+                    <span class="tech-tag">Termux</span>
+                    <span class="tech-tag">Kali Linux</span>
+                    <span class="tech-tag">HTML/CSS/JS</span>
+                    <span class="tech-tag">Firebase</span>
+                    <span class="tech-tag">GitHub Pages</span>
                 </div>
             </div>
             
-            <div class="hero-actions">
-                <a href="login.html" class="btn-primary">
+            <!-- แรงบันดาลใจ -->
+            <div class="inspiration">
+                <p class="inspire-title">💡 ทำไปทำไม</p>
+                <p class="inspire-text">
+                    "อยากลองทำอะไรเป็นของตัวเอง<br>
+                    เรียนรู้ระบบไปด้วย เผื่อต่อยอดได้<br>
+                    ถ้ามีใครได้ใช้ต่อก็ดีใจครับ"
+                </p>
+            </div>
+            
+            <!-- ปุ่มเข้าสู่ระบบ -->
+            <div class="creator-actions">
+                <a href="login.html" class="btn-enter">
                     <span>เข้าสู่ระบบ</span>
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M5 12h14M12 5l7 7-7 7"/>
                     </svg>
                 </a>
-                <button class="btn-secondary" onclick="scrollToInfo()">
-                    <span>ดูข้อมูลเพิ่มเติม</span>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M19 9l-7 7-7-7"/>
-                    </svg>
-                </button>
-            </div>
-        </div>
-        
-        <!-- ส่วนข้อมูลผู้พัฒนา -->
-        <div id="info-section" class="info-section">
-            <div class="info-card">
-                <div class="info-header">
-                    <div class="dev-avatar">👨‍💻</div>
-                    <h3>Willuhmruj</h3>
-                    <p class="dev-role">Lead Developer & Architect</p>
-                </div>
-                
-                <div class="info-body">
-                    <p class="dev-quote">
-                        "สร้างระบบด้วยความหลงใหลในเทคโนโลยี<br>
-                        มุ่งเน้นความปลอดภัยและประสิทธิภาพ"
-                    </p>
-                    
-                    <div class="tech-stack">
-                        <span class="tech-tag">Firebase</span>
-                        <span class="tech-tag">HTML5/CSS3</span>
-                        <span class="tech-tag">JavaScript</span>
-                        <span class="tech-tag">GitHub</span>
-                        <span class="tech-tag">Termux</span>
-                        <span class="tech-tag">Kali Linux</span>
-                    </div>
-                </div>
-                
-                <div class="info-footer">
-                    <p class="build-info">
-                        <span class="build-label">Build:</span> 2026.04.18<br>
-                        <span class="build-label">Version:</span> 2.0.0<br>
-                        <span class="build-label">Status:</span> <span class="status-active">● Active</span>
-                    </p>
-                </div>
             </div>
             
-            <div class="scroll-hint" onclick="scrollToTop()">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2">
-                    <path d="M5 15l7-7 7 7"/>
-                </svg>
-                <span>กลับด้านบน</span>
+            <!-- Footer -->
+            <div class="creator-footer">
+                <p>© รุจ · Willuhmruj Stack · 2026</p>
             </div>
         </div>
     </div>
 
     <script>
-        function scrollToInfo() {
-            document.getElementById('info-section').scrollIntoView({ 
-                behavior: 'smooth' 
-            });
-        }
-        
-        function scrollToTop() {
-            window.scrollTo({ 
-                top: 0, 
-                behavior: 'smooth' 
-            });
-        }
-        
-        // แอนิเมชันตอนโหลดหน้า
         document.addEventListener('DOMContentLoaded', () => {
-            const hero = document.querySelector('.hero-content');
+            const content = document.querySelector('.creator-content');
             setTimeout(() => {
-                hero.style.opacity = '1';
-                hero.style.transform = 'translateY(0)';
+                content.style.opacity = '1';
+                content.style.transform = 'translateY(0)';
             }, 100);
         });
     </script>
 </body>
-                    </html>
+</html>
