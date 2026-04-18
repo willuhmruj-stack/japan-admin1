@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ล็อกอิน - Google</title>
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="login-box">
+            <h2>🔐 เข้าสู่ระบบ</h2>
+            <p>ใช้บัญชี Google เพื่อเข้าใช้งาน</p>
+            
+            <button id="google-login-btn" class="google-btn">
+                🟢 ล็อกอินด้วย Google
+            </button>
+            
+            <p id="error-message" style="color: red;"></p>
+            <p id="user-info" style="display: none;"></p>
+        </div>
+    </div>
+
+    <script src="js/firebase.js"></script>
+    <script>
+        const auth = firebase.auth();
+        const provider = new firebase.auth.GoogleAuthProvider();
+        
+        const loginBtn = document.getElementById('google-login-btn');
+        const errorMsg = document.getElementById('error-message');
+        const userInfo = document.getElementById('user-info');
+        
+        // ตรวจสอบสถานะล็อกอิน
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                // ล็อกอินอยู่ → แสดงข้อมูลและปุ่มออก
+                document.querySelector('.login-box').innerHTML = `
+                    <h2>✅ ล็อกอินสำเร็จ</h2>
+                    <img src="${user.photoURL}" style="width:80px; border-radius:50%; margin:15px;">
+                    <p><strong>${user.displayName}</strong></p>
+                    <p>${user.email}</p>
+                    <button id="logout-btn" class="logout-btn">ออกจากระบบ</button>
+                `;
+                document.getElementById('logout-btn').addEventListener('click', () => {
+                    auth.signOut();
+                });
+            } else {
+                // ยังไม่ล็อกอิน
+                document.querySelector('.login-box').innerHTML = `
+                    <h2>🔐 เข้าสู่ระบบ</h2>
+                    <p>ใช้บัญชี Google เพื่อเข้าใช้งาน</p>
+                    <button id="google-login-btn" class="google-btn">🟢 ล็อกอินด้วย Google</button>
+                    <p id="error-message" style="color: red;"></p>
+                `;
+                document.getElementById('google-login-btn').addEventListener('click', () => {
+                    auth.signInWithPopup(provider)
+                        .catch(error => {
+                            document.getElementById('error-message').innerText = '❌ ' + error.message;
+                        });
+                });
+            }
+        });
+    </script>
+</body>
+</html>
