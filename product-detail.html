@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>รายละเอียดสินค้า - ร้าน APK</title>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- ปุ่มกลับ -->
+        <a href="index.html" class="back-link">⬅️ กลับหน้าร้าน</a>
+        
+        <!-- ส่วนแสดงรายละเอียดสินค้า -->
+        <div id="product-detail" class="product-detail-container">
+            <div class="loading">⏳ กำลังโหลดข้อมูลสินค้า...</div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="js/firebase.js"></script>
+    <script src="js/auth.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const productContainer = document.getElementById('product-detail');
+            
+            // ดึง ID สินค้าจาก URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = urlParams.get('id');
+            
+            if (!productId) {
+                productContainer.innerHTML = '<p style="color:red;">❌ ไม่พบรหัสสินค้า</p>';
+                return;
+            }
+            
+            // ตรวจสอบ Firestore
+            if (typeof db === 'undefined') {
+                productContainer.innerHTML = '<p style="color:red;">❌ ไม่สามารถเชื่อมต่อฐานข้อมูลได้</p>';
+                return;
+            }
+            
+            // ดึงข้อมูลสินค้าจาก Firestore
+            db.collection("products").doc(productId).get()
+                .then((doc) => {
+                    if (!doc.exists) {
+                        productContainer.innerHTML = '<p style="color:red;">❌ ไม่พบสินค้าที่ต้องการ</p>';
+                        return;
+                    }
+                    
+                    const product = doc.data();
+                    renderProductDetail(product, productId);
+                })
+                .catch((error) => {
+                    console.error("Error getting product:", error);
+                    productContainer.innerHTML = '<p style="color:red;">⚠️ โหลดข้อมูลไม่สำเร็จ</p>';
+                });
+        });
+        
+        // ฟังก์ชันแสดงรายละเอียดสินค้า
+        function renderProductDetail(product, productId) {
+            const container = document.getElementById('product-detail');
+            
+            let html = `
+                <div class="product-detail-card">
+                    <div class="product-detail-image">
+                        <img src="${product.imageUrl || 'images/app-icon.png'}" alt="${product.name}">
+                    </div>
+                    <div class="product-detail-info">
+                        <h1>${product.name}</h1>
+                        <p class="product-detail-price">💰 ${product.price} บาท</p>
+                        <p class="product-detail-description">${product.description || 'ไม่มีคำอธิบาย'}</p>
+                        
+                        <div id="action-button-container">
+                            <!-- ปุ่มจะถูกสร้างโดย JavaScript ตามสถานะล็อกอิน -->
+                        </div>
+                        
+                        <p class="product-note">📱 หลังจากชำระเงิน คุณจะได้รับลิงก์ดาวน์โหลดทันที</p>
+                    </div>
+                </div>
+            `;
+            
+            container.innerHTML = html;
+            
+            // จัดการปุ่มตามสถานะล็อกอิน
+            const buttonContainer = document.getElementById('action-button-container');
+            
+            // ตรวจสอบ auth object
+            if (typeof auth === 'undefined') {
+                buttonContainer.innerHTML = '<p style="color:red;">ระบบล็อกอินไม่พร้อมใช้งาน</p>';
+                return;
+            }
+            
+            auth.onAuthStateChanged(user => {
+                if (user) {
+                    // ผู้ใช้ล็อกอินแล้ว → แสดงปุ่มซื้อ
+                    buttonContainer.innerHTML = `
+                        <button class="btn-buy" onclick="redirectToCheckout('${productId}', '${product.name}', ${product.price})">
+                            💳 ซื้อเลย
+                        </button>
+                    `;
+                } else {
+                    // ยังไม่ล็อกอิน → แสดงปุ่มล็อกอิน
+                    buttonContainer.innerHTML = `
+                        <a href="login.html" class="btn-login-to-buy">
+                            🔐 ล็อกอินเพื่อซื้อสินค้า
+                        </a>
+                    `;
+                }
+            });
+        }
+        
+        // ฟังก์ชันไปหน้าชำระเงิน
+        function redirectToCheckout(productId, productName, productPrice) {
+            // ส่งข้อมูลสินค้าไปยังหน้า checkout ผ่าน URL parameters
+            const params = new URLSearchParams({
+                id: productId,
+                name: productName,
+                price: productPrice
+            });
+            window.location.href = `checkout.html?${params.toString()}`;
+        }
+    </script>
+    
+    <!-- CSS เพิ่มเติมสำหรับหน้านี้ (ใส่รวมกับ style.css ได้) -->
+    <style>
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #00d4ff;
+            text-decoration: none;
+            font-size: 16px;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .product-detail-card {
+            display: flex;
+            flex-wrap: wrap;
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            padding: 30px;
+            border: 1px solid rgba(255,255,255,0.1);
+            gap: 30px;
+        }
+        .product-detail-image {
+            flex: 1 1 300px;
+            text-align: center;
+        }
+        .product-detail-image img {
+            max-width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 2px solid #00d4ff;
+        }
+        .product-detail-info {
+            flex: 2 1 400px;
+        }
+        .product-detail-info h1 {
+            font-size: 36px;
+            margin-bottom: 15px;
+            color: white;
+        }
+        .product-detail-price {
+            font-size: 32px;
+            font-weight: bold;
+            color: #FFD700;
+            margin-bottom: 20px;
+        }
+        .product-detail-description {
+            color: #ccc;
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        .btn-buy {
+            background: linear-gradient(135deg, #06C755, #00a347);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            font-size: 20px;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 8px 0 #008c3a;
+            transition: 0.1s;
+            width: 100%;
+            max-width: 300px;
+        }
+        .btn-buy:active {
+            transform: translateY(8px);
+            box-shadow: 0 0 0 #008c3a;
+        }
+        .btn-login-to-buy {
+            display: inline-block;
+            background: #4285f4;
+            color: white;
+            padding: 18px 40px;
+            font-size: 20px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            box-shadow: 0 8px 0 #2a5bbf;
+            transition: 0.1s;
+            text-align: center;
+        }
+        .btn-login-to-buy:active {
+            transform: translateY(8px);
+            box-shadow: 0 0 0 #2a5bbf;
+        }
+        .product-note {
+            margin-top: 20px;
+            color: #aaa;
+            font-size: 14px;
+        }
+        .loading {
+            text-align: center;
+            color: white;
+            font-size: 18px;
+        }
+        @media (max-width: 768px) {
+            .product-detail-card {
+                flex-direction: column;
+            }
+        }
+    </style>
+</body>
+  </html>
