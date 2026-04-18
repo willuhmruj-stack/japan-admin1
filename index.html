@@ -3,81 +3,131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ล็อกอิน</title>
+    <title>Willuhmruj Stack</title>
     <link rel="stylesheet" href="style.css">
-    
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <div class="login-box">
-            <!-- ไอคอนล็อก -->
-            <div class="login-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1.5">
-                    <path d="M12 2C8.13 2 5 5.13 5 9v3c0 2.21 1.79 4 4 4h6c2.21 0 4-1.79 4-4V9c0-3.87-3.13-7-7-7z"/>
-                    <path d="M12 17v4M8 21h8"/>
-                </svg>
+    <div class="landing-container">
+        <!-- พื้นหลังแอนิเมชัน -->
+        <div class="bg-animation">
+            <div class="gradient-orb orb-1"></div>
+            <div class="gradient-orb orb-2"></div>
+            <div class="gradient-orb orb-3"></div>
+        </div>
+        
+        <!-- เนื้อหาหลัก -->
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span class="pulse-dot"></span> PRODUCTION READY
             </div>
             
-            <div id="auth-container">
-                <!-- JavaScript จะ render ที่นี่ -->
+            <h1 class="hero-title">
+                <span class="title-line">WILLUHM</span>
+                <span class="title-line accent">RUJ STACK</span>
+            </h1>
+            
+            <p class="hero-description">
+                สถาปัตยกรรมระบบที่สร้างมาเพื่ออนาคต<br>
+                พัฒนาโดยทีมวิศวกรไทย เพื่อประสิทธิภาพสูงสุด
+            </p>
+            
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <span class="stat-number">100%</span>
+                    <span class="stat-label">ความเสถียร</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">24/7</span>
+                    <span class="stat-label">รองรับการใช้งาน</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">∞</span>
+                    <span class="stat-label">ไม่จำกัด</span>
+                </div>
+            </div>
+            
+            <div class="hero-actions">
+                <a href="login.html" class="btn-primary">
+                    <span>เข้าสู่ระบบ</span>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+                <button class="btn-secondary" onclick="scrollToInfo()">
+                    <span>ดูข้อมูลเพิ่มเติม</span>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        
+        <!-- ส่วนข้อมูลผู้พัฒนา -->
+        <div id="info-section" class="info-section">
+            <div class="info-card">
+                <div class="info-header">
+                    <div class="dev-avatar">👨‍💻</div>
+                    <h3>Willuhmruj</h3>
+                    <p class="dev-role">Lead Developer & Architect</p>
+                </div>
+                
+                <div class="info-body">
+                    <p class="dev-quote">
+                        "สร้างระบบด้วยความหลงใหลในเทคโนโลยี<br>
+                        มุ่งเน้นความปลอดภัยและประสิทธิภาพ"
+                    </p>
+                    
+                    <div class="tech-stack">
+                        <span class="tech-tag">Firebase</span>
+                        <span class="tech-tag">HTML5/CSS3</span>
+                        <span class="tech-tag">JavaScript</span>
+                        <span class="tech-tag">GitHub</span>
+                        <span class="tech-tag">Termux</span>
+                        <span class="tech-tag">Kali Linux</span>
+                    </div>
+                </div>
+                
+                <div class="info-footer">
+                    <p class="build-info">
+                        <span class="build-label">Build:</span> 2026.04.18<br>
+                        <span class="build-label">Version:</span> 2.0.0<br>
+                        <span class="build-label">Status:</span> <span class="status-active">● Active</span>
+                    </p>
+                </div>
+            </div>
+            
+            <div class="scroll-hint" onclick="scrollToTop()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2">
+                    <path d="M5 15l7-7 7 7"/>
+                </svg>
+                <span>กลับด้านบน</span>
             </div>
         </div>
     </div>
 
-    <script src="js/firebase.js"></script>
     <script>
-        const auth = firebase.auth();
-        const provider = new firebase.auth.GoogleAuthProvider();
-        const container = document.getElementById('auth-container');
-        
-        function renderLogin() {
-            container.innerHTML = `
-                <h2>ยินดีต้อนรับ</h2>
-                <p>ลงชื่อเข้าใช้เพื่อดำเนินการต่อ</p>
-                <button id="google-login-btn" class="google-btn">
-                    <svg width="20" height="20" viewBox="0 0 24 24">
-                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                    </svg>
-                    ล็อกอินด้วย Google
-                </button>
-                <p id="error-message"></p>
-            `;
-            
-            document.getElementById('google-login-btn').addEventListener('click', () => {
-                auth.signInWithPopup(provider)
-                    .catch(error => {
-                        document.getElementById('error-message').innerText = '❌ ' + error.message;
-                    });
+        function scrollToInfo() {
+            document.getElementById('info-section').scrollIntoView({ 
+                behavior: 'smooth' 
             });
         }
         
-        function renderProfile(user) {
-            container.innerHTML = `
-                <h2>✅ ล็อกอินสำเร็จ</h2>
-                <img src="${user.photoURL}" class="profile-image" alt="Profile">
-                <div class="user-name">${user.displayName}</div>
-                <div class="user-email">${user.email}</div>
-                <button id="logout-btn" class="logout-btn">ออกจากระบบ</button>
-            `;
-            
-            document.getElementById('logout-btn').addEventListener('click', () => {
-                auth.signOut();
+        function scrollToTop() {
+            window.scrollTo({ 
+                top: 0, 
+                behavior: 'smooth' 
             });
         }
         
-        auth.onAuthStateChanged(user => {
-            if (user) {
-                renderProfile(user);
-            } else {
-                renderLogin();
-            }
+        // แอนิเมชันตอนโหลดหน้า
+        document.addEventListener('DOMContentLoaded', () => {
+            const hero = document.querySelector('.hero-content');
+            setTimeout(() => {
+                hero.style.opacity = '1';
+                hero.style.transform = 'translateY(0)';
+            }, 100);
         });
     </script>
 </body>
-</html>
+                    </html>
