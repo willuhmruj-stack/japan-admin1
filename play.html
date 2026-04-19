@@ -5,10 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ค้นพบตัวตนที่แท้จริง · รุจ</title>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Firebase -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
-    <!-- html2canvas สำหรับเซฟรูป -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -19,265 +15,566 @@
         }
         .game-container { max-width: 650px; margin: 0 auto; }
         .game-header { text-align: center; margin-bottom: 25px; }
-        .game-title { font-size: 34px; font-weight: 700; background: linear-gradient(135deg, #ff6b9d, #c44569, #ffa502); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .game-title {
+            font-size: 34px; font-weight: 700;
+            background: linear-gradient(135deg, #ff6b9d, #c44569, #ffa502);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
         .game-subtitle { color: #aaa; font-size: 14px; }
         .progress-container { background: rgba(255,255,255,0.05); height: 6px; border-radius: 10px; margin-bottom: 8px; }
         .progress-bar { height: 100%; background: linear-gradient(90deg, #74b9ff, #ff7675); border-radius: 10px; width: 0%; transition: width 0.3s; }
         .question-counter { text-align: right; color: #888; font-size: 14px; margin-bottom: 20px; }
-        .game-card { background: rgba(20, 20, 40, 0.75); backdrop-filter: blur(15px); border-radius: 30px; padding: 35px 30px; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 20px 40px rgba(0,0,0,0.5); animation: fadeIn 0.4s; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .game-card {
+            background: rgba(20,20,40,0.75); backdrop-filter: blur(15px);
+            border-radius: 30px; padding: 35px 30px;
+            border: 1px solid rgba(255,255,255,0.08);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            animation: fadeIn 0.4s;
+        }
+        @keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
         .question-text { font-size: 22px; font-weight: 500; margin-bottom: 30px; line-height: 1.4; }
         .options-container { display: flex; flex-direction: column; gap: 12px; }
-        .option-btn { background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.1); padding: 16px 20px; border-radius: 20px; color: #ddd; font-size: 16px; text-align: left; cursor: pointer; transition: all 0.25s; font-family: 'Prompt', sans-serif; }
-        .option-btn:hover { background: rgba(255, 107, 157, 0.15); border-color: rgba(255, 107, 157, 0.5); color: white; transform: scale(1.02); }
+        .option-btn {
+            background: rgba(255,255,255,0.03);
+            border: 1.5px solid rgba(255,255,255,0.1);
+            padding: 16px 20px; border-radius: 20px;
+            color: #ddd; font-size: 16px; text-align: left;
+            cursor: pointer; transition: all 0.25s;
+            font-family: 'Prompt', sans-serif;
+        }
+        .option-btn:hover {
+            background: rgba(255,107,157,0.15);
+            border-color: rgba(255,107,157,0.5);
+            color: white; transform: scale(1.02);
+        }
         .result-box { text-align: center; }
         .result-emoji { font-size: 80px; margin-bottom: 20px; }
         .result-title { font-size: 42px; font-weight: 700; margin-bottom: 15px; }
         .result-desc { color: #ccc; font-size: 18px; line-height: 1.6; margin-bottom: 20px; }
-        .result-stats { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin: 20px 0; }
-        .char-badge { background: rgba(255,255,255,0.05); padding: 8px 16px; border-radius: 40px; border: 1px solid rgba(255,255,255,0.1); }
-        .btn-group { display: flex; gap: 15px; margin-top: 25px; flex-wrap: wrap; }
-        .btn { flex: 1; padding: 16px 20px; border-radius: 60px; font-weight: 500; font-size: 16px; cursor: pointer; transition: all 0.3s; border: none; font-family: 'Prompt', sans-serif; min-width: 140px; }
-        .btn-primary { background: linear-gradient(135deg, #ff6b9d, #c44569); color: white; box-shadow: 0 8px 20px rgba(255, 107, 157, 0.3); }
-        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(255, 107, 157, 0.4); }
-        .btn-secondary { background: rgba(255,255,255,0.05); color: #ccc; border: 1px solid rgba(255,255,255,0.1); }
+        .result-stats { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin: 10px 0; }
+        .char-badge {
+            padding: 6px 14px; border-radius: 40px;
+            border: 1px solid rgba(255,255,255,0.1);
+            font-size: 12px; color: #ccc;
+        }
+        .btn-group { display: flex; gap: 10px; margin-top: 25px; flex-wrap: wrap; }
+        .btn {
+            flex: 1; padding: 14px 18px; border-radius: 60px;
+            font-weight: 500; font-size: 15px; cursor: pointer;
+            transition: all 0.3s; border: none;
+            font-family: 'Prompt', sans-serif; min-width: 120px;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #ff6b9d, #c44569);
+            color: white; box-shadow: 0 8px 20px rgba(255,107,157,0.3);
+        }
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(255,107,157,0.4); }
+        .btn-secondary {
+            background: rgba(255,255,255,0.05); color: #ccc;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
         .btn-secondary:hover { background: rgba(255,255,255,0.1); color: white; }
-        .start-box { text-align: center; padding: 20px 0; }
-        .start-icon { font-size: 70px; margin-bottom: 20px; }
-        #save-area { background: #1a1a2e; padding: 20px; border-radius: 20px; margin-top: 20px; }
-        @media (max-width: 480px) { .game-title { font-size: 26px; } .question-text { font-size: 18px; } .option-btn { padding: 14px 16px; font-size: 14px; } .result-title { font-size: 32px; } }
+        .toast {
+            position: fixed; bottom: 30px; left: 50%;
+            transform: translateX(-50%) translateY(80px);
+            background: rgba(20,20,40,0.95);
+            border: 1px solid rgba(255,107,157,0.35);
+            border-radius: 99px; padding: 12px 24px;
+            font-family: 'Prompt', sans-serif; font-size: 14px; color: #ff6b9d;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            opacity: 0; z-index: 9999; pointer-events: none;
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+        @media (max-width: 480px) {
+            .game-title { font-size: 26px; }
+            .question-text { font-size: 18px; }
+            .option-btn { padding: 14px 16px; font-size: 14px; }
+            .result-title { font-size: 30px; }
+            .btn { font-size: 13px; padding: 12px 14px; min-width: 100px; }
+        }
     </style>
 </head>
 <body>
-    <div class="game-container">
-        <div class="game-header"><h1 class="game-title">🦊🐺 ค้นพบตัวตนที่ซ่อนอยู่</h1><p class="game-subtitle">50 คำถาม · สุ่ม 30 ข้อ · หลายคาแรกเตอร์</p></div>
-        <div id="progress-section" style="display: none;"><div class="progress-container"><div class="progress-bar" id="progress-bar"></div></div><p class="question-counter" id="question-counter"></p></div>
-        <div id="game-content" class="game-card"></div>
+
+<div class="toast" id="toast"></div>
+
+<div class="game-container">
+    <div class="game-header">
+        <h1 class="game-title">🦊🐺 ค้นพบตัวตนที่ซ่อนอยู่</h1>
+        <p class="game-subtitle">50 คำถาม · สุ่ม 30 ข้อ · 8 คาแรกเตอร์</p>
     </div>
+    <div id="progress-section" style="display:none;">
+        <div class="progress-container"><div class="progress-bar" id="progress-bar"></div></div>
+        <p class="question-counter" id="question-counter"></p>
+    </div>
+    <div id="game-content" class="game-card"></div>
+</div>
 
-    <script src="js/firebase.js"></script>
-    <script>
-        // ========== 50 คำถามในคลัง ==========
-        const questionBank = [
-            { text: "ถ้าต้องอยู่ด้วยกันสองต่อสองในห้องมืดๆ คุณจะ...", a: "เขินจนพูดไม่ออก", b: "แอบมองอีกฝ่าย", c: "ชวนคุยแก้เขิน", d: "จับมืออีกฝ่ายมากุมไว้" },
-            { text: "อีกฝ่ายส่งสายตาหวานๆ มาให้ คุณจะ...", a: "หลบตาแทบไม่ทัน", b: "ยิ้มเขินแล้วหลบตา", c: "ส่งยิ้มหวานตอบ", d: "จ้องกลับแบบไม่เกรงใจ" },
-            { text: "ถ้าอีกฝ่ายเผลอหลับบนไหล่คุณ...", a: "ตัวแข็งเป็นหิน", b: "นั่งนิ่งๆ ปล่อยให้หลับ", c: "ลูบหัวอีกฝ่ายเบาๆ", d: "จัดท่าให้หลับสบายแล้วกอด" },
-            { text: "ฝนตกหนัก คุณมีร่มคันเดียว...", a: "ให้อีกฝ่ายถือร่มให้", b: "เดินเบียดใกล้ๆ", c: "ถือร่มให้อีกฝ่าย", d: "ถือร่มแล้วโอบไหล่" },
-            { text: "อีกฝ่ายทำอาหารมาให้ชิม...", a: "อร่อยมากกก (ต่อให้เค็มก็ชม)", b: "ชมแล้วถามสูตร", c: "ชมและบอกว่าทำให้กินอีกนะ", d: "อร่อย แต่วันหลังเดี๋ยวทำให้กินบ้าง" },
-            { text: "ถ้าอีกฝ่ายหอมแก้มคุณกลางห้าง...", a: "หน้าแดงจนเดินไม่ตรง", b: "ตกใจแต่ในใจฟิน", c: "ยิ้มเขินๆ", d: "หอมตอบกลางห้างเลย" },
-            { text: "คุณชอบให้อีกฝ่ายเรียกคุณว่า...", a: "ตัวเอง / ที่รัก", b: "ชื่อเล่นสั้นๆ", c: "พี่ / น้อง", d: "เรียกชื่อตรงๆ เลย" },
-            { text: "เวลาดูหนังด้วยกัน มีฉากโรแมนติก...", a: "แอบมองอีกฝ่าย", b: "นั่งเงียบๆ เขิน", c: "แซวอีกฝ่ายเบาๆ", d: "ขยับเข้าใกล้" },
-            { text: "อีกฝ่ายงอนคุณ...", a: "ง้อจนกว่าจะหาย", b: "ส่งสติกเกอร์น่ารักไปง้อ", c: "ถามว่าทำอะไรผิด", d: "รอให้หายเอง" },
-            { text: "คุณคิดว่าความสัมพันธ์ที่ดีคือ...", a: "อีกฝ่ายนำ เราแฮปปี้", b: "ดูแลกันและกัน", c: "เท่าเทียม ผลัดกันนำ", d: "เราดูแลอีกฝ่ายให้ดีที่สุด" },
-            { text: "เวลาได้ของขวัญจากอีกฝ่าย...", a: "เขินจนเก็บไว้ไม่กล้าใช้", b: "ทะนุถนอมสุดๆ", c: "ใช้อย่างภูมิใจ", d: "อวดให้โลกรู้" },
-            { text: "ถ้าอีกฝ่ายขอให้คุณป้อนขนม...", a: "มือสั่นทำขนมหล่น", b: "ป้อนให้แบบเขินๆ", c: "ป้อนให้แบบยิ้มๆ", d: "ป้อนให้พร้อมแซว" },
-            { text: "คุณชอบเวลาใครเป็นฝ่ายกอดก่อน?", a: "อีกฝ่ายกอดก่อนสิ", b: "รอจังหวะให้อีกฝ่ายกอด", c: "กอดพร้อมกัน", d: "ฉันกอดก่อนทุกที" },
-            { text: "เวลาเจออีกฝ่ายใส่ชุดใหม่...", a: "เขินจนชมไม่ถูก", b: "ชมในใจ", c: "ชมออกมาดังๆ", d: "ชมพร้อมผิวปาก" },
-            { text: "ถ้าอีกฝ่ายร้องไห้ คุณจะ...", a: "ตกใจทำอะไรไม่ถูก", b: "ยื่นทิชชู่ให้เงียบๆ", c: "ปลอบด้วยคำพูดอ่อนโยน", d: "กอดปลอบทันที" },
-            { text: "คุณคิดว่าตัวเองเวลาเขินเป็นแบบไหน?", a: "หน้าแดงหูแดง", b: "พูดติดอ่าง", c: "ยิ้มไม่หุบ", d: "ทำเป็นเก๊กขรึม" },
-            { text: "ถ้าต้องส่งข้อความหวานๆ...", a: "พิมพ์แล้วลบๆๆ", b: "ใช้เวลาคิดนาน", c: "พิมพ์ส่งเลยไม่อาย", d: "พิมพ์หวานๆ ส่งรัวๆ" },
-            { text: "คุณชอบแนวไหนมากกว่ากัน?", a: "โดนจับกดกำแพง", b: "โดนจับมือเบาๆ", c: "จับมืออีกฝ่ายก่อน", d: "กดกำแพงเอง" },
-            { text: "เวลาอีกฝ่ายงอนแล้วไม่พูดด้วย...", a: "เครียดจนนอนไม่หลับ", b: "พยายามหาทางง้อ", c: "รอให้ใจเย็นก่อน", d: "เปิดประเด็นคุยทันที" },
-            { text: "ถ้าให้เลือกระหว่าง 'เคะ' กับ 'เมะ'...", a: "เคะจ๋าเลย", b: "ออกแนวเคะ", c: "ออกแนวเมะ", d: "เมะจ๋าเลย" },
-            // เพิ่มจนครบ 50 ข้อ (ด้านล่างนี้คือข้อ 21-50 แบบย่อ แต่จะใส่เต็มให้)
-            { text: "เวลาเดินจูงมือกัน...", a: "เขิน ไม่กล้าจูงแน่น", b: "จูงเบาๆ", c: "จูงแน่นปานกลาง", d: "จูงแน่นมากก" },
-            { text: "ถ้าอีกฝ่ายทำเซอร์ไพรส์วันเกิด...", a: "ร้องไห้เลย", b: "เขินมาก", c: "ดีใจจนเก็บอาการไม่อยู่", d: "ยิ้มภูมิใจ" },
-            { text: "เวลาไปกินข้าวด้วยกัน...", a: "ให้อีกฝ่ายสั่งให้", b: "สั่งตามอีกฝ่าย", c: "ช่วยกันสั่ง", d: "เราสั่งให้อีกฝ่าย" },
-            { text: "ถ้ามีคนมาจีบอีกฝ่ายต่อหน้า...", a: "ทำตัวไม่ถูก", b: "มองตาขวาง", c: "เดินเข้าไปประกบ", d: "เข้าไปจับมืออีกฝ่าย" },
-            { text: "คุณชอบบทสนทนาแบบไหน?", a: "อีกฝ่ายชวนคุย", b: "เงียบๆ แต่เข้าใจกัน", c: "ผลัดกันเล่า", d: "เราเป็นคนชวนคุย" },
-            { text: "เวลาอีกฝ่ายง่วง...", a: "ปล่อยให้นอน", b: "หาที่หนุนให้", c: "ชวนคุยต่อเบาๆ", d: "ดึงเข้ามากอด" },
-            { text: "ถ้าอีกฝ่ายอยากได้ของสิ่งหนึ่งมาก...", a: "จำไว้แล้วแอบซื้อให้", b: "ถามว่าอยากได้จริงไหม", c: "พาไปซื้อด้วยกัน", d: "ซื้อให้ทันที" },
-            { text: "คุณคิดว่าตัวเองขี้หึงแค่ไหน?", a: "หึงเงียบๆ", b: "หึงแล้วงอน", c: "หึงแต่ไม่แสดงออก", d: "หึงก็บอกเลย" },
-            { text: "เวลาอีกฝ่ายป่วย...", a: "เป็นห่วงจนนอนไม่หลับ", b: "ถามอาการตลอด", c: "หายามาให้", d: "ดูแลทุกอย่าง" },
-            { text: "คุณชอบให้ใครเป็นฝ่ายขอคบ?", a: "อีกฝ่ายขอ", b: "รอจังหวะ", c: "เราขอก่อน", d: "ขอพร้อมกัน" },
-            { text: "ถ้าต้องแนะนำตัวกับพ่อแม่อีกฝ่าย...", a: "เกร็งมาก", b: "เขิน", c: "ยิ้มแย้ม", d: "มั่นใจเต็มที่" },
-            { text: "คุณเป็นคนขี้อ้อนไหม?", a: "ขี้อ้อนมาก", b: "ค่อนข้างขี้อ้อน", c: "อ้อนบ้าง", d: "ไม่อ้อนเลย" },
-            { text: "เวลาอีกฝ่ายทำอะไรน่ารัก...", a: "แอบยิ้มคนเดียว", b: "เขิน", c: "ชมว่าทำไมน่ารัก", d: "หยิกแก้ม" },
-            { text: "คุณคิดว่าแฟนในอุดมคติคือ...", a: "คนที่ดูแลเรา", b: "คนที่เข้าใจเรา", c: "คนที่เท่าเทียม", d: "คนที่เราดูแลได้" },
-            { text: "เวลาเห็นอีกฝ่ายร้องไห้เพราะหนัง...", a: "ตกใจ", b: "ยื่นทิชชู่", c: "ปลอบเบาๆ", d: "กอด" },
-            { text: "คุณเป็นคนโรแมนติกไหม?", a: "ไม่เลย", b: "นิดหน่อย", c: "ปานกลาง", d: "มาก" },
-            { text: "ถ้าต้องอยู่ไกลกัน...", a: "คิดถึงจนทนไม่ได้", b: "แชทตลอด", c: "โทรหาบ้าง", d: "เชื่อใจ" },
-            { text: "เวลาอีกฝ่ายงอน...", a: "ง้อทันที", b: "ง้อแบบน่ารักๆ", c: "ถามเหตุผล", d: "ปล่อยให้หายเอง" },
-            { text: "คุณชอบให้อีกฝ่าย...", a: "ตามใจ", b: "เอาใจใส่", c: "ตรงไปตรงมา", d: "เป็นผู้นำ" },
-            { text: "นิสัยที่คุณชอบในตัวอีกฝ่ายคือ...", a: "อ่อนโยน", b: "อบอุ่น", c: "มั่นใจ", d: "เข้มแข็ง" }
-        ]; // ครบ 50 ข้อแล้ว
+<script>
+// ─── Firebase config — ใส่ค่าของคุณที่นี่ ────────────────────────────────
+// ถ้าใช้ js/firebase.js ให้โหลด script นั้นก่อน tag นี้แล้วลบ block นี้ออก
+const FIREBASE_READY = (typeof firebase !== 'undefined');
+let db = null;
+if (FIREBASE_READY) {
+    try { db = firebase.firestore(); } catch(e) { /* silent */ }
+}
+// ─────────────────────────────────────────────────────────────────────────
 
-        // ========== ระบบตัวละคร (8 คาแรกเตอร์) ==========
-        const characters = [
-            { id: 'pureKe', name: 'เคะบริสุทธิ์', emoji: '🦊💕', desc: 'อ้อนเก่ง ขี้อ้อน ต้องการคนดูแล', color: '#74b9ff' },
-            { id: 'smartKe', name: 'เคะแว่น', emoji: '🦊🤓', desc: 'ฉลาด เนิร์ดๆ แต่ขี้อ้อนในบางครั้ง', color: '#a29bfe' },
-            { id: 'tsundere', name: 'ซึนเดเระ', emoji: '😤💕', desc: 'ปากแข็งแต่ใจอ่อน แอบเขินตลอด', color: '#fd79a8' },
-            { id: 'seke', name: 'เซเคะ', emoji: '🦊🐺', desc: 'ปรับตัวเก่ง เป็นได้ทุกบทบาท', color: '#ffeaa7' },
-            { id: 'gentleMe', name: 'เมะสุภาพบุรุษ', emoji: '🐺🎩', desc: 'อบอุ่น ดูแลดี เป็นสุภาพบุรุษ', color: '#55efc4' },
-            { id: 'coolMe', name: 'เมะสุดเท่', emoji: '🐺🔥', desc: 'มั่นใจ เท่ แต่แอบอ่อนโยน', color: '#e17055' },
-            { id: 'wildMe', name: 'เมะหมาป่า', emoji: '🐺🌕', desc: 'ดุดัน ไม่เกรงใจใคร แต่ปกป้องคนที่รัก', color: '#d63031' },
-            { id: 'sadistMe', name: 'เมะซาดิสต์', emoji: '🐺⛓️', desc: 'ชอบแกล้ง แต่ลึกๆ แล้วหวง', color: '#6c5ce7' }
-        ];
+// ── Question bank (50 ข้อ) ────────────────────────────────────────────────
+// w[choice] = [pureKe, smartKe, tsundere, seke, gentleMe, coolMe, wildMe, sadistMe]
+const questionBank = [
+    { text:"ถ้าต้องอยู่ด้วยกันสองต่อสองในห้องมืดๆ คุณจะ...",
+      opts:["เขินจนพูดไม่ออก","แอบมองอีกฝ่าย","ชวนคุยแก้เขิน","จับมืออีกฝ่ายมากุมไว้"],
+      icons:["🦊","🌸","🔥","🐺"],
+      w:[[3,1,0,0,0,0,0,0],[1,1,2,1,0,0,0,0],[0,0,1,2,2,1,0,0],[0,0,0,1,1,2,2,1]] },
+    { text:"อีกฝ่ายส่งสายตาหวานๆ มาให้ คุณจะ...",
+      opts:["หลบตาแทบไม่ทัน","ยิ้มเขินแล้วหลบตา","ส่งยิ้มหวานตอบ","จ้องกลับแบบไม่เกรงใจ"],
+      icons:["🦊","🌸","🔥","🐺"],
+      w:[[3,1,0,0,0,0,0,0],[2,1,1,1,0,0,0,0],[0,0,1,2,2,1,0,0],[0,0,0,1,0,2,2,1]] },
+    { text:"ถ้าอีกฝ่ายเผลอหลับบนไหล่คุณ...",
+      opts:["ตัวแข็งเป็นหิน","นั่งนิ่งๆ ปล่อยให้หลับ","ลูบหัวอีกฝ่ายเบาๆ","จัดท่าให้หลับสบายแล้วกอด"],
+      icons:["🦊","🌸","🔥","🐺"],
+      w:[[3,1,0,0,0,0,0,0],[1,2,1,1,1,0,0,0],[0,0,1,2,3,1,0,0],[0,0,0,1,2,2,1,1]] },
+    { text:"ฝนตกหนัก คุณมีร่มคันเดียว...",
+      opts:["ให้อีกฝ่ายถือร่มให้","เดินเบียดใกล้ๆ","ถือร่มให้อีกฝ่าย","ถือร่มแล้วโอบไหล่"],
+      icons:["🦊","🌸","🔥","🐺"],
+      w:[[3,1,0,0,0,0,0,0],[1,1,2,2,0,0,0,0],[0,0,1,2,3,1,0,0],[0,0,0,1,2,2,1,1]] },
+    { text:"อีกฝ่ายทำอาหารมาให้ชิม...",
+      opts:["อร่อยมาก (ต่อให้เค็มก็ชม)","ชมแล้วถามสูตร","ชมและบอกว่าทำให้กินอีกนะ","อร่อย แต่วันหลังเดี๋ยวทำให้กินบ้าง"],
+      icons:["🦊","🌸","🔥","🐺"],
+      w:[[2,1,1,1,0,0,0,0],[1,3,0,1,0,0,0,0],[0,0,1,2,2,1,0,0],[0,0,0,1,1,2,2,1]] },
+    { text:"ถ้าอีกฝ่ายหอมแก้มคุณกลางห้าง...",
+      opts:["หน้าแดงจนเดินไม่ตรง","ตกใจแต่ในใจฟิน","ยิ้มเขินๆ","หอมตอบกลางห้างเลย"],
+      icons:["🦊","🌸","🔥","🐺"],
+      w:[[3,1,0,0,0,0,0,0],[2,2,0,1,0,0,0,0],[0,1,2,2,1,1,0,0],[0,0,0,1,0,2,2,2]] },
+    { text:"คุณชอบให้อีกฝ่ายเรียกคุณว่า...",
+      opts:["ตัวเอง / ที่รัก","ชื่อเล่นสั้นๆ","พี่ / น้อง","เรียกชื่อตรงๆ เลย"],
+      icons:["🦊","🌸","🔥","🐺"],
+      w:[[3,1,0,1,0,0,0,0],[1,2,1,2,1,0,0,0],[0,0,1,2,2,1,0,0],[0,0,0,1,1,2,2,1]] },
+    { text:"เวลาดูหนังด้วยกัน มีฉากโรแมนติก...",
+      opts:["แอบมองอีกฝ่าย","นั่งเงียบๆ เขิน","แซวอีกฝ่ายเบาๆ","ขยับเข้าใกล้"],
+      icons:["🦊","🌸","🔥","🐺"],
+      w:[[2,2,0,1,0,0,0,0],[3,1,0,1,0,0,0,0],[0,1,2,2,1,2,0,0],[0,0,0,1,1,1,2,2]] },
+    { text:"อีกฝ่ายงอนคุณ...",
+      opts:["ง้อจนกว่าจะหาย","ส่งสติกเกอร์น่ารักไปง้อ","ถามว่าทำอะไรผิด","รอให้หายเอง"],
+      icons:["🦊","🌸","🔥","🐺"],
+      w:[[3,1,0,0,1,0,0,0],[2,2,0,1,1,0,0,0],[0,1,1,2,2,1,1,0],[0,0,1,1,1,2,2,2]] },
+    { text:"คุณคิดว่าความสัมพันธ์ที่ดีคือ...",
+      opts:["อีกฝ่ายนำ เราแฮปปี้","ดูแลกันและกัน","เท่าเทียม ผลัดกันนำ","เราดูแลอีกฝ่ายให้ดีที่สุด"],
+      icons:["🦊","🌸","🔥","🐺"],
+      w:[[3,1,0,0,0,0,0,0],[1,2,1,2,1,0,0,0],[0,0,1,3,1,1,0,0],[0,0,0,1,2,2,1,1]] },
+    { text:"เวลาได้ของขวัญจากอีกฝ่าย...",
+      opts:["เขินจนเก็บไว้ไม่กล้าใช้","ทะนุถนอมสุดๆ","ใช้อย่างภูมิใจ","อวดให้โลกรู้"],
+      icons:["🦊","🌸","🔥","🐺"],
+      w:[[3,1,0,0,0,0,0,0],[2,2,0,1,1,0,0,0],[0,0,1,2,2,2,0,0],[0,0,0,1,1,2,2,2]] },
+    { text:"ถ้าอีกฝ่ายขอให้คุณป้อนขนม...",
+      opts:["มือสั่นทำขนมหล่น","ป้อนให้แบบเขินๆ","ป้อนให้แบบยิ้มๆ","ป้อนให้พร้อมแซว"],
+      icons:["🦊","🌸","🔥","🐺"],
+      w:[[3,1,0,0,0,0,0,0],[2,2,1,0,0,0,0,0],[0,0,1,2,2,2,0,0],[0,0,1,2,1,2,1,2]] },
+    { text:"คุณชอบให้ใครเป็นฝ่ายกอดก่อน?",
+      opts:["อีกฝ่ายกอดก่อนสิ","รอจังหวะให้อีกฝ่ายกอด","กอดพร้อมกัน","ฉันกอดก่อนทุกที"],
+      icons:["🦊","🌸","🔥","🐺"],
+      w:[[3,1,0,0,0,0,0,0],[2,2,0,1,0,0,0,0],[0,0,1,3,1,1,0,0],[0,0,0,1,1,2,2,2]] },
+    { text:"เวลาเจออีกฝ่ายใส่ชุดใหม่...",
+      opts:["เขินจนชมไม่ถูก","ชมในใจ","ชมออกมาดังๆ","ชมพร้อมผิวปาก"],
+      icons:["🦊","🌸","🔥","🐺"],
+      w:[[3,1,0,0,0,0,0,0],[2,2,0,1,0,0,0,0],[0,0,1,2,2,2,0,0],[0,0,0,1,0,2,2,3]] },
+    { text:"ถ้าอีกฝ่ายร้องไห้ คุณจะ...",
+      opts:["ตกใจทำอะไรไม่ถูก","ยื่นทิชชู่ให้เงียบๆ","ปลอบด้วยคำพูดอ่อนโยน","กอดปลอบทันที"],
+      icons:["🦊","🌸","🔥","🐺"],
+      w:[[2,2,0,0,0,0,0,0],[1,1,1,1,1,0,0,0],[0,0,1,2,3,1,0,0],[0,0,0,1,2,2,2,1]] },
+    { text:"คุณคิดว่าตัวเองเวลาเขินเป็นแบบไหน?",
+      opts:["หน้าแดงหูแดง","พูดติดอ่าง","ยิ้มไม่หุบ","ทำเป็นเก๊กขรึม"],
+      icons:["🦊","🌸","🔥","🐺"],
+      w:[[3,1,0,0,0,0,0,0],[3,1,0,0,0,0,0,0],[1,2,1,2,1,1,0,0],[0,0,2,1,0,2,1,2]] },
+    { text:"ถ้าต้องส่งข้อความหวานๆ...",
+      opts:["พิมพ์แล้วลบๆๆ","ใช้เวลาคิดนาน","พิมพ์ส่งเลยไม่อาย","พิมพ์หวานๆ ส่งรัวๆ"],
+      icons:["🦊","🌸","🔥","🐺"],
+      w:[[3,1,0,0,0,0,0,0],[2,2,1,0,0,0,0,0],[0,0,1,2,2,2,1,0],[0,0,0,1,1,2,2,3]] },
+    { text:"คุณชอบแนวไหนมากกว่ากัน?",
+      opts:["โดนจับกดกำแพง","โดนจับมือเบาๆ","จับมืออีกฝ่ายก่อน","กดกำแพงเอง"],
+      icons:["🦊","🌸","🔥","🐺"],
+      w:[[3,1,0,0,0,0,0,0],[2,2,0,1,0,0,0,0],[0,0,1,2,2,2,0,0],[0,0,0,1,0,2,2,3]] },
+    { text:"เวลาอีกฝ่ายงอนแล้วไม่พูดด้วย...",
+      opts:["เครียดจนนอนไม่หลับ","พยายามหาทางง้อ","รอให้ใจเย็นก่อน","เปิดประเด็นคุยทันที"],
+      icons:["🦊","🌸","🔥","🐺"],
+      w:[[3,1,0,0,0,0,0,0],[2,2,0,1,1,0,0,0],[0,1,1,2,2,1,0,0],[0,0,0,1,1,2,2,2]] },
+    { text:"ถ้าให้เลือกระหว่าง เคะ กับ เมะ...",
+      opts:["เคะจ๋าเลย","ออกแนวเคะ","ออกแนวเมะ","เมะจ๋าเลย"],
+      icons:["🦊","🌸","🔥","🐺"],
+      w:[[4,1,0,0,0,0,0,0],[2,2,0,2,0,0,0,0],[0,0,0,2,2,2,0,0],[0,0,0,0,0,2,2,4]] },
+    { text:"เวลาเดินจูงมือกัน...",
+      opts:["เขิน ไม่กล้าจูงแน่น","จูงเบาๆ","จูงแน่นปานกลาง","จูงแน่นมาก"],
+      icons:["🦊","🌸","🔥","🐺"],
+      w:[[3,1,0,0,0,0,0,0],[2,2,0,1,0,0,0,0],[0,0,1,2,2,2,0,0],[0,0,0,1,1,2,2,2]] },
+    { text:"ถ้าอีกฝ่ายทำเซอร์ไพรส์วันเกิด...",
+      opts:["ร้องไห้เลย","เขินมาก","ดีใจจนเก็บอาการไม่อยู่","ยิ้มภูมิใจ"],
+      icons:["🦊","🌸","🔥","🐺"],
+      w:[[3,1,0,0,0,0,0,0],[2,2,0,1,0,0,0,0],[1,1,1,2,2,1,0,0],[0,0,0,1,1,3,2,1]] },
+    { text:"เวลาไปกินข้าวด้วยกัน...",
+      opts:["ให้อีกฝ่ายสั่งให้","สั่งตามอีกฝ่าย","ช่วยกันสั่ง","เราสั่งให้อีกฝ่าย"],
+      icons:["🦊","🌸","🔥","🐺"],
+      w:[[3,1,0,0,0,0,0,0],[2,2,0,1,0,0,0,0],[0,0,1,3,1,1,0,0],[0,0,0,1,2,2,2,1]] },
+    { text:"ถ้ามีคนมาจีบอีกฝ่ายต่อหน้า...",
+      opts:["ทำตัวไม่ถูก","มองตาขวาง","เดินเข้าไปประกบ","เข้าไปจับมืออีกฝ่าย"],
+      icons:["🦊","🌸","🔥","🐺"],
+      w:[[2,2,0,0,0,0,0,0],[1,2,1,1,0,0,0,0],[0,0,1,2,2,2,1,0],[0,0,0,1,1,2,3,2]] },
+    { text:"คุณชอบบทสนทนาแบบไหน?",
+      opts:["อีกฝ่ายชวนคุย","เงียบๆ แต่เข้าใจกัน","ผลัดกันเล่า","เราเป็นคนชวนคุย"],
+      icons:["🦊","🌸","🔥","🐺"],
+      w:[[3,1,0,0,0,0,0,0],[1,2,0,2,1,0,0,0],[0,0,1,3,1,1,0,0],[0,0,0,1,1,2,2,2]] },
+    { text:"เวลาอีกฝ่ายง่วง...",
+      opts:["ปล่อยให้นอน","หาที่หนุนให้","ชวนคุยต่อเบาๆ","ดึงเข้ามากอด"],
+      icons:["🦊","🌸","🔥","🐺"],
+      w:[[1,1,1,1,1,0,0,0],[1,1,1,1,2,1,0,0],[0,1,1,2,1,2,0,0],[0,0,0,1,1,2,2,2]] },
+    { text:"ถ้าอีกฝ่ายอยากได้ของสิ่งหนึ่งมาก...",
+      opts:["จำไว้แล้วแอบซื้อให้","ถามว่าอยากได้จริงไหม","พาไปซื้อด้วยกัน","ซื้อให้ทันที"],
+      icons:["🦊","🌸","🔥","🐺"],
+      w:[[1,1,0,0,2,1,0,0],[0,2,1,1,1,0,0,0],[0,0,1,2,2,2,0,0],[0,0,0,1,1,2,2,3]] },
+    { text:"คุณคิดว่าตัวเองขี้หึงแค่ไหน?",
+      opts:["หึงเงียบๆ","หึงแล้วงอน","หึงแต่ไม่แสดงออก","หึงก็บอกเลย"],
+      icons:["🦊","🌸","🔥","🐺"],
+      w:[[2,2,0,1,0,0,0,0],[3,1,0,0,0,0,0,0],[0,1,2,1,1,2,1,0],[0,0,1,1,0,2,2,2]] },
+    { text:"เวลาอีกฝ่ายป่วย...",
+      opts:["เป็นห่วงจนนอนไม่หลับ","ถามอาการตลอด","หายามาให้","ดูแลทุกอย่าง"],
+      icons:["🦊","🌸","🔥","🐺"],
+      w:[[2,2,0,0,1,0,0,0],[2,2,0,0,1,0,0,0],[0,0,1,2,2,2,0,0],[0,0,0,1,2,2,2,1]] },
+    { text:"คุณชอบให้ใครเป็นฝ่ายขอคบ?",
+      opts:["อีกฝ่ายขอ","รอจังหวะ","เราขอก่อน","ขอพร้อมกัน"],
+      icons:["🦊","🌸","🔥","🐺"],
+      w:[[3,1,0,0,0,0,0,0],[2,2,0,1,0,0,0,0],[0,0,0,2,2,2,1,0],[0,0,1,3,1,1,0,0]] },
+    { text:"ถ้าต้องแนะนำตัวกับพ่อแม่อีกฝ่าย...",
+      opts:["เกร็งมาก","เขิน","ยิ้มแย้ม","มั่นใจเต็มที่"],
+      icons:["🦊","🌸","🔥","🐺"],
+      w:[[3,1,0,0,0,0,0,0],[2,2,0,1,0,0,0,0],[0,0,1,2,2,2,0,0],[0,0,0,1,0,2,2,3]] },
+    { text:"คุณเป็นคนขี้อ้อนไหม?",
+      opts:["ขี้อ้อนมาก","ค่อนข้างขี้อ้อน","อ้อนบ้าง","ไม่อ้อนเลย"],
+      icons:["🦊","🌸","🔥","🐺"],
+      w:[[4,1,0,0,0,0,0,0],[3,1,0,1,0,0,0,0],[0,1,1,2,1,1,0,0],[0,0,1,0,0,2,2,3]] },
+    { text:"เวลาอีกฝ่ายทำอะไรน่ารัก...",
+      opts:["แอบยิ้มคนเดียว","เขิน","ชมว่าทำไมน่ารัก","หยิกแก้ม"],
+      icons:["🦊","🌸","🔥","🐺"],
+      w:[[2,2,0,1,0,0,0,0],[3,1,0,0,0,0,0,0],[0,0,1,2,2,2,0,0],[0,0,0,1,0,2,2,3]] },
+    { text:"คุณคิดว่าแฟนในอุดมคติคือ...",
+      opts:["คนที่ดูแลเรา","คนที่เข้าใจเรา","คนที่เท่าเทียม","คนที่เราดูแลได้"],
+      icons:["🦊","🌸","🔥","🐺"],
+      w:[[3,1,0,0,0,0,0,0],[1,3,0,1,0,0,0,0],[0,0,1,3,1,1,0,0],[0,0,0,1,2,2,2,1]] },
+    { text:"เวลาเห็นอีกฝ่ายร้องไห้เพราะหนัง...",
+      opts:["ตกใจ","ยื่นทิชชู่","ปลอบเบาๆ","กอด"],
+      icons:["🦊","🌸","🔥","🐺"],
+      w:[[2,2,0,0,0,0,0,0],[1,1,1,1,1,1,0,0],[0,0,1,2,2,2,0,0],[0,0,0,1,2,2,2,1]] },
+    { text:"คุณเป็นคนโรแมนติกไหม?",
+      opts:["ไม่เลย","นิดหน่อย","ปานกลาง","มาก"],
+      icons:["🦊","🌸","🔥","🐺"],
+      w:[[0,0,2,1,0,2,1,1],[1,2,1,1,1,1,0,0],[1,1,1,2,2,2,0,0],[2,2,0,1,1,1,1,1]] },
+    { text:"ถ้าต้องอยู่ไกลกัน...",
+      opts:["คิดถึงจนทนไม่ได้","แชทตลอด","โทรหาบ้าง","เชื่อใจ"],
+      icons:["🦊","🌸","🔥","🐺"],
+      w:[[3,1,0,0,0,0,0,0],[2,2,0,1,1,0,0,0],[0,0,1,2,2,2,0,0],[0,0,1,1,1,2,2,2]] },
+    { text:"เวลาอีกฝ่ายงอน (อีกครั้ง สถานการณ์ต่างกัน)...",
+      opts:["ง้อทันที","ง้อแบบน่ารักๆ","ถามเหตุผล","ปล่อยให้หายเอง"],
+      icons:["🦊","🌸","🔥","🐺"],
+      w:[[3,1,0,0,0,0,0,0],[2,2,0,1,1,0,0,0],[0,0,1,2,2,2,0,0],[0,0,1,1,1,2,2,2]] },
+    { text:"คุณชอบให้อีกฝ่าย...",
+      opts:["ตามใจ","เอาใจใส่","ตรงไปตรงมา","เป็นผู้นำ"],
+      icons:["🦊","🌸","🔥","🐺"],
+      w:[[3,1,0,0,0,0,0,0],[1,3,0,1,1,0,0,0],[0,1,1,2,1,2,0,0],[1,1,0,2,1,2,2,1]] },
+    { text:"นิสัยที่คุณชอบในตัวอีกฝ่ายคือ...",
+      opts:["อ่อนโยน","อบอุ่น","มั่นใจ","เข้มแข็ง"],
+      icons:["🦊","🌸","🔥","🐺"],
+      w:[[1,2,1,1,2,0,0,0],[1,1,1,1,3,1,0,0],[0,0,1,2,1,3,1,0],[0,0,0,1,1,2,3,2]] },
+    { text:"ถ้ามีเวลาว่างด้วยกัน คุณอยากทำอะไร?",
+      opts:["นอนกอดกันเฉยๆ","ดูซีรีส์ด้วยกัน","ออกไปข้างนอก","ทำอะไรก็ได้ขอแค่อยู่ด้วยกัน"],
+      icons:["🦊","🌸","🔥","🐺"],
+      w:[[2,2,0,1,1,0,0,0],[1,1,1,2,2,0,0,0],[0,0,1,2,1,3,1,0],[1,1,1,2,2,1,0,0]] },
+    { text:"ถ้าคุณต้องบอกรัก...",
+      opts:["พิมพ์ข้อความส่งแล้วรอ","รอโอกาสพูดตรงๆ","บอกเลยทันที","ทำให้รู้ด้วยการกระทำ"],
+      icons:["🦊","🌸","🔥","🐺"],
+      w:[[3,1,0,0,0,0,0,0],[1,2,0,2,1,0,0,0],[0,0,1,1,2,2,1,1],[0,0,0,1,2,2,2,2]] },
+    { text:"เวลาอยู่ด้วยกันคุณรู้สึกแบบไหน?",
+      opts:["เขินตลอดเวลา","อบอุ่นสบายใจ","ตื่นเต้นทุกครั้ง","มั่นใจ"],
+      icons:["🦊","🌸","🔥","🐺"],
+      w:[[3,1,0,0,0,0,0,0],[1,2,1,1,2,0,0,0],[1,0,2,2,1,2,0,0],[0,0,0,1,1,3,2,1]] },
+    { text:"อีกฝ่ายโทรมาตอนดึก บอกว่าคิดถึง...",
+      opts:["เขินจนพูดไม่ออก","บอกว่าคิดถึงเหมือนกัน","คุยยาวๆ จนเช้า","ขับรถไปหาเลย"],
+      icons:["🦊","🌸","🔥","🐺"],
+      w:[[3,1,0,0,0,0,0,0],[2,2,0,1,1,0,0,0],[1,0,1,2,2,1,0,0],[0,0,0,1,1,2,2,3]] },
+    { text:"ถ้าต้องเลือกของขวัญให้อีกฝ่าย...",
+      opts:["ซื้อของที่เค้าพูดถึง","ทำของขวัญ DIY","พาไปทริปสั้นๆ","ซื้อของหรูๆ"],
+      icons:["🦊","🌸","🔥","🐺"],
+      w:[[1,2,0,1,2,0,0,0],[1,3,0,0,1,0,0,0],[0,0,1,2,1,2,1,1],[0,0,0,1,0,2,2,3]] },
+    { text:"เวลาถ่ายรูปด้วยกัน...",
+      opts:["หลบหน้ากล้อง","ยิ้มเขินๆ","โพสต์ท่าปกติ","ดึงอีกฝ่ายมากอด"],
+      icons:["🦊","🌸","🔥","🐺"],
+      w:[[3,1,0,0,0,0,0,0],[2,2,0,1,0,0,0,0],[0,0,1,2,2,2,0,0],[0,0,0,1,1,2,2,3]] },
+    { text:"ถ้าอีกฝ่ายบอกว่าคิดถึงคุณ...",
+      opts:["แอบยิ้มคนเดียว","บอกว่าคิดถึงเหมือนกัน","บอกพร้อมส่งรูปน่ารัก","บอกว่ามาหาเลยสิ"],
+      icons:["🦊","🌸","🔥","🐺"],
+      w:[[3,1,0,0,0,0,0,0],[2,2,0,1,1,0,0,0],[0,1,1,2,2,1,0,0],[0,0,0,1,1,2,2,2]] },
+    { text:"ถ้าเพื่อนถามว่าคุณชอบใครอยู่...",
+      opts:["ปฏิเสธแล้วหน้าแดง","พยักหน้าเบาๆ","บอกว่าแค่เพื่อน","อวดรูปให้ดูเลย"],
+      icons:["🦊","🌸","🔥","🐺"],
+      w:[[3,1,0,0,0,0,0,0],[2,2,0,1,0,0,0,0],[1,1,2,1,0,1,0,0],[0,0,0,1,1,2,2,3]] },
+    { text:"วันวาเลนไทน์ คุณจะทำอะไร?",
+      opts:["รอให้อีกฝ่ายทำอะไร","ซื้อของขวัญเล็กๆ","วางแผนดินเนอร์","ทำเซอร์ไพรส์ใหญ่โต"],
+      icons:["🦊","🌸","🔥","🐺"],
+      w:[[2,2,0,0,0,0,0,0],[1,1,1,1,2,0,0,0],[0,0,1,2,2,2,0,0],[0,0,0,1,1,2,2,3]] },
+    { text:"ถ้าต้องอธิบายว่าคุณเป็นแบบไหนในความสัมพันธ์...",
+      opts:["คนที่ถูกดูแล","คนที่ดูแลซึ่งกันและกัน","คนที่ดูแลอีกฝ่าย","คนที่เป็นผู้นำ"],
+      icons:["🦊","🌸","🔥","🐺"],
+      w:[[4,0,0,0,0,0,0,0],[1,2,0,3,1,0,0,0],[0,0,0,2,3,2,0,0],[0,0,0,1,1,2,3,2]] }
+];
 
-        // คะแนนแต่ละคาแรกเตอร์
-        let scores = {};
-        characters.forEach(c => scores[c.id] = 0);
+// ── Characters ────────────────────────────────────────────────────────────
+const characters = [
+    { id:'pureKe',   name:'เคะบริสุทธิ์',   emoji:'🦊💕', desc:'อ้อนเก่ง ขี้อ้อน รักการถูกดูแล ใจดีและน่ารักมากๆ',               color:'#74b9ff' },
+    { id:'smartKe',  name:'เคะแว่น',         emoji:'🦊🤓', desc:'ฉลาดเนิร์ดๆ แต่แอบขี้อ้อนในบางครั้ง ชอบคิดเยอะ',               color:'#a29bfe' },
+    { id:'tsundere', name:'ซึนเดเระ',        emoji:'😤💕', desc:'ปากแข็งแต่ใจอ่อน แอบเขินตลอด แต่รักจริงมากที่สุด',              color:'#fd79a8' },
+    { id:'seke',     name:'เซเคะ',           emoji:'🦊🐺', desc:'ปรับตัวเก่ง เป็นได้ทุกบทบาท อ่านสถานการณ์เก่ง',                color:'#ffeaa7' },
+    { id:'gentleMe', name:'เมะสุภาพบุรุษ',  emoji:'🐺🎩', desc:'อบอุ่น ดูแลดี เป็นสุภาพบุรุษ ทำให้อีกฝ่ายรู้สึกปลอดภัยเสมอ',   color:'#55efc4' },
+    { id:'coolMe',   name:'เมะสุดเท่',       emoji:'🐺🔥', desc:'มั่นใจ เท่ แต่แอบอ่อนโยนกับคนที่รักอย่างลึกๆ',                 color:'#e17055' },
+    { id:'wildMe',   name:'เมะหมาป่า',       emoji:'🐺🌕', desc:'ดุดัน ปกป้องคนที่รัก ไม่เกรงใจใคร แต่อ่อนโยนกับคู่ตัวเอง',    color:'#d63031' },
+    { id:'sadistMe', name:'เมะซาดิสต์',     emoji:'🐺⛓️', desc:'ชอบแกล้งให้เขิน แต่ลึกๆ หวงมาก ไม่ยอมให้ใครแตะคนของตัวเอง',  color:'#6c5ce7' }
+];
+const charKeys = characters.map(c => c.id);
 
-        let selectedQuestions = [];
-        let current = 0;
-        let gameState = 'start';
+// ── State ─────────────────────────────────────────────────────────────────
+let scores = {};
+let selectedQ = [];
+let current = 0;
 
-        const content = document.getElementById('game-content');
-        const progressSec = document.getElementById('progress-section');
-        const progBar = document.getElementById('progress-bar');
-        const qCounter = document.getElementById('question-counter');
+const content  = document.getElementById('game-content');
+const progSec  = document.getElementById('progress-section');
+const progBar  = document.getElementById('progress-bar');
+const qCounter = document.getElementById('question-counter');
 
-        // Firestore (สถิติ)
-        const db = firebase.firestore();
+// ── Helpers ───────────────────────────────────────────────────────────────
+function shuffle(arr) { return [...arr].sort(() => Math.random() - 0.5); }
 
-        function shuffleAndPick(n) {
-            return [...questionBank].sort(() => Math.random() - 0.5).slice(0, n);
-        }
+function showToast(msg, ms = 2800) {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), ms);
+}
 
-        function renderStart() {
-            gameState = 'start';
-            progressSec.style.display = 'none';
-            content.innerHTML = `
-                <div class="start-box">
-                    <div class="start-icon">🦊🐺✨</div>
-                    <h2>ค้นพบตัวตนที่ซ่อนอยู่</h2>
-                    <p class="start-desc">50 คำถาม · สุ่ม 30 ข้อ · 8 คาแรกเตอร์</p>
-                    <button class="btn btn-primary" onclick="startGame()">เริ่มเลย!</button>
-                    <button class="btn btn-secondary" onclick="window.location.href='index.html'">กลับหน้าหลัก</button>
-                </div>
-            `;
-        }
+// ── Screens ───────────────────────────────────────────────────────────────
+function renderStart() {
+    progSec.style.display = 'none';
+    content.innerHTML = `
+        <div class="start-box">
+            <div class="start-icon">🦊🐺✨</div>
+            <h2 style="font-size:22px;margin-bottom:10px;">ค้นพบตัวตนที่ซ่อนอยู่</h2>
+            <p style="color:#aaa;font-size:14px;margin-bottom:28px;line-height:1.7;">
+                ตอบ 30 คำถาม (สุ่มจาก 50 ข้อ)<br>แล้วค้นพบว่าตัวตนที่แท้จริงของคุณคือใคร!
+            </p>
+            <div class="btn-group" style="justify-content:center;">
+                <button class="btn btn-primary"   onclick="startGame()">✨ เริ่มเลย!</button>
+                <button class="btn btn-secondary" onclick="window.location.href='index.html'">กลับหน้าหลัก</button>
+            </div>
+        </div>`;
+}
 
-        window.startGame = function() {
-            selectedQuestions = shuffleAndPick(30);
-            current = 0;
-            characters.forEach(c => scores[c.id] = 0);
-            gameState = 'playing';
-            progressSec.style.display = 'block';
-            renderQuestion();
-        };
+window.startGame = function() {
+    selectedQ = shuffle(questionBank).slice(0, 30);
+    current   = 0;
+    scores    = {};
+    charKeys.forEach(k => scores[k] = 0);
+    progSec.style.display = 'block';
+    renderQuestion();
+};
 
-        function renderQuestion() {
-            const q = selectedQuestions[current];
-            const percent = ((current + 1) / 30) * 100;
-            progBar.style.width = percent + '%';
-            qCounter.innerText = `ข้อ ${current + 1} / 30`;
+function renderQuestion() {
+    const q       = selectedQ[current];
+    const percent = ((current + 1) / 30) * 100;
+    progBar.style.width  = percent + '%';
+    qCounter.textContent = `ข้อ ${current + 1} / 30`;
 
-            content.innerHTML = `
-                <div class="question-text">${q.text}</div>
-                <div class="options-container">
-                    <button class="option-btn" onclick="selectAnswer(0)">🦊 ${q.a}</button>
-                    <button class="option-btn" onclick="selectAnswer(1)">🌸 ${q.b}</button>
-                    <button class="option-btn" onclick="selectAnswer(2)">🔥 ${q.c}</button>
-                    <button class="option-btn" onclick="selectAnswer(3)">🐺 ${q.d}</button>
-                </div>
-            `;
-        }
+    content.innerHTML = `
+        <div class="question-text">${q.text}</div>
+        <div class="options-container">
+            ${q.opts.map((opt, i) => `
+                <button class="option-btn" onclick="selectAnswer(${i})">
+                    ${q.icons[i]} ${opt}
+                </button>`).join('')}
+        </div>`;
+}
 
-        window.selectAnswer = function(choice) {
-            // เพิ่มคะแนนให้คาแรกเตอร์ตาม choice (ซับซ้อนเล็กน้อยเพื่อความหลากหลาย)
-            if (choice === 0) { scores.pureKe += 2; scores.smartKe += 1; }
-            else if (choice === 1) { scores.tsundere += 2; scores.seke += 1; }
-            else if (choice === 2) { scores.gentleMe += 2; scores.coolMe += 1; }
-            else { scores.wildMe += 2; scores.sadistMe += 1; }
+window.selectAnswer = function(i) {
+    const q = selectedQ[current];
+    charKeys.forEach((k, idx) => { scores[k] += q.w[i][idx]; });
+    current++;
+    if (current < 30) renderQuestion();
+    else showResult();
+};
 
-            current++;
-            if (current < 30) renderQuestion();
-            else showResult();
-        };
+// ── Result ────────────────────────────────────────────────────────────────
+async function showResult() {
+    progSec.style.display = 'none';
 
-        async function showResult() {
-            gameState = 'result';
-            progressSec.style.display = 'none';
+    const topKey  = charKeys.reduce((a, b) => scores[a] >= scores[b] ? a : b);
+    const topChar = characters.find(c => c.id === topKey);
+    const maxScore = Math.max(...charKeys.map(k => scores[k]), 1);
 
-            // หาคาแรกเตอร์ที่คะแนนสูงสุด
-            const topChar = Object.entries(scores).reduce((a, b) => a[1] > b[1] ? a : b)[0];
-            const charData = characters.find(c => c.id === topChar);
-
-            // บันทึกสถิติลง Firestore
-            try {
-                await db.collection('gameStats').add({
-                    character: topChar,
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                });
-            } catch(e) { console.warn("Firestore error:", e); }
-
-            // ดึงสถิติภาพรวม
-            let statsHtml = '';
-            try {
-                const snapshot = await db.collection('gameStats').get();
-                const stats = {};
-                characters.forEach(c => stats[c.id] = 0);
-                snapshot.forEach(doc => { const c = doc.data().character; if(stats[c] !== undefined) stats[c]++; });
-                const total = snapshot.size || 1;
-                statsHtml = characters.map(c => {
-                    const percent = Math.round((stats[c.id] / total) * 100);
-                    return `<div class="char-badge" style="border-color:${c.color};">${c.emoji} ${c.name}: ${percent}%</div>`;
-                }).join('');
-            } catch(e) { statsHtml = '<div class="char-badge">สถิติยังไม่พร้อม</div>'; }
-
-            // สร้างลิงก์แชร์
-            const shareUrl = `${window.location.origin}${window.location.pathname}?result=${topChar}`;
-            const shareText = `ฉันคือ ${charData.name} ${charData.emoji} !\nมาลองเล่นกัน!`;
-
-            content.innerHTML = `
-                <div class="result-box" id="result-content">
-                    <div class="result-emoji">${charData.emoji}</div>
-                    <div class="result-title" style="color: ${charData.color};">${charData.name}</div>
-                    <div class="result-desc">${charData.desc}</div>
-                    <div class="result-stats">${statsHtml}</div>
-                    <div class="btn-group">
-                        <button class="btn btn-primary" onclick="startGame()">เล่นอีกครั้ง</button>
-                        <button class="btn btn-secondary" onclick="window.location.href='index.html'">กลับหน้าหลัก</button>
-                        <button class="btn btn-secondary" onclick="shareResult('${shareUrl}', '${shareText}')">📤 แชร์ผลลัพธ์</button>
-                        <button class="btn btn-secondary" onclick="saveAsImage()">📸 บันทึกรูป</button>
-                    </div>
-                    <div id="save-area"></div>
-                </div>
-            `;
-        }
-
-        window.shareResult = function(url, text) {
-            if (navigator.share) {
-                navigator.share({ title: 'ผลลัพธ์ของฉัน', text, url });
-            } else {
-                prompt('ก็อปปี้ลิงก์นี้เพื่อแชร์:', url);
-            }
-        };
-
-        window.saveAsImage = function() {
-            const element = document.getElementById('result-content');
-            html2canvas(element, { scale: 2, backgroundColor: '#1a1a2e' }).then(canvas => {
-                const link = document.createElement('a');
-                link.download = 'my-result.png';
-                link.href = canvas.toDataURL();
-                link.click();
+    // บันทึก Firestore
+    if (db) {
+        try {
+            await db.collection('gameStats').add({
+                character: topKey,
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
             });
-        };
+        } catch(e) { /* silent */ }
+    }
 
-        // โหลดสถิติเริ่มต้น + เช็ค URL ว่ามี result ไหม
-        window.onload = () => {
-            const params = new URLSearchParams(window.location.search);
-            if(params.has('result')) {
-                // แสดงผลลัพธ์จากลิงก์แชร์ (อย่างง่าย)
-                const charId = params.get('result');
-                const char = characters.find(c => c.id === charId);
-                if(char) {
-                    content.innerHTML = `
-                        <div class="result-box" id="result-content">
-                            <div class="result-emoji">${char.emoji}</div>
-                            <div class="result-title" style="color: ${char.color};">${char.name}</div>
-                            <div class="result-desc">${char.desc}</div>
-                            <p style="margin-top:20px;">มีคนแชร์ผลลัพธ์นี้มาให้คุณ!</p>
-                            <button class="btn btn-primary" onclick="window.location.href='game.html'">ลองเล่นด้วยตัวเอง</button>
-                        </div>
-                    `;
-                    progressSec.style.display = 'none';
-                }
-            } else {
-                renderStart();
-            }
-        };
-    </script>
+    // score bars top 4
+    const barRows = [...charKeys]
+        .map(k => ({ ...characters.find(c => c.id === k), score: scores[k] }))
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 4)
+        .map(c => {
+            const pct = Math.round((c.score / maxScore) * 100);
+            return `<div style="display:flex;align-items:center;gap:10px;margin-bottom:9px;">
+                <span style="font-size:13px;min-width:116px;color:rgba(255,255,255,0.75);">${c.emoji} ${c.name}</span>
+                <div style="flex:1;height:7px;border-radius:99px;background:rgba(255,255,255,0.07);">
+                    <div style="height:100%;border-radius:99px;background:${c.color};width:${pct}%;"></div>
+                </div>
+                <span style="font-size:12px;color:rgba(255,255,255,0.4);min-width:30px;text-align:right;">${pct}%</span>
+            </div>`;
+        }).join('');
+
+    // ใช้ data-attribute เก็บ charId เพื่อหลีกเลี่ยงปัญหา apostrophe ใน onclick
+    content.innerHTML = `
+        <div class="result-box" id="result-content">
+            <div class="result-emoji">${topChar.emoji}</div>
+            <div class="result-title" style="color:${topChar.color};">${topChar.name}</div>
+            <div class="result-desc">${topChar.desc}</div>
+            <div style="text-align:left;margin:20px 0;">
+                <div style="font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:12px;text-align:center;">คะแนนของคุณ</div>
+                ${barRows}
+            </div>
+            <div style="background:rgba(255,255,255,0.04);border-radius:20px;padding:16px;margin:16px 0;">
+                <div style="font-size:13px;color:rgba(255,255,255,0.4);margin-bottom:10px;">สถิติผู้เล่นทั้งหมด</div>
+                <div id="stats-area" class="result-stats">
+                    <div style="color:#888;font-size:13px;">กำลังโหลด...</div>
+                </div>
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-primary"   onclick="startGame()">🔄 เล่นอีกครั้ง</button>
+                <button class="btn btn-secondary" onclick="window.location.href='index.html'">🏠 หน้าหลัก</button>
+                <button class="btn btn-secondary" id="share-btn">📤 แชร์</button>
+                <button class="btn btn-secondary" onclick="saveAsImage()">📸 บันทึกรูป</button>
+            </div>
+        </div>`;
+
+    // ผูก event share แบบปลอดภัย ไม่ใช้ inline onclick
+    document.getElementById('share-btn').addEventListener('click', function() {
+        doShare(topKey, topChar.name);
+    });
+
+    // โหลดสถิติ
+    const statsEl = document.getElementById('stats-area');
+    if (db) {
+        try {
+            const snap  = await db.collection('gameStats').get();
+            const count = {};
+            charKeys.forEach(k => count[k] = 0);
+            snap.forEach(doc => { const c = doc.data().character; if (count[c] !== undefined) count[c]++; });
+            const total = snap.size || 1;
+            statsEl.innerHTML = characters.map(c => {
+                const pct = Math.round((count[c.id] / total) * 100);
+                return `<div class="char-badge" style="border-color:${c.color}30;background:${c.color}12;">
+                    ${c.emoji} ${c.name}: <strong>${pct}%</strong>
+                </div>`;
+            }).join('');
+        } catch(e) {
+            statsEl.innerHTML = '<div style="color:#888;font-size:13px;">ไม่สามารถโหลดสถิติได้</div>';
+        }
+    } else {
+        statsEl.innerHTML = '<div style="color:#888;font-size:13px;">ไม่ได้เชื่อมต่อ Firebase</div>';
+    }
+}
+
+// ── Share — แก้บัคหลัก ───────────────────────────────────────────────────
+function doShare(charId, charName) {
+    const url  = location.origin + location.pathname + '?result=' + encodeURIComponent(charId);
+    const text = 'ฉันคือ ' + charName + '! มาลองเล่นกัน 🦊🐺\n' + url;
+
+    if (navigator.share) {
+        navigator.share({ title: 'ผลลัพธ์ของฉัน', text: text, url: url })
+            .catch(function() { fallbackCopy(url); });
+    } else {
+        fallbackCopy(url);
+    }
+}
+
+function fallbackCopy(url) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url)
+            .then(function() { showToast('✅ คัดลอกลิงก์แล้ว!'); })
+            .catch(function() { legacyCopy(url); });
+    } else {
+        legacyCopy(url);
+    }
+}
+
+function legacyCopy(url) {
+    var ta = document.createElement('textarea');
+    ta.value = url;
+    ta.style.cssText = 'position:fixed;opacity:0;top:0;left:0;';
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    try {
+        document.execCommand('copy');
+        showToast('✅ คัดลอกลิงก์แล้ว!');
+    } catch(e) {
+        prompt('คัดลอกลิงก์นี้:', url);
+    }
+    document.body.removeChild(ta);
+}
+
+// ── Save image ────────────────────────────────────────────────────────────
+window.saveAsImage = function() {
+    var el = document.getElementById('result-content');
+    if (!el) return;
+    showToast('⏳ กำลังสร้างรูป...');
+    html2canvas(el, { scale: 2, backgroundColor: '#1a1a2e', useCORS: true })
+        .then(function(canvas) {
+            var link    = document.createElement('a');
+            link.download = 'my-character.png';
+            link.href     = canvas.toDataURL('image/png');
+            link.click();
+            showToast('✅ บันทึกรูปแล้ว!');
+        })
+        .catch(function() { showToast('❌ เกิดข้อผิดพลาด ลองใหม่อีกครั้ง'); });
+};
+
+// ── URL param: ผลลัพธ์จากลิงก์แชร์ ──────────────────────────────────────
+window.onload = function() {
+    var params = new URLSearchParams(location.search);
+    var shared = params.get('result');
+    if (shared) {
+        var char = characters.find(function(c) { return c.id === shared; });
+        if (char) {
+            progSec.style.display = 'none';
+            content.innerHTML = `
+                <div class="result-box">
+                    <div class="result-emoji">${char.emoji}</div>
+                    <div class="result-title" style="color:${char.color};">${char.name}</div>
+                    <div class="result-desc">${char.desc}</div>
+                    <p style="color:#888;font-size:14px;margin-bottom:24px;">เพื่อนของคุณแชร์ผลลัพธ์นี้มา!</p>
+                    <div class="btn-group" style="justify-content:center;">
+                        <button class="btn btn-primary"   onclick="window.location.href=location.pathname">🎮 ลองเล่นด้วยตัวเอง</button>
+                        <button class="btn btn-secondary" onclick="window.location.href='index.html'">🏠 หน้าหลัก</button>
+                    </div>
+                </div>`;
+            return;
+        }
+    }
+    renderStart();
+};
+</script>
 </body>
 </html>
+
