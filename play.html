@@ -114,11 +114,19 @@
 <script>
 // ─── Firebase config — ใส่ค่าของคุณที่นี่ ────────────────────────────────
 // ถ้าใช้ js/firebase.js ให้โหลด script นั้นก่อน tag นี้แล้วลบ block นี้ออก
-const FIREBASE_READY = (typeof firebase !== 'undefined');
-let db = null;
-if (FIREBASE_READY) {
-    try { db = firebase.firestore(); } catch(e) { /* silent */ }
-}
+// ─── Firebase config — ใส่ค่าของคุณที่นี่ ────────────────────────────────
+const firebaseConfig = {
+  apiKey: "AIzaSyDUotTGRXmMNGRmVqwAZQaWPuoJLSVQzTE",
+  authDomain: "godruj-cf845.firebaseapp.com",
+  projectId: "godruj-cf845",
+  storageBucket: "godruj-cf845.firebasestorage.app",
+  messagingSenderId: "842695726741",
+  appId: "1:842695726741:web:11c1de5cc7458bf4cfad9c"
+};
+
+firebase.initializeApp(firebaseConfig);
+let db = firebase.firestore();
+const FIREBASE_READY = true;
 // ─────────────────────────────────────────────────────────────────────────
 
 // ── Question bank (50 ข้อ) ────────────────────────────────────────────────
